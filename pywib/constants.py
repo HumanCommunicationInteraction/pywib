@@ -30,8 +30,22 @@ class EventTypes:
     EVENT_TRACKING_END = 200
 
 class ComponentTypes:
+    """ Component type constants for UI elements."""
     COMPONENT_TEXT_FIELD = 1
     COMPONENT_COMBOBOX = 2
     COMPONENT_OPTION = 3
     COMPONENT_RADIO_BUTTON = 4
     COMPONENT_CHECK_BOX = 5
+
+class ColumnNames:
+    """ Standard column names for DataFrame operations."""
+    SESSION_ID = 'sessionId'
+    SCENE_ID = 'sceneId'
+    EVENT_TYPE = 'eventType'
+    ELEMENT_ID = 'elementId'
+    TIME_STAMP = 'timeStamp'
+    X = 'x'
+    Y = 'y'
+    KEY_VALUE_EVENT = 'keyValueEvent'
+    KEY_CODE_EVENT = 'keyCodeEvent'
+    SOURCE_SESSION_ID = 'sourceSessionId'
