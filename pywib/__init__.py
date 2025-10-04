@@ -8,6 +8,7 @@ __email__ = "carvajalguillermo@uniovi.es"
 from .constants import *
 from .utils import validate_dataframe, validate_dataframe_keyboard, extract_trace, visualize_trace
 from .core.movement import velocity, acceleration, num_pauses, auc_ratio
+from .utils.utils import compute_space_time_diff
 
 __all__ = [
     # Version info
@@ -29,5 +30,8 @@ __all__ = [
     "velocity",
     "acceleration",
     "num_pauses",
-    "auc_ratio"
+    "auc_ratio",
+
+    # Utils
+    "compute_space_time_diff",
 ]
