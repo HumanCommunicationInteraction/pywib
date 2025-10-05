@@ -7,7 +7,8 @@ __email__ = "carvajalguillermo@uniovi.es"
 
 from .constants import *
 from .utils import validate_dataframe, validate_dataframe_keyboard, extract_trace, visualize_trace
-from .core.movement import velocity, acceleration, num_pauses, auc_ratio
+from .core.movement import velocity, acceleration, jerkiness, path, auc_ratio
+from .core.timing import execution_time, movement_time, pauses_metrics
 from .utils.utils import compute_space_time_diff
 
 __all__ = [
@@ -29,8 +30,12 @@ __all__ = [
     # Movement functions
     "velocity",
     "acceleration",
-    "num_pauses",
     "auc_ratio",
+    "jerkiness",
+    "path",
+
+    # Timing
+    "pauses_metrics",
 
     # Utils
     "compute_space_time_diff",

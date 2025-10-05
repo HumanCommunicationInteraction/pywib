@@ -11,6 +11,12 @@ def compute_space_time_diff(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with additional 'dx', 'dy', and 'dt' columns.
     """
+    if(ColumnNames.X not in df.columns or
+       ColumnNames.Y not in df.columns or
+       ColumnNames.TIME_STAMP not in df.columns or
+       ColumnNames.SESSION_ID not in df.columns):
+        raise ValueError(f"DataFrame must contain '{ColumnNames.X}', '{ColumnNames.Y}', '{ColumnNames.TIME_STAMP}', and '{ColumnNames.SESSION_ID}' columns.")
+
     df = df.copy()
     df.sort_values(by=[ColumnNames.TIME_STAMP], inplace=True)
     df[ColumnNames.TIME_STAMP] = pd.to_numeric(df[ColumnNames.TIME_STAMP], errors='coerce')

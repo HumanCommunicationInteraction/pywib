@@ -34,53 +34,60 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
         traces[session_id] = session_traces
     return traces
 
-def acceleration(df: pd.DataFrame, computeTraces: bool = True) -> pd.DataFrame:
+def acceleration(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate the acceleration for the given DataFrame.
     This function computes the acceleration based on the change in velocity over time.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing 'velocity' and 'dt' columns.
-        computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
-
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
     Returns:
-        pd.DataFrame: DataFrame with an additional 'acceleration' column.
+        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'acceleration' column.
     """
     
-    validate_dataframe(df)
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
 
-    if computeTraces:
-        df = extract_traces_by_session(df)
+    for session_id, session_traces in traces.items():
+        for i in range(len(session_traces)):
+                validate_dataframe(session_traces[i])
+        # TODO revisar
+        for j in range(len(session_traces)):
+            session_traces[j]['acceleration'] = session_traces[j]["velocity"].diff().fillna(0) / session_traces[j]['dt']
+            session_traces[j]['acceleration'] = session_traces[j]['acceleration'].fillna(0)
 
-    df = compute_space_time_diff(df)
-    
-    df['acceleration'] = df.groupby([ColumnNames.SESSION_ID])['velocity'].diff().fillna(0) / df['dt']
+        traces[session_id] = session_traces
+    return traces
 
-    return df
-
-def jerkiness(df: pd.DataFrame, computeTraces: bool = True) -> pd.DataFrame:
+def jerkiness(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate the jerkiness for the given DataFrame.
     This function computes the jerkiness based on the change in acceleration over time.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing 'acceleration' and 'dt' columns.
-        computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
 
     Returns:
-        pd.DataFrame: DataFrame with an additional 'jerkiness' column.
+        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'jerkiness' column.
     """
-    
-    validate_dataframe(df)
 
-    if computeTraces:
-        df = extract_traces_by_session(df)
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
 
-    df = compute_space_time_diff(df)
+    for session_id, session_traces in traces.items():
+        for i in range(len(session_traces)):
+                validate_dataframe(session_traces[i])
+        # TODO revisar
+        for j in range(len(session_traces)):
+            session_traces[j] = session_traces[j]["acceleration"].diff().fillna(0) / session_traces[j]['dt']
+            
+        traces[session_id] = session_traces
 
-    df['jerkiness'] = df.groupby([ColumnNames.SESSION_ID])['acceleration'].diff().fillna(0) / df['dt']
-
-    return df
+    return traces
 
 def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
     """
@@ -96,6 +103,7 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
     """
 
     if traces is None:
+        validate_dataframe(df)
         traces = extract_traces_by_session(df)
 
     for session_id, session_traces in traces.items():
@@ -104,15 +112,14 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
 
             # Compute the distance for each trace
             for j in range(len(session_traces)):
-                session_traces[j] = compute_space_time_diff(session_traces[j])
-                session_traces[j]['distance'] = np.sqrt(session_traces[j]['dx'] ** 2 + session_traces[j]['dy'] ** 2)
+                session_traces[j]['distance'] = _path(session_traces[j])['distance']
             
             # Store the traces with distance in the dictionary
             df[session_id] = session_traces
 
     return df
 
-def _path(trace: pd.DataFrame = None) -> pd.DataFrame:
+def _path(trace: pd.DataFrame) -> pd.DataFrame:
     """
     Helper function to calculate the path length for a single trace.
     This function computes the path length based on the Euclidean distance between consecutive points.
@@ -218,39 +225,3 @@ def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
 
     return auc_per_session
 
-def num_pauses(df: pd.DataFrame, threshold: float = 100, computeTraces: bool = True) -> tuple[dict, dict]:
-    """
-    Calculate the number of pauses in the DataFrame.
-    
-    Parameters:
-        df (pd.DataFrame): DataFrame containing 'timeStamp' column.
-        threshold (float): Time threshold in milliseconds to consider a pause, by default 100 ms.
-        computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
-    
-    Returns:
-        tuple: A tuple containing two dictionaries with the number of pauses per session and the mean number of pauses per trace, with the sessionId as keys.
-    """
-    validate_dataframe(df)
-
-    if computeTraces:
-        df = extract_traces_by_session(df)
-
-    num_pauses_per_session = {}
-    mean_pause_per_trace = {}
-    for session_id, session_traces in df.items():
-        total_pauses_session = 0
-        for trace in session_traces:
-            df_pauses = _num_pauses_trace(trace, threshold)
-            total_pauses_session += df_pauses.shape[0]
-        num_pauses_per_session[session_id] = total_pauses_session
-        mean_pause_per_trace[session_id] = total_pauses_session / len(session_traces) if len(session_traces) > 0 else 0
-    return num_pauses_per_session, mean_pause_per_trace
-
-def _num_pauses_trace(df: pd.DataFrame, threshold: float) -> pd.DataFrame:
-    """
-    Helper function to calculate pauses in a single trace.
-    """
-    df = df.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
-    df['dt'] = df[ColumnNames.TIME_STAMP].diff().fillna(0)
-    pauses = df[df['dt'] > threshold]
-    return pauses

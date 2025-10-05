@@ -49,3 +49,6 @@ class ColumnNames:
     KEY_VALUE_EVENT = 'keyValueEvent'
     KEY_CODE_EVENT = 'keyCodeEvent'
     SOURCE_SESSION_ID = 'sourceSessionId'
+    DT = 'dt'
+    DX = 'dx'
+    DY = 'dy'
