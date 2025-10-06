@@ -5,7 +5,7 @@ from ..utils.utils import compute_space_time_diff
 from ..utils.segmentation import extract_traces_by_session
 from ..constants import ColumnNames
 
-def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def velocity(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate the velocity for the given DataFrame or traces.
     This function computes the velocity based on the distance and time difference between consecutive points.
@@ -53,7 +53,6 @@ def acceleration(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None
     for session_id, session_traces in traces.items():
         for i in range(len(session_traces)):
                 validate_dataframe(session_traces[i])
-        # TODO revisar
         for j in range(len(session_traces)):
             session_traces[j]['acceleration'] = session_traces[j]["velocity"].diff().fillna(0) / session_traces[j]['dt']
             session_traces[j]['acceleration'] = session_traces[j]['acceleration'].fillna(0)
