@@ -6,7 +6,8 @@ build-backend = "hatchling.build"
 name = "pywib"
 version = "0.1.0"
 authors = [
-  { name="Guillermo Carvajal Aza", email="carvajalguillermo@uniovi.es" },
+  { name="Guillermo Dylan Carvajal Aza", email="carvajalguillermo@uniovi.es" },
+  { name="Alejandro Álvarez Varela", email="avarela@uniovi.es"}
 ]
 description = "HCI Web Interaction Analyzer - A library for analyzing web user interactions"
 readme = "README.md"
