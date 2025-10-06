@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 
 # Now you can import directly since the package is installed
-from pywib.core.movement import velocity, acceleration
-from pywib.utils.utils import compute_space_time_diff
+from src.pywib.core.movement import velocity, acceleration
+from src.pywib.utils.utils import compute_space_time_diff
 from utils import process_csv
 
 class TestMovement(unittest.TestCase):

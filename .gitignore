@@ -1,6 +1,7 @@
-/pywib/__pycache__
-/pywib/tests/__pycache__
-/pywib/utils/__pycache__
-/pywib/core/__pycache__
+src/pywib/__pycache__
+src/pywib/tests/__pycache__
+src/pywib/utils/__pycache__
+src/pywib/core/__pycache__
 test/__pycache__
 dist
+.vscode/
