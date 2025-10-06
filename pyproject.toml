@@ -49,8 +49,8 @@ all_files = true
 
 # Configuración principal de Sphinx
 [tool.sphinx.config]
-project = "Mi Librería Científica"
-author = "Tu Nombre"
+project = "pywib"
+author = "Guillermo Dylan Carvajal Aza, Alejandro Álvarez Varela"
 release = "0.1.0"
 extensions = [
     "sphinx.ext.autodoc",
