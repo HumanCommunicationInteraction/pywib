@@ -39,3 +39,27 @@ Repository = "https://github.com/HumanCommunicationInteraction/pywib.git"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pywib"]
+
+[tool.sphinx]
+builder = "html"
+source-dir = "docs"
+build-dir = "docs/_build"
+all_files = true
+
+# Configuración principal de Sphinx
+[tool.sphinx.config]
+project = "Mi Librería Científica"
+author = "Tu Nombre"
+release = "0.1.0"
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.mathjax",
+    "sphinx_autodoc_typehints",
+    "sphinxcontrib.bibtex",
+    "myst_parser",
+]
+bibtex_bibfiles = ["references.bib"]
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]

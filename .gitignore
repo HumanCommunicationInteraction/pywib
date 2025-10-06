@@ -5,3 +5,4 @@ src/pywib/core/__pycache__
 test/__pycache__
 dist
 .vscode/
+docs/build
