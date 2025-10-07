@@ -80,10 +80,10 @@ def jerkiness(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -
     for session_id, session_traces in traces.items():
         for i in range(len(session_traces)):
                 validate_dataframe(session_traces[i])
-        # TODO revisar
         for j in range(len(session_traces)):
             session_traces[j] = session_traces[j]["acceleration"].diff().fillna(0) / session_traces[j]['dt']
-            
+            session_traces[j]['jerkiness'] = session_traces[j]['jerkiness'].fillna(0)
+
         traces[session_id] = session_traces
 
     return traces

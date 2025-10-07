@@ -6,29 +6,32 @@ from ..constants import ColumnNames
 
 def execution_time(df: pd.DataFrame) -> float:
     """
-    Calculate the total execution time of a session in seconds.
+    Calculate the total execution time of a session in milliseconds, without taking pauses into account.
+    This is the same as the total time from the first to the last event registered for the session.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing 'timeStamp' column.
     Returns:
-        float: Total execution time in seconds.
+        float: Total execution time in milliseconds.
+
     """
     validate_dataframe(df)
 
     start_time = df[ColumnNames.TIME_STAMP].min()
     end_time = df[ColumnNames.TIME_STAMP].max()
-    total_time = (end_time - start_time) / 1000.0  # Convert milliseconds to seconds
+    total_time = (end_time - start_time)
     return total_time
 
 def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> float:
     """
-    Calculate the total movement time from traces in seconds.
-
+    Calculate the total movement time from traces in milliseconds, taking pauses into account.
+    This is the same as the interval of time the user is interacting with the interface.
+    
     Parameters:
         df (pd.DataFrame): DataFrame containing 'timeStamp' column.
         traces (dict): Dictionary with sessionId as keys and list of DataFrames as values.
     Returns:
-        float: Total movement time in seconds.
+        float: Total movement time in milliseconds.
     """
     if traces is None:
         validate_dataframe(df)
@@ -38,7 +41,7 @@ def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None
     for session_id, session_traces in traces.items():
         for trace in session_traces:
             trace = compute_space_time_diff(trace)  
-            total_movement_time += trace[ColumnNames.DT].sum() / 1000.0  # Convert milliseconds to seconds
+            total_movement_time += trace[ColumnNames.DT].sum()
 
     return total_movement_time
 
