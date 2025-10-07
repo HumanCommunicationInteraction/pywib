@@ -6,7 +6,7 @@ __author__ = "Guillermo Dylan Carvajal Aza"
 __email__ = "carvajalguillermo@uniovi.es"
 
 from .constants import *
-from .utils import validate_dataframe, validate_dataframe_keyboard, extract_traces_by_session, visualize_trace
+from .utils import validate_dataframe, validate_dataframe_keyboard, extract_traces_by_session, visualize_trace, video_from_traces
 from .core.movement import velocity, acceleration, jerkiness, path, auc_ratio
 from .core.timing import execution_time, movement_time, pauses_metrics
 from .utils.utils import compute_space_time_diff
@@ -40,4 +40,5 @@ __all__ = [
     # Utils
     "compute_space_time_diff",
     "extract_traces_by_session",
+    "video_from_traces"
 ]
