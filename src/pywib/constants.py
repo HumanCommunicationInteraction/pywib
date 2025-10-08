@@ -53,3 +53,4 @@ class ColumnNames:
     DX = 'dx'
     DY = 'dy'
     VELOCITY= 'velocity'
+    ACCELERATION = 'acceleration'
