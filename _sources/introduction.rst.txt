@@ -1,8 +1,18 @@
 Introducción
 ============
 
-Bienvenido a **pywib** (Python Web Interaction Behaviour).
+Welcome to **pywib** (Python Web Interaction Behaviour).
 
-Este proyecto tiene como objetivo analizar la interacción humano-computadora
-desde un enfoque empírico.
+This proyect aims to analyze user interaction with web applications by processing interaction event data (such as clicks, mouse movements, scrolls, etc.) recorded in CSV files.
+It provides tools to compute various movement metrics (like velocity, acceleration, jerkiness, etc.) and others such as visualizing interaction traces.
 
+
+Installation
+-------------
+You can install **pywib** using pip:
+.. code-block:: bash
+
+   pip install pywib
+
+Getting Started
+-----------------
