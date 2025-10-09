@@ -4,7 +4,7 @@ from ..utils.segmentation import extract_traces_by_session
 from ..utils.utils import compute_space_time_diff
 from ..constants import ColumnNames
 
-def execution_time(df: pd.DataFrame) -> float:
+def execution_time(df: pd.DataFrame) -> dict:
     """
     Calculate the total execution time of a session in milliseconds, without taking pauses into account.
     This is the same as the total time from the first to the last event registered for the session.
@@ -12,17 +12,19 @@ def execution_time(df: pd.DataFrame) -> float:
     Parameters:
         df (pd.DataFrame): DataFrame containing 'timeStamp' column.
     Returns:
-        float: Total execution time in milliseconds.
+        dict: Total execution time in milliseconds for each session.
 
     """
     validate_dataframe(df)
 
-    start_time = df[ColumnNames.TIME_STAMP].min()
-    end_time = df[ColumnNames.TIME_STAMP].max()
-    total_time = (end_time - start_time)
-    return total_time
+    total_time_per_session = {}
+    for session_id, session_df in df.groupby(ColumnNames.SESSION_ID):
+        session_df = session_df.sort_values(by=ColumnNames.TIME_STAMP)
+        total_time = session_df[ColumnNames.TIME_STAMP].iloc[-1] - session_df[ColumnNames.TIME_STAMP].iloc[0]
+        total_time_per_session[session_id] = total_time
+    return total_time_per_session
 
-def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> float:
+def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate the total movement time from traces in milliseconds, taking pauses into account.
     This is the same as the interval of time the user is interacting with the interface.
@@ -31,19 +33,21 @@ def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None
         df (pd.DataFrame): DataFrame containing 'timeStamp' column.
         traces (dict): Dictionary with sessionId as keys and list of DataFrames as values.
     Returns:
-        float: Total movement time in milliseconds.
+        dict: A dictionary with sessionId as keys and total movement time in milliseconds as values.
     """
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
 
-    total_movement_time = 0.0
+    movement_time_per_session = {}
     for session_id, session_traces in traces.items():
+        total_movement_time = 0.0
         for trace in session_traces:
             trace = compute_space_time_diff(trace)  
             total_movement_time += trace[ColumnNames.DT].sum()
+        movement_time_per_session[session_id] = total_movement_time
 
-    return total_movement_time
+    return movement_time_per_session
 
 def num_pauses(df: pd.DataFrame, threshold: float = 100, computeTraces: bool = True) -> tuple[dict, dict]:
     """
