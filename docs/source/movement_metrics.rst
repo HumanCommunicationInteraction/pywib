@@ -1,5 +1,5 @@
 Movement Metrics
-=============
+================
 
 .. currentmodule:: pywib
 

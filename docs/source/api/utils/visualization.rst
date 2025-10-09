@@ -1,5 +1,5 @@
 Visualization
-================
+=============
 
-.. automodule:: pywib
+.. automodule:: pywib.utils.visualization
    :members: visualize_trace
