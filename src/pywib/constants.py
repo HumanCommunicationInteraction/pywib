@@ -73,3 +73,4 @@ class ColumnNames:
     DY = 'dy'
     VELOCITY= 'velocity'
     ACCELERATION = 'acceleration'
+    JERKINESS = 'jerkiness'

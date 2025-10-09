@@ -146,6 +146,30 @@ def jerkiness(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -
 
     return traces
 
+def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate jerkiness metrics for the given DataFrame or traces.
+    This function computes the mean, max, and min jerkiness for each session.
+    """
+    if((ColumnNames.JERKINESS not in df.columns) and (traces is None)):
+        validate_dataframe(df)
+        if(ColumnNames.ACCELERATION not in df.columns):
+            if(ColumnNames.VELOCITY not in df.columns):
+                traces = velocity(df)
+            traces = acceleration(None, traces)
+        traces = jerkiness(None, traces)
+
+    metrics = {}
+    for session_id, session_traces in traces.items():
+        all_jerkiness = pd.concat([trace['jerkiness'] for trace in session_traces])
+        all_jerkiness = all_jerkiness[all_jerkiness != 0]  # Exclude zero jerkiness for metrics calculation
+        metrics[session_id] = {
+            'mean': all_jerkiness.mean(),
+            'max': all_jerkiness.max(),
+            'min': all_jerkiness.min()
+        }
+    return metrics
+
 def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
     """
     Calculate the path length for the given DataFrame.
