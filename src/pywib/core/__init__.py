@@ -4,7 +4,7 @@ Utility functions for PyWib
 from .timing import execution_time, movement_time, num_pauses, pauses_metrics
 from .movement import (velocity, acceleration, jerkiness, 
                        path, auc_optimal, auc_ratio, auc, 
-                       velocity_metrics, acceleration_metrics)
+                       velocity_metrics, acceleration_metrics, jerkiness_metrics)
 
 __all__ = [
     "execution_time",
@@ -19,5 +19,6 @@ __all__ = [
     "auc_ratio",
     "auc",
     "velocity_metrics",
-    "acceleration_metrics"
+    "acceleration_metrics",
+    "jerkiness_metrics"
 ]

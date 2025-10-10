@@ -1,5 +1,6 @@
 Jerkiness
-================
+=========
 
-.. automodule:: pywib
+.. automodule:: pywib.core.movement
    :members: jerkiness
+   :noindex:

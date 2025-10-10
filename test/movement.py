@@ -1,11 +1,9 @@
 import unittest
-import pandas as pd
 import numpy as np
+from utils import process_csv, import_pyModule
+import_pyModule()
 
-# Now you can import directly since the package is installed
-from src.pywib.core.movement import velocity, acceleration
-from src.pywib.utils.utils import compute_space_time_diff
-from utils import process_csv
+from pywib import velocity, acceleration, compute_space_time_diff
 
 class TestMovement(unittest.TestCase):
     

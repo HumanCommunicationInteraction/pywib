@@ -1,5 +1,6 @@
 Acceleration
-================
+============
 
-.. automodule:: pywib
+.. automodule:: pywib.core.movement
    :members: acceleration
+   :noindex:

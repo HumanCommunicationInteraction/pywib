@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 
 def visualize_trace(df, stroke_indices, stroke_id):
+    """"
+    Geenrates a plot visualizing the trace of a stroke.
+    """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))
     plt.plot(stroke_data['x'], stroke_data['y'], 'b-o', linewidth=2, markersize=4, label='Trazo real')

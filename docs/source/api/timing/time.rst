@@ -1,8 +1,8 @@
-Timing 
-================
+Timing
+======
 
-.. automodule:: pywib
+.. automodule:: pywib.core.timing
    :members: execution_time
 
-.. automodule:: pywib
+.. automodule:: pywib.core.timing
    :members: movement_time
