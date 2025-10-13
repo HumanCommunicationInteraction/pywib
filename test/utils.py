@@ -1,6 +1,19 @@
 import pandas as pd
 from collections import defaultdict
 
+def import_pyModule():
+    """
+    Necessary to import the pywib package when running tests directly from the test/ folder.
+    """
+    import sys
+    import os
+
+    # If running tests from the repo (package not installed), add src/ to sys.path
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    SRC_PATH = os.path.join(REPO_ROOT, 'src')
+    if SRC_PATH not in sys.path:
+        sys.path.insert(0, SRC_PATH)
+
 def process_csv(file_path):
     """
     Reads a semicolon-separated CSV file and processes it into matrices grouped by sessionId and sceneId.

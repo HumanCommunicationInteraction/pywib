@@ -10,6 +10,7 @@ It provides tools to compute various movement metrics (like velocity, accelerati
 Installation
 -------------
 You can install **pywib** using pip:
+
 .. code-block:: bash
 
    pip install pywib

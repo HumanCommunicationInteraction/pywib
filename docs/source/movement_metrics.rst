@@ -1,11 +1,11 @@
 Movement Metrics
-=============
+================
 
 .. currentmodule:: pywib
 
 Velocity
 --------
-See the function implementation in :py:func:`pywib.velocity`.
+See the function implementation in :py:func:`~pywib.velocity`.
 
 This function computes the velocity based on the distance and time difference between consecutive points.
 The velocity is calculated as:
@@ -21,12 +21,12 @@ The velocity is calculated as:
 
 where (|xi|, |yi|) are the coordinates and (|ti|) is the timestamp of point (|i|).
 
-The function :py:func:`pywib.velocity_metrics` computes velocity metrics such as mean, max, and min for each session.
+The function :py:func:`~pywib.velocity_metrics` computes velocity metrics such as mean, max, and min for each session.
 
 
 Acceleration
 ------------
-See the function implementation in :py:func:`pywib.acceleration`.
+See the function implementation in :py:func:`~pywib.acceleration`.
 
 This function computes the acceleration based on the change in velocity over time from a DataFrame or session traces.
 Note: the input DataFrame/traces must contain computed 'velocity' and 'dt' columns (where 'dt' is the time difference between consecutive samples).

@@ -33,6 +33,11 @@ extensions = [
     "myst_parser",
 ]
 
+# When True (default) Sphinx prefixes documented object names with the
+# full module path. Set to False to show just the object name in
+# autodoc/autosummary signatures 
+add_module_names = False
+
 # Bibliography for sphinxcontrib-bibtex
 bibtex_bibfiles = ['references.bib']
 
@@ -40,6 +45,7 @@ bibtex_bibfiles = ['references.bib']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'furo'
+html_favicon = 'favicon.ico'
 html_static_path = ['_static']
 
 def setup(app):
