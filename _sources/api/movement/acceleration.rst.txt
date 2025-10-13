@@ -1,5 +1,4 @@
 Acceleration
-================
+============
 
-.. automodule:: pywib
-   :members: acceleration
+.. autofunction:: pywib.acceleration

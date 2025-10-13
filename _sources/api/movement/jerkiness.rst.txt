@@ -1,5 +1,3 @@
 Jerkiness
-================
-
-.. automodule:: pywib
-   :members: jerkiness
+=========
+.. autofunction:: pywib.jerkiness

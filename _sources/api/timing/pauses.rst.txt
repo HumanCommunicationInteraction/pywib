@@ -1,8 +1,4 @@
 Pauses
-================
-
-.. automodule:: pywib
-   :members: num_pauses
-
-.. automodule:: pywib
-   :members: pauses_metrics
+======
+.. autofunction:: pywib.num_pauses
+.. autofunction:: pywib.pauses_metrics

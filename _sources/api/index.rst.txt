@@ -7,3 +7,4 @@ API Documentation
    movement/index
    utils/index
    timing/index
+   mouse/clicks

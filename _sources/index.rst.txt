@@ -18,5 +18,6 @@ The library includes various modules for different aspects of web interaction an
    movement_metrics
    constants
    api/index
+   mouse
 
 This library has been developed by the `HCI research group <https://www.hci.uniovi.es/>`_ from the University of Oviedo and is maintained on `GitHub <https://github.com/HumanCommunicationInteraction/pywib>`_.
