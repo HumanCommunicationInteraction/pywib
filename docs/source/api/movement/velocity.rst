@@ -1,10 +1,4 @@
 Velocity
 ========
-
-.. automodule:: pywib.core.movement
-   :members: velocity
-   :noindex:
-
-.. automodule:: pywib.core.movement
-   :members: velocity_metrics
-   :noindex:
+.. autofunction:: pywib.velocity
+.. autofunction:: pywib.velocity_metrics
