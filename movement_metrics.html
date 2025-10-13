@@ -259,7 +259,7 @@
 <h1>Movement Metrics<a class="headerlink" href="#movement-metrics" title="Link to this heading">¶</a></h1>
 <section id="velocity">
 <h2>Velocity<a class="headerlink" href="#velocity" title="Link to this heading">¶</a></h2>
-<p>See the function implementation in <code class="xref py py-func docutils literal notranslate"><span class="pre">velocity()</span></code>.</p>
+<p>See the function implementation in <a class="reference internal" href="api/movement/velocity.html#pywib.velocity" title="pywib.velocity"><code class="xref py py-func docutils literal notranslate"><span class="pre">velocity()</span></code></a>.</p>
 <p>This function computes the velocity based on the distance and time difference between consecutive points.
 The velocity is calculated as:</p>
 <div class="math-wrapper docutils container">
@@ -267,11 +267,11 @@ The velocity is calculated as:</p>
 \[v_i = \frac{\sqrt{(x_{i} - x_{i-1})^2 + (y_{i} - y_{i-1})^2}}{t_{i} - t_{i-1}}\]</div>
 </div>
 <p>where (<span class="math notranslate nohighlight">\(x_i\)</span>, <span class="math notranslate nohighlight">\(y_i\)</span>) are the coordinates and (<span class="math notranslate nohighlight">\(t_i\)</span>) is the timestamp of point (<span class="math notranslate nohighlight">\(i\)</span>).</p>
-<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">velocity_metrics()</span></code> computes velocity metrics such as mean, max, and min for each session.</p>
+<p>The function <a class="reference internal" href="api/movement/velocity.html#pywib.velocity_metrics" title="pywib.velocity_metrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">velocity_metrics()</span></code></a> computes velocity metrics such as mean, max, and min for each session.</p>
 </section>
 <section id="acceleration">
 <h2>Acceleration<a class="headerlink" href="#acceleration" title="Link to this heading">¶</a></h2>
-<p>See the function implementation in <code class="xref py py-func docutils literal notranslate"><span class="pre">acceleration()</span></code>.</p>
+<p>See the function implementation in <a class="reference internal" href="api/movement/acceleration.html#pywib.acceleration" title="pywib.acceleration"><code class="xref py py-func docutils literal notranslate"><span class="pre">acceleration()</span></code></a>.</p>
 <p>This function computes the acceleration based on the change in velocity over time from a DataFrame or session traces.
 Note: the input DataFrame/traces must contain computed ‘velocity’ and ‘dt’ columns (where ‘dt’ is the time difference between consecutive samples).</p>
 <p>The acceleration is calculated as:</p>
