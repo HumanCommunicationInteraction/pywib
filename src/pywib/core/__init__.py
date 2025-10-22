@@ -21,5 +21,7 @@ __all__ = [
     "auc",
     "velocity_metrics",
     "acceleration_metrics",
-    "jerkiness_metrics"
+    "jerkiness_metrics",
+    "click_slip",
+    "number_of_clicks",
 ]
