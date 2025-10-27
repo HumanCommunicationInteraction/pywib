@@ -1,5 +1,3 @@
 Distance
 ================
-
-.. automodule:: pywib.core.movement
-   :members: path
+.. autofunction:: pywib.path

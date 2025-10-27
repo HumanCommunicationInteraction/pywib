@@ -10,7 +10,7 @@ from .utils import (validate_dataframe, validate_dataframe_keyboard,
                     extract_traces_by_session, visualize_trace, compute_space_time_diff)
 from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
                    execution_time, movement_time, pauses_metrics, velocity_metrics, 
-                   acceleration_metrics, jerkiness_metrics)
+                   acceleration_metrics, jerkiness_metrics, number_of_clicks, click_slip, num_pauses)
 __all__ = [
     # Version info
     "__version__",
@@ -37,10 +37,15 @@ __all__ = [
     "acceleration_metrics",
     "jerkiness_metrics",
 
+    # Mouse functions
+    "number_of_clicks",
+    "click_slip",
+
     # Timing
     "pauses_metrics",
     "execution_time",
     "movement_time",
+    "num_pauses",
 
     # Utils
     "compute_space_time_diff",
