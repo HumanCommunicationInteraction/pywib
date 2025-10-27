@@ -14,7 +14,7 @@ def velocity(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> 
         df (pd.DataFrame): DataFrame containing 'x', 'y', and 'timeStamp' columns.
         traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
     Returns:
-        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'velocity' column.
+        dict (dict): A dictionary with keys as (sessionId) and values as DataFrames with an additional 'velocity' column.
     """
 
     if traces is None:
@@ -22,9 +22,6 @@ def velocity(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> 
         traces = extract_traces_by_session(df)
             
     for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
-
         for j in range(len(session_traces)):
             session_traces[j] = _path(session_traces[j])
             session_traces[j]['velocity'] = session_traces[j]['distance'] / session_traces[j]['dt']
@@ -46,8 +43,9 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean
     """
-    
-    if((ColumnNames.VELOCITY not in df.columns) and (traces is None)):
+    # TODO añadir opción para que en vez de un dict deveuelva un DataFrame con columnas (sessionId, mean, max, min)
+
+    if((traces is None) and (ColumnNames.VELOCITY not in df.columns)):
         validate_dataframe(df)
         traces = velocity(df)
 
@@ -80,8 +78,6 @@ def acceleration(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None
         traces = extract_traces_by_session(df)
 
     for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
         for j in range(len(session_traces)):
             session_traces[j]['acceleration'] = session_traces[j]["velocity"].diff().fillna(0) / session_traces[j]['dt']
             session_traces[j]['acceleration'] = session_traces[j]['acceleration'].fillna(0)
@@ -136,8 +132,6 @@ def jerkiness(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -
         traces = extract_traces_by_session(df)
 
     for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
         for j in range(len(session_traces)):
             session_traces[j] = session_traces[j]["acceleration"].diff().fillna(0) / session_traces[j]['dt']
             session_traces[j]['jerkiness'] = session_traces[j]['jerkiness'].fillna(0)
@@ -196,9 +190,9 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
                 session_traces[j]['distance'] = _path(session_traces[j])['distance']
             
             # Store the traces with distance in the dictionary
-            df[session_id] = session_traces
+            traces[session_id] = session_traces
 
-    return df
+    return traces
 
 def _path(trace: pd.DataFrame) -> pd.DataFrame:
     """
@@ -306,3 +300,24 @@ def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
 
     return auc_per_session
 
+def MAD(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate the Mean Absolute Deviation (MAD) for the given DataFrame.
+    """
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    metrics = {}
+    for session_id, session_traces in traces.items():
+        session_mad = []
+        session_mad_max = []
+        for trace in session_traces:
+            session_mad.append(np.mean(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+            session_mad_max.append(np.max(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+        metrics[session_id] = {
+            'mad': np.mean(session_mad) if session_mad else 0,
+            'mad_max': np.mean(session_mad_max) if session_mad_max else 0
+        }
+
+    return metrics
