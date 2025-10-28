@@ -1,6 +1,4 @@
 import pandas as pd
-
-from pywib.core.movement import _path
 from pywib.utils.validation import validate_dataframe
 
 def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -130,3 +128,25 @@ def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = N
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
     return jerkiness_traces(traces)
+
+def _path(trace: pd.DataFrame) -> pd.DataFrame:
+    """
+    Helper function to calculate the path length for a single trace.
+    This function computes the path length based on the Euclidean distance between consecutive points.
+
+    Parameters:
+        trace (pd.DataFrame): A single trace DataFrame.
+
+    Returns:
+        pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
+    """
+
+    if trace is None:
+        raise ValueError("Trace DataFrame must be provided.")
+
+    validate_dataframe(trace)
+
+    trace = compute_space_time_diff(trace)
+    trace['distance'] = np.sqrt(trace['dx'] ** 2 + trace['dy'] ** 2)
+
+    return trace

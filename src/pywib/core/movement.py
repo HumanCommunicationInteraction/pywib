@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
 
-from pywib.utils.movement import acceleration_traces, jerkiness_traces, velocity_traces, velocity_df, acceleration_df, jerkiness_df, jerkiness_traces
-from pywib.utils.validation import validate_dataframe
-from pywib.utils.utils import compute_space_time_diff, compute_metrics_from_traces
-from pywib.utils.segmentation import extract_traces_by_session
+from pywib.utils import (acceleration_traces, velocity_traces, velocity_df, 
+                         acceleration_df, jerkiness_df, jerkiness_traces, 
+                         _path, validate_dataframe, compute_space_time_diff, 
+                         compute_metrics_from_traces, extract_traces_by_session)
 from pywib.constants import ColumnNames
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
@@ -180,27 +180,6 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
 
     return traces
 
-def _path(trace: pd.DataFrame) -> pd.DataFrame:
-    """
-    Helper function to calculate the path length for a single trace.
-    This function computes the path length based on the Euclidean distance between consecutive points.
-
-    Parameters:
-        trace (pd.DataFrame): A single trace DataFrame.
-
-    Returns:
-        pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
-    """
-
-    if trace is None:
-        raise ValueError("Trace DataFrame must be provided.")
-
-    validate_dataframe(trace)
-
-    trace = compute_space_time_diff(trace)
-    trace['distance'] = np.sqrt(trace['dx'] ** 2 + trace['dy'] ** 2)
-
-    return trace
 
 def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
     """
