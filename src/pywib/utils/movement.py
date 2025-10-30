@@ -1,5 +1,6 @@
 import pandas as pd
-from pywib.utils.validation import validate_dataframe
+import numpy as np
+from pywib.utils import compute_space_time_diff, validate_dataframe
 
 def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     """

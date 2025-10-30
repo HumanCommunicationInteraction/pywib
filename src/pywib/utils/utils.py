@@ -68,7 +68,7 @@ def compute_metrics_from_traces(
             - 'max': Maximum value.
             - 'min': Minimum value.
     """
-    if (column_name not in df.columns) and (traces is None):
+    if (traces is None) and (column_name not in df.columns):
         validate_dataframe(df)
         traces = compute_traces_fn(df)
 
