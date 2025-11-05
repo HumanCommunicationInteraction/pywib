@@ -1,6 +1,10 @@
 import unittest
 import numpy as np
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
 from utils import process_csv, import_pyModule
+
 import_pyModule()
 
 from pywib import number_of_clicks, click_slip
