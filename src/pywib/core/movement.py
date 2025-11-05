@@ -4,7 +4,8 @@ import numpy as np
 from pywib.utils import (acceleration_traces, velocity_traces, velocity_df, 
                          acceleration_df, jerkiness_df, jerkiness_traces, 
                          _path, validate_dataframe, compute_space_time_diff, 
-                         compute_metrics_from_traces, extract_traces_by_session)
+                         compute_metrics_from_traces, extract_traces_by_session, 
+                         auc_ratio_traces, auc_ratio_df)
 from pywib.constants import ColumnNames
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
@@ -16,7 +17,7 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if per_traces:
+    if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
         return velocity_df(df)
 
@@ -59,7 +60,7 @@ def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] 
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if per_traces:
+    if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
         return acceleration_df(df)
 
@@ -117,7 +118,7 @@ def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = N
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if per_traces:
+    if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
         return jerkiness_df(df)
 
@@ -181,7 +182,7 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
     return traces
 
 
-def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
+def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float | dict:
     """
     Calculate the Area Under the Curve (AUC) for the given DataFrame.
     
@@ -193,21 +194,25 @@ def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -
     Returns:
         float: The computed AUC value.
     """
-    
+
     if(validation):
         validate_dataframe(df)
 
+    # TODO revisar
     if computeTraces:
-        df   = extract_traces_by_session(df)
+        df = df.sort_values(by=ColumnNames.TIME_STAMP)
+        traces = extract_traces_by_session(df)
+        auc_by_session = {}
+        for session_id, session_traces in traces.items():
+            session_traces = compute_space_time_diff(session_traces)
+            auc_by_session[session_id] = np.mean([np.trapezoid(trace[ColumnNames.Y], trace[ColumnNames.X]) for trace in session_traces])
+        return auc_by_session
+    else:
+        df = compute_space_time_diff(df)
+        # Área bajo la curva real
+        area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
+        return area_real
 
-    df = df.sort_values(by=ColumnNames.TIME_STAMP)
-
-    df = compute_space_time_diff(df)
-
-    # Área bajo la curva real
-    area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
-
-    return area_real
 
 def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
     """
@@ -240,7 +245,7 @@ def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool =
 
     return area_optimal
 
-def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
+def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
     """
     Calculate the AUC ratio for the given DataFrame.
     
@@ -252,18 +257,43 @@ def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
         auc_per_session (dict): A dictionary with sessionId as keys and a tuple (area_real, area_optimal, auc_ratio) as values.
     """
 
-    validate_dataframe(df)
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if computeTraces:
-        df = extract_traces_by_session(df)
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return auc_ratio_df(df)
 
-    auc_per_session = {}
-    for session_id, session_traces in df.items():
-        area_real = auc(session_traces, False, False)
-        area_optimal = auc_optimal(session_traces, False, False)
-        auc_per_session[session_id] = (area_real, area_optimal, abs(area_real - area_optimal) / (abs(area_optimal) + 1e-6))
+    # If traces are not provided, extract them from df
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
 
-    return auc_per_session
+    return auc_ratio_traces(traces)
+
+def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate auc ratio metrics for the given DataFrame or traces.
+    This function computes the mean, max, and min auc ratio for each session.
+    """
+    if (traces is None):
+        if(df is None):
+            raise ValueError("Either 'df' or 'traces' must be provided.")
+        computed_auc = auc_ratio(df)
+
+    for session_id in computed_auc.keys():
+        auc_ratios = [trace_metrics['auc_ratio'] for trace_metrics in computed_auc[session_id]]
+        auc = [trace_metrics['auc'] for trace_metrics in computed_auc[session_id]]
+        computed_auc[session_id] = {
+            'mean_ratio': np.mean(auc_ratios) if auc_ratios else 0,
+            'max_ratio': np.max(auc_ratios) if auc_ratios else 0,
+            'min_ratio': np.min(auc_ratios) if auc_ratios else 0,
+            'mean': np.mean(auc) if auc else 0,
+            'max': np.max(auc) if auc else 0,
+            'min': np.min(auc) if auc else 0,
+        }
+    return computed_auc
+    
 
 def MAD(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pywib.constants import ColumnNames
 from pywib.utils import compute_space_time_diff, validate_dataframe
 
 def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -49,6 +50,10 @@ def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with an additional 'acceleration' column.
     """
     validate_dataframe(df)
+
+    if(ColumnNames.VELOCITY not in df.columns):
+        df = velocity_df(df)
+
     df['acceleration'] = df['velocity'].diff().fillna(0) / df['dt']
     df['acceleration'] = df['acceleration'].fillna(0)
     return df
@@ -151,3 +156,76 @@ def _path(trace: pd.DataFrame) -> pd.DataFrame:
     trace['distance'] = np.sqrt(trace['dx'] ** 2 + trace['dy'] ** 2)
 
     return trace
+
+def _auc(df: pd.DataFrame) -> float:
+    """
+    Helper function to calculate the Area Under the Curve (AUC) for a single DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'x' and 'y' columns.
+    Returns:
+        float: The computed AUC value.
+    """
+    validate_dataframe(df)
+
+    df = compute_space_time_diff(df)
+
+    # Área bajo la curva real
+    area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
+    return area_real
+
+def _auc_optimal(df: pd.DataFrame) -> float:
+    """
+    Helper function to calculate the Area Under the Optimal Curve for a single DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'x' and 'y' columns.
+    Returns:
+        float: The computed Area Under the Optimal Curve value.
+    """
+    df = compute_space_time_diff(df)
+
+    # Área bajo la línea óptima
+    x0, y0 = df[ColumnNames.X].iloc[0], df[ColumnNames.Y].iloc[0]
+    x1, y1 = df[ColumnNames.X].iloc[-1], df[ColumnNames.Y].iloc[-1]
+    x_opt = np.linspace(x0, x1, len(df))
+    y_opt = np.linspace(y0, y1, len(df))
+    area_optimal = np.trapezoid(y_opt, x_opt)
+
+    return area_optimal
+
+def auc_ratio_df(df: pd.DataFrame) -> dict:
+    """
+    Calculate AUC, optimal AUC, and AUC ratio for a single DataFrame.
+    
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'x' and 'y' columns.
+    Returns:
+        dict: Dictionary with 'auc', 'auc_optimal', and 'auc_ratio'.
+    """
+    validate_dataframe(df)
+    auc_val = _auc(df)
+    area_optimal = _auc_optimal(df)
+    return {
+        "auc": auc_val,
+        "auc_ratio": abs(auc_val - area_optimal) / (abs(area_optimal) + 1e-6)
+    }
+
+def auc_ratio_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[list[dict]]:
+    """
+    Calculate AUC ratio metrics for multiple traces grouped by session IDs.
+
+    Parameters:
+        traces (dict[str, list[pd.DataFrame]]): Mapping of sessionId to list of DataFrames.
+    Returns:
+        dict[list[dict]]: Mapping of sessionId to list of AUC ratio metrics dictionaries.
+    """
+    auc_metrics = {}
+    for session_id, session_traces in traces.items():
+        auc_metrics_per_trace = []
+        for i, df in enumerate(session_traces):
+            validate_dataframe(df)
+            auc_metrics_per_trace.append(auc_ratio_df(df))
+        auc_metrics[session_id] = auc_metrics_per_trace
+    return auc_metrics
+
