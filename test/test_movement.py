@@ -13,7 +13,7 @@ class TestMovement(unittest.TestCase):
     def setUp(self):
         """Set up test data"""
         # Create sample test data instead of relying on external CSV
-        self.test_data = process_csv('pywib/test/test_data/test_window_resize_error.csv')
+        self.test_data = process_csv('test/test_data/test_window_resize_error.csv')
         
     def test_velocity(self):
         """Test velocity calculation"""

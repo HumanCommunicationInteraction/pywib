@@ -10,7 +10,7 @@ import_pyModule()
 from pywib import number_of_clicks, click_slip
 
 class TestData:
-    dataFile = 'pywib/test/test_data/test_mouse.csv'
+    dataFile = 'test/test_data/test_mouse.csv'
     expected_clicks = {
         'SESSION_A': 2,
         'SESSION_B': 2

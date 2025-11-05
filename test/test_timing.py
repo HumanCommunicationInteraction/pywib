@@ -10,7 +10,7 @@ import_pyModule()
 from pywib import movement_time, execution_time
 
 class TestData:
-    window_resize_error_file = 'pywib/test/test_data/test_window_resize_error.csv'
+    window_resize_error_file = 'test/test_data/test_window_resize_error.csv'
     window_resize_error_execution_time = 18100  # in milliseconds
 
 class TestTiming(unittest.TestCase):
