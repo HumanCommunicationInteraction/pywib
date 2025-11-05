@@ -259,21 +259,12 @@
 <h1>Velocity<a class="headerlink" href="#velocity" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pywib.velocity">
-<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.velocity" title="Link to this definition">¶</a></dt>
-<dd><p>Calculate the velocity for the given DataFrame or traces.
-This function computes the velocity based on the distance and time difference between consecutive points.</p>
+<span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.velocity" title="Link to this definition">¶</a></dt>
+<dd><p>Wrapper function to calculate velocity for either a single DataFrame or a traces dictionary.</p>
+<p>If <cite>traces</cite> is None, they will be computed from the DataFrame.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘x’, ‘y’, and ‘timeStamp’ columns.</p></li>
-<li><p><strong>traces</strong> (<em>dict</em>) – A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as DataFrames with an additional ‘velocity’ column.</p>
-</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]]</span></p>
 </dd>
 </dl>
 </dd></dl>
