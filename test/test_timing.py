@@ -1,12 +1,16 @@
 import unittest
 import numpy as np
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
 from utils import process_csv, import_pyModule
+
 import_pyModule()
 
 from pywib import movement_time, execution_time
 
 class TestData:
-    window_resize_error_file = 'E:\\Documents\\Guille\\Uni\\2025\\HCI-Web-Interaction-Analyzer\\test_window_resize_error.csv'
+    window_resize_error_file = 'test/test_data/test_window_resize_error.csv'
     window_resize_error_execution_time = 18100  # in milliseconds
 
 class TestTiming(unittest.TestCase):
