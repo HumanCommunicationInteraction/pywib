@@ -70,7 +70,7 @@ def compute_metrics_from_traces(
     """
     if (traces is None) and (column_name not in df.columns):
         validate_dataframe(df)
-        traces = compute_traces_fn(df)
+        traces = compute_traces_fn(df, per_traces=True)
 
     metrics = {}
     for session_id, session_traces in traces.items():

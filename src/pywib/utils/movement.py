@@ -87,6 +87,10 @@ def jerkiness_df(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with an additional 'jerkiness' column.
     """
     validate_dataframe(df)
+
+    if(ColumnNames.ACCELERATION not in df.columns):
+        df = acceleration_df(df)
+
     df['jerkiness'] = df['acceleration'].diff().fillna(0) / df['dt']
     df['jerkiness'] = df['jerkiness'].fillna(0)
     return df
