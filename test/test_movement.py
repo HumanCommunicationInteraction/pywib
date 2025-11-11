@@ -10,7 +10,7 @@ from pywib import (velocity, acceleration, compute_space_time_diff,
                    auc_ratio_metrics, auc_ratio, velocity_metrics, acceleration_metrics,
                    jerkiness, jerkiness_metrics)
 
-DEBUG = True
+DEBUG = False
 
 class TestMovement(unittest.TestCase):
     
