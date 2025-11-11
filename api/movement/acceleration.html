@@ -195,13 +195,19 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../movement_metrics.html">Movement Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../constants.html">Constants</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Documentation</a><input aria-label="Toggle navigation of API Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Movement Functions</a><input aria-label="Toggle navigation of Movement Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="velocity.html">Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="velocity.html#velocity-metrics">Velocity Metrics</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Acceleration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acceleration-metrics">Acceleration Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="jerkiness.html">Jerkiness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -216,7 +222,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
 </ul>
 
 </div>
@@ -269,6 +274,54 @@
 </dl>
 </dd></dl>
 
+<section id="practical-example">
+<h2>Practical Example<a class="headerlink" href="#practical-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">acceleration</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">compute_space_time_diff</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">compute_space_time_diff</span><span class="p">(</span><span class="n">df_data</span><span class="p">)</span>
+<span class="n">acceleration_traces</span> <span class="o">=</span> <span class="n">acceleration</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">velocity</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">traces</span> <span class="ow">in</span> <span class="n">acceleration_traces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">trace</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="acceleration-metrics">
+<h1>Acceleration Metrics<a class="headerlink" href="#acceleration-metrics" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pywib.acceleration_metrics">
+<span class="sig-name descname"><span class="pre">acceleration_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.acceleration_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate acceleration metrics for the given DataFrame or traces.
+This function computes the mean, max, and min acceleration for each session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing interaction data. Optionally already including ‘acceleration’ column.</p></li>
+<li><p><strong>traces</strong> (<em>dict</em>) – A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as dictionaries with ‘mean’, ‘max’, and ‘min’ acceleration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="id1">
+<h2>Practical Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">acceleration_metrics</span>
+<span class="n">acc_metrics</span> <span class="o">=</span> <span class="n">acceleration_metrics</span><span class="p">(</span><span class="n">data_df</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">acc_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Session Acceleration Metrics:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Mean Acceleration: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Max Acceleration: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Min Acceleration: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -328,6 +381,12 @@
             <ul>
 <li><a class="reference internal" href="#">Acceleration</a><ul>
 <li><a class="reference internal" href="#pywib.acceleration"><code class="docutils literal notranslate"><span class="pre">acceleration()</span></code></a></li>
+<li><a class="reference internal" href="#practical-example">Practical Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acceleration-metrics">Acceleration Metrics</a><ul>
+<li><a class="reference internal" href="#pywib.acceleration_metrics"><code class="docutils literal notranslate"><span class="pre">acceleration_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#id1">Practical Example</a></li>
 </ul>
 </li>
 </ul>

@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Movement Metrics" href="movement_metrics.html"><link rel="prev" title="pywib documentation" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
-        <title>Introducción - pywib 0.1.0 documentation</title>
+        <title>Mouse Behavioral Patterns - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ae546fa" />
@@ -192,8 +192,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Introducción</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="movement_metrics.html">Movement Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mouse.html">Mouse Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timing.html">Timing Metrics</a></li>
@@ -242,7 +242,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/introduction.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/patterns.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -260,21 +260,59 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="introduccion">
-<h1>Introducción<a class="headerlink" href="#introduccion" title="Link to this heading">¶</a></h1>
-<p>Welcome to <strong>pywib</strong> (Python Web Interaction Behaviour).</p>
-<p>This proyect aims to analyze user interaction with web applications by processing interaction event data (such as clicks, mouse movements, scrolls, etc.) recorded in CSV files.
-It provides tools to compute various movement metrics (like velocity, acceleration, jerkiness, etc.) and others such as visualizing interaction traces.</p>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>You can install <strong>pywib</strong> using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pywib
-</pre></div>
-</div>
+          <section id="mouse-behavioral-patterns">
+<h1>Mouse Behavioral Patterns<a class="headerlink" href="#mouse-behavioral-patterns" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Original text from cite:<cite>Katerina2018-ch</cite>.</p>
+<p><em>In the area of HCI researchers have been trying to quantify the movement of humans who perform pointing tasks on computers and other devices. Mouse cursor movement is a vital part in this field and has been used in many studies.</em></p>
+<p><em>In 2001, Mueller and Lockerd proposed the use of cursor patterns behavior as input to deliver personalized content to users. Unfortunately, the identification of patterns has not significantly advanced since then. Mouse patterns characterization is generally vague, and their identification remains a largely visual process and qualitative analysis.</em></p>
+<p><em>There are not many research works that clearly attempt to detect users’ behavioral attributes via mouse behavior. Such as…</em></p>
+<p><em>There are several studies that have identified some common patterns of cursor movements, such as reading patterns, direct movements, random movements, hesitation patterns, fixed and guide patterns. These patterns have been identified in different web contexts like search engine result page, interaction with web forms and web site navigation. These works are of significant HCI contribution, since identifying mouse behavioral patterns allow us to infer the activity performed by the user, for example, usability problems and user experience</em></p>
 </section>
-<section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<section id="straight-pattern">
+<h2>Straight pattern<a class="headerlink" href="#straight-pattern" title="Link to this heading">¶</a></h2>
+<p>Described by <a class="reference external" href="https://link.springer.com/chapter/10.1007/978-3-540-73287-7_59">(Lee &amp; Chen, 2006)</a>.</p>
+<p>Also known as the ‘direct mouse movements’ refers to users confident movements, characteried by a pause before a direc movement towards a target since “once traced the desired featre users move the mouse straight to it” (Lee &amp; Chen, 2006)</p>
+<p>According to <a class="reference external" href="https://doi.org/10.1145/1358628.1358797">Rodden et al. (2008)</a>
+, this pattern defines direct movements that occur once the user has decided which action to take and this could reveal certainty and task-oriented self-efficacy.</p>
+<p>Hence, drawing from the related literature review, mouse trajectory (e.g. straight lines) or selected targets (i.e. clicks) after direct movements may measure the end-user’s self-efficacy level or perceived ease of use when interacting with computer applications.</p>
 </section>
+<section id="hesitation-pattern">
+<h2>Hesitation pattern<a class="headerlink" href="#hesitation-pattern" title="Link to this heading">¶</a></h2>
+<p>First explicitly defined in Cheese project (Mueller &amp; Lockerd, 2001, pp. 1–2).</p>
+<p>According to the authors “hesitation on links or text could potentially provide information about what else interests the user on the page”. This hesitation could be expressed by the cursor as a mouse hover over the under decision item (i.e. element to click).</p>
+<p>Other studies which focused on the analysis of movements of the cursor in web forms refer to the pattern of hesitation as movements between “two or more answers while trying to decide which one to choose (Ferreira et al., 2010). Hesitation patterns have also been identified during interaction with navigation menus (Atterer et al., 2006).</p>
+<p>In commercial applications of mouse tracking, as ClickTale (2006), the pattern of hesitation is defined as “the average time from the beginning of a mouse hover to the moment of the mouse click”.</p>
+<p>Hesitation pattern could hence be used to infer users’ perceived difficulty, risk-perception levels (since the user evaluates the cost benefits of choosing an action among others), or even the perceived usability from his/her interaction with the system.</p>
+</section>
+<section id="reading-pattern">
+<h2>Reading pattern<a class="headerlink" href="#reading-pattern" title="Link to this heading">¶</a></h2>
+<p>The reading pattern can be divided into two different types of behavior: the horizontal reading pattern that is characteristic but not so common among users (Rodden et al., 2008) and the vertical reading pattern where the mouse path traces a vertical line, with small or large pauses.</p>
+<p>The vertical reading pattern is defined as a movement of “following the eye vertically” (Rodden et al., 2008). This pattern is observable in vertical lists like a menu where the users “use the mouse as a marker when they are looking through a list of links” (Mueller &amp; Lockerd, 2001, pp. 1–2).</p>
+</section>
+<section id="random-and-fixed-pattern">
+<h2>Random and fixed pattern<a class="headerlink" href="#random-and-fixed-pattern" title="Link to this heading">¶</a></h2>
+<p>According to Ferreira et al. (2010) the random pattern is characterized by movements “without any specific intention, just playing around and doing random movements whit short pauses or not”. The authors noted that the random movements often arise when the difficulty level of the task increases.
+Hence, on presence of a random pattern we can infer doubt, difficulty, low self-efficacy, anxiety, etc.</p>
+<p>Described in Lee and Chen (2006), the fixed pattern refers to the areas where the users mostly used for “repose” the cursor. For Lee and Chen (2006) these areas usually are on the right-side of the page. This area is also mentioned as “White space” (Ferreira et al., 2010) and research indicates that a large number of users use whitespace to rest the mouse, thus avoiding accidentally clicking a link.</p>
+<p>Fixed pattern could be expressed via long or shorter mouse pauses on ‘neutral’ web-page areas. During this time users may reflect on the task, read (eye tracking could only reveal reading behavior during mouse pauses) or evaluate the costs and benefits of making particular decisions (e.g. clicks, actions). Hence, fixed pattern could measure risk-perception or usefulness levels.</p>
+</section>
+<section id="guide-pattern">
+<h2>Guide Pattern<a class="headerlink" href="#guide-pattern" title="Link to this heading">¶</a></h2>
+<p>Defined in Lee and Chen (2006), the guide pattern defines a behavior of continuous movement of the cursor. According to the authors this pattern seems to reflex an “exploratory” role that suggests a relationship between mouse and eye movement” and hence this pattern may give us an idea of the user expectations. Hence, guide pattern may be associated with users’ acceptance, i.e. perceived usefulness and ease of use and also willingness to learn.</p>
+<p>However, guide pattern is very similar to the reading pattern since it can be expressed via ‘smooth’ (i.e. slow) cursor movements identifying horizontal or vertical reading.</p>
+</section>
+</section>
+<section id="keystroke-dynamics-in-hci">
+<h1>Keystroke dynamics in HCI<a class="headerlink" href="#keystroke-dynamics-in-hci" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://doi.org/10.1145/1978942.1979046">Epp et al. (2011)</a> describes keystroke dynamics as ‘the study of the unique timing patterns in an individual’s typing, and typically includes extracting keystroke timing features such as the duration of a key press and the time elapsed between key presses”.</p>
+<p>Recently, keystroke dynamics have been used in affective computing research to detect user affective states like mood and emotions (Epp et al. 2011; Khanna &amp; Sasikumar, 2010).</p>
+<p>Attributes taking into consideration when analuzing keystroke dynamics are: tying speed, mode, std. deviation/variance, range, total time taken, number of backspaces used and interval between typing.</p>
+<p>There is not much research in analyzing keystroke dynamics and end-users behavioral states. Some related research may concern personality detection through keyboard and mouse input.</p>
+<p>The keyboard attributes measured in two exploratory studies were ‘key-up’ and key-down’. Their findings revealed some limited significance since only recording the standard deviation of the average time between events gave some insight into a user’s activity level, a sub trait of extraversion.</p>
+<p>In Vizer, Zhou, and Sears (2009) the authors used keystroke timing features of free text in conjunction with linguistic features to identify cognitive and physical stress.
+In a more related study of Dijkstra (2013) the author examined the correlation between mouse or keyboard input and self-efficacy levels. Although mouse input showed some promising results for detecting self-efficacy levels, no correlations were found between typing keyboard behavior and self-efficacy.</p>
 </section>
 
         </article>
@@ -282,26 +320,8 @@ It provides tools to compute various movement metrics (like velocity, accelerati
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="movement_metrics.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Movement Metrics</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="index.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Home</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -332,11 +352,16 @@ It provides tools to compute various movement metrics (like velocity, accelerati
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Introducción</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#">Mouse Behavioral Patterns</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#straight-pattern">Straight pattern</a></li>
+<li><a class="reference internal" href="#hesitation-pattern">Hesitation pattern</a></li>
+<li><a class="reference internal" href="#reading-pattern">Reading pattern</a></li>
+<li><a class="reference internal" href="#random-and-fixed-pattern">Random and fixed pattern</a></li>
+<li><a class="reference internal" href="#guide-pattern">Guide Pattern</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#keystroke-dynamics-in-hci">Keystroke dynamics in HCI</a></li>
 </ul>
 
           </div>

@@ -195,13 +195,19 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../movement_metrics.html">Movement Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../constants.html">Constants</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Documentation</a><input aria-label="Toggle navigation of API Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Movement Functions</a><input aria-label="Toggle navigation of Movement Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="velocity.html">Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="velocity.html#velocity-metrics">Velocity Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="acceleration.html">Acceleration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Jerkiness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jerkiness-metrics">Jerkiness Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -216,7 +222,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
 </ul>
 
 </div>
@@ -278,6 +283,51 @@
 </dl>
 </dd></dl>
 
+<section id="practical-example">
+<h2>Practical Example<a class="headerlink" href="#practical-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">jerkiness</span>
+<span class="n">jk_df</span> <span class="o">=</span> <span class="n">jerkiness</span><span class="p">(</span><span class="n">data_df</span><span class="p">,</span> <span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">traces</span> <span class="ow">in</span> <span class="n">jk_df</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">trace</span><span class="p">[[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;jerkiness&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="jerkiness-metrics">
+<h1>Jerkiness Metrics<a class="headerlink" href="#jerkiness-metrics" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pywib.jerkiness_metrics">
+<span class="sig-name descname"><span class="pre">jerkiness_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.jerkiness_metrics" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate jerkiness metrics for the given DataFrame or traces.
+This function computes the mean, max, and min jerkiness for each session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing interaction data. Optionally already including ‘jerkiness’ column.</p></li>
+<li><p><strong>traces</strong> (<em>dict</em>) – A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as dictionaries with ‘mean’, ‘max’, and ‘min’ jerkiness.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="id1">
+<h2>Practical Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">jerkiness_metrics</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">jerkiness_metrics</span><span class="p">(</span><span class="n">data_df</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">session</span><span class="p">,</span> <span class="n">session</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Session: </span><span class="si">{</span><span class="n">session</span><span class="si">}</span><span class="s2">, Mean Jerkiness: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Max Jerkiness: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Min Jerkiness: </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -337,6 +387,12 @@
             <ul>
 <li><a class="reference internal" href="#">Jerkiness</a><ul>
 <li><a class="reference internal" href="#pywib.jerkiness"><code class="docutils literal notranslate"><span class="pre">jerkiness()</span></code></a></li>
+<li><a class="reference internal" href="#practical-example">Practical Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jerkiness-metrics">Jerkiness Metrics</a><ul>
+<li><a class="reference internal" href="#pywib.jerkiness_metrics"><code class="docutils literal notranslate"><span class="pre">jerkiness_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#id1">Practical Example</a></li>
 </ul>
 </li>
 </ul>

@@ -195,13 +195,19 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../movement_metrics.html">Movement Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../constants.html">Constants</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Documentation</a><input aria-label="Toggle navigation of API Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Movement Functions</a><input aria-label="Toggle navigation of Movement Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocity-metrics">Velocity Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="acceleration.html">Acceleration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="jerkiness.html">Jerkiness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -216,7 +222,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
 </ul>
 
 </div>
@@ -260,15 +265,40 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pywib.velocity">
 <span class="sig-name descname"><span class="pre">velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.velocity" title="Link to this definition">¶</a></dt>
-<dd><p>Wrapper function to calculate velocity for either a single DataFrame or a traces dictionary.</p>
+<dd><p>Function to calculate velocity for either a single DataFrame or a traces dictionary.</p>
 <p>If <cite>traces</cite> is None, they will be computed from the DataFrame.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘x’, ‘y’, and ‘timeStamp’ columns.</p></li>
+<li><p><strong>traces</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>list</em><em>[</em><em>pd.DataFrame</em><em>]</em><em>]</em>) – Dictionary mapping session IDs to lists of DataFrames.</p></li>
+<li><p><strong>per_traces</strong> (<em>bool</em>) – Whether to compute velocity per trace. If False, compute directly on df.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of traces with computed ‘velocity’ column.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>]]</span></p>
+<dd class="field-odd"><p>dict[str, list[pd.DataFrame]]</p>
 </dd>
 </dl>
 </dd></dl>
 
+<section id="practical-example">
+<h2>Practical Example<a class="headerlink" href="#practical-example" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">velocity</span>
+
+ <span class="n">df</span> <span class="o">=</span> <span class="n">compute_space_time_diff</span><span class="p">(</span><span class="n">data_frame</span><span class="p">)</span>
+ <span class="c1"># Calculate velocity</span>
+ <span class="n">df_velocity</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+ <span class="c1"># Iterate over traces to obtain velocity values</span>
+ <span class="k">for</span> <span class="n">session_id</span><span class="p">,</span> <span class="n">traces</span> <span class="ow">in</span> <span class="n">df_velocity</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Session ID: </span><span class="si">{</span><span class="n">session_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+     <span class="k">for</span> <span class="n">trace</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Velocity values:</span><span class="se">\n</span><span class="si">{</span><span class="n">trace</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="pywib.velocity_metrics">
 <span class="sig-name descname"><span class="pre">velocity_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.velocity_metrics" title="Link to this definition">¶</a></dt>
@@ -282,7 +312,7 @@ This function computes the mean, max, and min velocity for each session.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as dictionaries with ‘mean</p>
+<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as dictionaries with ‘mean ‘, ‘max’, and ‘min’ velocity.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -290,6 +320,23 @@ This function computes the mean, max, and min velocity for each session.</p>
 </dl>
 </dd></dl>
 
+</section>
+</section>
+<section id="velocity-metrics">
+<h1>Velocity Metrics<a class="headerlink" href="#velocity-metrics" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2>Practical Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">velocity_metrics</span>
+
+ <span class="n">metrics</span> <span class="o">=</span> <span class="n">velocity_metrics</span><span class="p">(</span><span class="n">data_frame</span><span class="p">)</span>
+
+ <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">session_id</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean Velocity: </span><span class="si">{</span><span class="n">session_id</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max Velocity: </span><span class="si">{</span><span class="n">session_id</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min Velocity: </span><span class="si">{</span><span class="n">session_id</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 
         </article>
@@ -349,7 +396,14 @@ This function computes the mean, max, and min velocity for each session.</p>
             <ul>
 <li><a class="reference internal" href="#">Velocity</a><ul>
 <li><a class="reference internal" href="#pywib.velocity"><code class="docutils literal notranslate"><span class="pre">velocity()</span></code></a></li>
+<li><a class="reference internal" href="#practical-example">Practical Example</a><ul>
 <li><a class="reference internal" href="#pywib.velocity_metrics"><code class="docutils literal notranslate"><span class="pre">velocity_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#velocity-metrics">Velocity Metrics</a><ul>
+<li><a class="reference internal" href="#id1">Practical Example</a></li>
 </ul>
 </li>
 </ul>
