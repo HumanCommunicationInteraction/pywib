@@ -1,5 +1,5 @@
 Movement Functions
-================
+==================
 
 .. toctree::
    :maxdepth: 1
@@ -8,3 +8,4 @@ Movement Functions
    acceleration
    jerkiness
    path
+   auc

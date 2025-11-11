@@ -126,8 +126,14 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['max'], session['min'])
 
     def test_auc(self):
-        # TODO terminar tests
         auc = auc_ratio(self.test_data_auc.copy())
+        for _, session in auc.items():
+            for trace in session:
+                self.assertIn('auc_ratio', trace)
+                self.assertIn('auc', trace)
+                self.assertGreaterEqual(trace['auc_ratio'], 0)
+        
+    def test_auc_metrics(self):
         auc_metrics = auc_ratio_metrics(self.test_data_auc.copy())
         for _, session in auc_metrics.items():
             self.assertIn('mean_ratio', session)
