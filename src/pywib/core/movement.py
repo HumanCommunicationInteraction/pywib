@@ -10,9 +10,17 @@ from pywib.constants import ColumnNames
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
     """
-    Wrapper function to calculate velocity for either a single DataFrame or a traces dictionary.
+    Function to calculate velocity for either a single DataFrame or a traces dictionary.
 
     If `traces` is None, they will be computed from the DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'x', 'y', and 'timeStamp' columns.
+        traces (dict[str, list[pd.DataFrame]]): Dictionary mapping session IDs to lists of DataFrames.
+        per_traces (bool): Whether to compute velocity per trace. If False, compute directly on df.
+
+    Returns:
+        dict[str, list[pd.DataFrame]]: Dictionary of traces with computed 'velocity' column.
     """
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
@@ -40,7 +48,7 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
         traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
 
     Returns:
-        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean ', 'max', and 'min' velocity.
     """
     
     return compute_metrics_from_traces(
@@ -78,7 +86,7 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     This function computes the mean, max, and min acceleration for each session.
 
     Parameters:
-        df (pd.DataFrame): DataFrame containing 'acceleration' column.
+        df (pd.DataFrame): DataFrame containing interaction data. Optionally already including 'acceleration' column.
         traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' acceleration.
@@ -86,8 +94,8 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     if (ColumnNames.ACCELERATION not in df.columns) and (traces is None):
         validate_dataframe(df)
         if ColumnNames.VELOCITY not in df.columns:
-            traces = velocity(df)
-        traces = acceleration(None, traces)
+            traces = velocity(df, per_traces=True)
+        traces = acceleration(None, traces,  per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
@@ -134,14 +142,20 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
     """
     Calculate jerkiness metrics for the given DataFrame or traces.
     This function computes the mean, max, and min jerkiness for each session.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing interaction data. Optionally already including 'jerkiness' column.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' jerkiness.
     """
     if((ColumnNames.JERKINESS not in df.columns) and (traces is None)):
         validate_dataframe(df)
         if(ColumnNames.ACCELERATION not in df.columns):
             if(ColumnNames.VELOCITY not in df.columns):
-                traces = velocity(df)
-            traces = acceleration(None, traces)
-        traces = jerkiness(None, traces)
+                traces = velocity(df, per_traces=True)
+            traces = acceleration(None, traces, per_traces=True)
+        traces = jerkiness(None, traces, per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
