@@ -7,6 +7,7 @@ from .movement import (velocity, acceleration, jerkiness,
                        velocity_metrics, acceleration_metrics, jerkiness_metrics,
                        MAD)
 from .mouse import click_slip, number_of_clicks
+from .keyboard import (typing_speed, typing_speed_metrics)
 
 __all__ = [
     "execution_time",
@@ -26,5 +27,7 @@ __all__ = [
     "jerkiness_metrics",
     "click_slip",
     "number_of_clicks",
-    "MAD"
+    "MAD",
+    "typing_speed",
+    "typing_speed_metrics",
 ]
