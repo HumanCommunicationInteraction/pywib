@@ -1,38 +1,42 @@
 import pandas as pd
 import numpy as np
-from ..utils.validation import validate_dataframe
-from ..utils.utils import compute_space_time_diff
-from ..utils.segmentation import extract_traces_by_session
-from ..constants import ColumnNames
 
-def velocity(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+from pywib.utils import (acceleration_traces, velocity_traces, velocity_df, 
+                         acceleration_df, jerkiness_df, jerkiness_traces, 
+                         _path, validate_dataframe, compute_space_time_diff, 
+                         compute_metrics_from_traces, extract_traces_by_session, 
+                         auc_ratio_traces, auc_ratio_df)
+from pywib.constants import ColumnNames
+
+def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
     """
-    Calculate the velocity for the given DataFrame or traces.
-    This function computes the velocity based on the distance and time difference between consecutive points.
+    Function to calculate velocity for either a single DataFrame or a traces dictionary.
+
+    If `traces` is None, they will be computed from the DataFrame.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing 'x', 'y', and 'timeStamp' columns.
-        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
-    Returns:
-        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'velocity' column.
-    """
+        traces (dict[str, list[pd.DataFrame]]): Dictionary mapping session IDs to lists of DataFrames.
+        per_traces (bool): Whether to compute velocity per trace. If False, compute directly on df.
 
+    Returns:
+        dict[str, list[pd.DataFrame]]: Dictionary of traces with computed 'velocity' column.
+    """
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
+
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return velocity_df(df)
+
+    # If traces are not provided, extract them from df
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
-            
-    for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
 
-        for j in range(len(session_traces)):
-            session_traces[j] = _path(session_traces[j])
-            session_traces[j]['velocity'] = session_traces[j]['distance'] / session_traces[j]['dt']
-            # Fix NaN velocity for first point - set to 0
-            session_traces[j]['velocity'] = session_traces[j]['velocity'].fillna(0)
-            
-        traces[session_id] = session_traces
-    return traces
+    # Compute velocity for each trace
+    return velocity_traces(traces)
+
 
 def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
@@ -44,50 +48,37 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
         traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
 
     Returns:
-        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean ', 'max', and 'min' velocity.
     """
     
-    if((ColumnNames.VELOCITY not in df.columns) and (traces is None)):
-        validate_dataframe(df)
-        traces = velocity(df)
+    return compute_metrics_from_traces(
+        df=df,
+        traces=traces,
+        column_name=ColumnNames.VELOCITY,
+        compute_traces_fn=velocity,
+        preprocess_fn=lambda s: s[s > 0]  # Exclude zero velocities
+    )
 
-    metrics = {}
-    for session_id, session_traces in traces.items():
-        all_velocities = pd.concat([trace['velocity'] for trace in session_traces])
-        all_velocities = all_velocities[all_velocities > 0]  # Exclude zero velocities for metrics calculation
-        metrics[session_id] = {
-            'mean': all_velocities.mean(),
-            'max': all_velocities.max(),
-            'min': all_velocities.min()
-        }
-
-    return metrics
-
-def acceleration(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
     """
-    Calculate the acceleration for the given DataFrame.
-    This function computes the acceleration based on the change in velocity over time.
+    Wrapper function to calculate acceleration for either a single DataFrame or a traces dictionary.
 
-    Parameters:
-        df (pd.DataFrame): DataFrame containing 'velocity' and 'dt' columns.
-        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
-    Returns:
-        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'acceleration' column.
+    If `traces` is None, they will be computed from the DataFrame.
     """
-    
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
+
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return acceleration_df(df)
+
+    # If traces are not provided, extract them from df
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
 
-    for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
-        for j in range(len(session_traces)):
-            session_traces[j]['acceleration'] = session_traces[j]["velocity"].diff().fillna(0) / session_traces[j]['dt']
-            session_traces[j]['acceleration'] = session_traces[j]['acceleration'].fillna(0)
-
-        traces[session_id] = session_traces
-    return traces
+    # Compute acceleration for each trace
+    return acceleration_traces(traces)
 
 def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
@@ -95,80 +86,84 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     This function computes the mean, max, and min acceleration for each session.
 
     Parameters:
-        df (pd.DataFrame): DataFrame containing 'acceleration' column.
+        df (pd.DataFrame): DataFrame containing interaction data. Optionally already including 'acceleration' column.
         traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' acceleration.
     """
-    if((ColumnNames.ACCELERATION not in df.columns) and (traces is None)):
+    if (ColumnNames.ACCELERATION not in df.columns) and (traces is None):
         validate_dataframe(df)
-        if(ColumnNames.VELOCITY not in df.columns):
-            traces = velocity(df)
-        traces = acceleration(None, traces)
+        if ColumnNames.VELOCITY not in df.columns:
+            traces = velocity(df, per_traces=True)
+        traces = acceleration(None, traces,  per_traces=True)
 
-    metrics = {}
-    for session_id, session_traces in traces.items():
-        all_accelerations = pd.concat([trace['acceleration'] for trace in session_traces])
-        all_accelerations = all_accelerations[all_accelerations != 0]  # Exclude zero accelerations for metrics calculation
-        metrics[session_id] = {
-            'mean': all_accelerations.mean(),
-            'max': all_accelerations.max(),
-            'min': all_accelerations.min()
-        }
+    return compute_metrics_from_traces(
+        df=df,
+        traces=traces,
+        column_name=ColumnNames.ACCELERATION,
+        compute_traces_fn=lambda _: traces,  # Already computed above
+        preprocess_fn=lambda s: s[s != 0]    # Exclude zero accelerations
+    )
 
-    return metrics
-
-def jerkiness(df: pd.DataFrame,  traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
     """
-    Calculate the jerkiness for the given DataFrame.
-    This function computes the jerkiness based on the change in acceleration over time.
+    Compute jerkiness for either a single DataFrame or multiple traces.
 
-    Parameters:
-        df (pd.DataFrame): DataFrame containing 'acceleration' and 'dt' columns.
-        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    If `traces` is not provided, they are extracted from `df` using `extract_traces_by_session()`.
 
-    Returns:
-        dict: A dictionary with keys as (sessionId) and values as DataFrames with an additional 'jerkiness' column.
+    Parameters
+    ----------
+    df : pd.DataFrame, optional
+        DataFrame containing 'acceleration' and 'dt' columns.
+    traces : dict[str, list[pd.DataFrame]], optional
+        Dictionary mapping session IDs to lists of DataFrames.
+
+    Returns
+    -------
+    dict[str, list[pd.DataFrame]]
+        Dictionary of traces, each containing the computed 'jerkiness' column.
     """
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
 
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return jerkiness_df(df)
+
+    # If traces are not provided, extract them from df
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
 
-    for session_id, session_traces in traces.items():
-        for i in range(len(session_traces)):
-                validate_dataframe(session_traces[i])
-        for j in range(len(session_traces)):
-            session_traces[j] = session_traces[j]["acceleration"].diff().fillna(0) / session_traces[j]['dt']
-            session_traces[j]['jerkiness'] = session_traces[j]['jerkiness'].fillna(0)
-
-        traces[session_id] = session_traces
-
-    return traces
+    # Compute jerkiness for each trace
+    return jerkiness_traces(traces)
 
 def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate jerkiness metrics for the given DataFrame or traces.
     This function computes the mean, max, and min jerkiness for each session.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing interaction data. Optionally already including 'jerkiness' column.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' jerkiness.
     """
     if((ColumnNames.JERKINESS not in df.columns) and (traces is None)):
         validate_dataframe(df)
         if(ColumnNames.ACCELERATION not in df.columns):
             if(ColumnNames.VELOCITY not in df.columns):
-                traces = velocity(df)
-            traces = acceleration(None, traces)
-        traces = jerkiness(None, traces)
+                traces = velocity(df, per_traces=True)
+            traces = acceleration(None, traces, per_traces=True)
+        traces = jerkiness(None, traces, per_traces=True)
 
-    metrics = {}
-    for session_id, session_traces in traces.items():
-        all_jerkiness = pd.concat([trace['jerkiness'] for trace in session_traces])
-        all_jerkiness = all_jerkiness[all_jerkiness != 0]  # Exclude zero jerkiness for metrics calculation
-        metrics[session_id] = {
-            'mean': all_jerkiness.mean(),
-            'max': all_jerkiness.max(),
-            'min': all_jerkiness.min()
-        }
-    return metrics
+    return compute_metrics_from_traces(
+        df=df,
+        traces=traces,
+        column_name=ColumnNames.JERKINESS,
+        compute_traces_fn=lambda _: traces,  # Already computed above
+        preprocess_fn=lambda s: s[s != 0]    # Exclude zero jerkiness
+    )
 
 def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
     """
@@ -196,33 +191,12 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
                 session_traces[j]['distance'] = _path(session_traces[j])['distance']
             
             # Store the traces with distance in the dictionary
-            df[session_id] = session_traces
+            traces[session_id] = session_traces
 
-    return df
+    return traces
 
-def _path(trace: pd.DataFrame) -> pd.DataFrame:
-    """
-    Helper function to calculate the path length for a single trace.
-    This function computes the path length based on the Euclidean distance between consecutive points.
 
-    Parameters:
-        trace (pd.DataFrame): A single trace DataFrame.
-
-    Returns:
-        pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
-    """
-
-    if trace is None:
-        raise ValueError("Trace DataFrame must be provided.")
-
-    validate_dataframe(trace)
-
-    trace = compute_space_time_diff(trace)
-    trace['distance'] = np.sqrt(trace['dx'] ** 2 + trace['dy'] ** 2)
-
-    return trace
-
-def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
+def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float | dict:
     """
     Calculate the Area Under the Curve (AUC) for the given DataFrame.
     
@@ -234,21 +208,25 @@ def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -
     Returns:
         float: The computed AUC value.
     """
-    
+
     if(validation):
         validate_dataframe(df)
 
+    # TODO revisar
     if computeTraces:
-        df   = extract_traces_by_session(df)
+        df = df.sort_values(by=ColumnNames.TIME_STAMP)
+        traces = extract_traces_by_session(df)
+        auc_by_session = {}
+        for session_id, session_traces in traces.items():
+            session_traces = compute_space_time_diff(session_traces)
+            auc_by_session[session_id] = np.mean([np.trapezoid(trace[ColumnNames.Y], trace[ColumnNames.X]) for trace in session_traces])
+        return auc_by_session
+    else:
+        df = compute_space_time_diff(df)
+        # Área bajo la curva real
+        area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
+        return area_real
 
-    df = df.sort_values(by=ColumnNames.TIME_STAMP)
-
-    df = compute_space_time_diff(df)
-
-    # Área bajo la curva real
-    area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
-
-    return area_real
 
 def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
     """
@@ -281,7 +259,7 @@ def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool =
 
     return area_optimal
 
-def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
+def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
     """
     Calculate the AUC ratio for the given DataFrame.
     
@@ -293,16 +271,62 @@ def auc_ratio(df: pd.DataFrame, computeTraces: bool = True) -> dict:
         auc_per_session (dict): A dictionary with sessionId as keys and a tuple (area_real, area_optimal, auc_ratio) as values.
     """
 
-    validate_dataframe(df)
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if computeTraces:
-        df = extract_traces_by_session(df)
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return auc_ratio_df(df)
 
-    auc_per_session = {}
-    for session_id, session_traces in df.items():
-        area_real = auc(session_traces, False, False)
-        area_optimal = auc_optimal(session_traces, False, False)
-        auc_per_session[session_id] = (area_real, area_optimal, abs(area_real - area_optimal) / (abs(area_optimal) + 1e-6))
+    # If traces are not provided, extract them from df
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
 
-    return auc_per_session
+    return auc_ratio_traces(traces)
 
+def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate auc ratio metrics for the given DataFrame or traces.
+    This function computes the mean, max, and min auc ratio for each session.
+    """
+    if (traces is None):
+        if(df is None):
+            raise ValueError("Either 'df' or 'traces' must be provided.")
+        computed_auc = auc_ratio(df)
+
+    for session_id in computed_auc.keys():
+        auc_ratios = [trace_metrics['auc_ratio'] for trace_metrics in computed_auc[session_id]]
+        auc = [trace_metrics['auc'] for trace_metrics in computed_auc[session_id]]
+        computed_auc[session_id] = {
+            'mean_ratio': np.mean(auc_ratios) if auc_ratios else 0,
+            'max_ratio': np.max(auc_ratios) if auc_ratios else 0,
+            'min_ratio': np.min(auc_ratios) if auc_ratios else 0,
+            'mean': np.mean(auc) if auc else 0,
+            'max': np.max(auc) if auc else 0,
+            'min': np.min(auc) if auc else 0,
+        }
+    return computed_auc
+    
+
+def MAD(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate the Mean Absolute Deviation (MAD) for the given DataFrame.
+    """
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    metrics = {}
+    for session_id, session_traces in traces.items():
+        session_mad = []
+        session_mad_max = []
+        for trace in session_traces:
+            session_mad.append(np.mean(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+            session_mad_max.append(np.max(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+        metrics[session_id] = {
+            'mad': np.mean(session_mad) if session_mad else 0,
+            'mad_max': np.mean(session_mad_max) if session_mad_max else 0
+        }
+
+    return metrics

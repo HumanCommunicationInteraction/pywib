@@ -24,7 +24,8 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
     Extracts traces from the DataFrame, grouped by (sessionId, sceneId).
     Each trace is considered as a sequence of consecutive ON_MOUSE_MOVE events
     between two non-move events.
-
+    Parameters:
+        dt (pd.DataFrame): DataFrame containing 'sessionId', 'sceneId', 'eventType', and 'timeStamp' columns.
     Returns:
         dict: a dictionary with keys as (sessionId) and values as lists of DataFrames.
     """

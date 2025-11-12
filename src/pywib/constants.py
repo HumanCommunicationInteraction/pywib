@@ -74,3 +74,4 @@ class ColumnNames:
     VELOCITY= 'velocity'
     ACCELERATION = 'acceleration'
     JERKINESS = 'jerkiness'
+    AUC_RATIO = 'auc_ratio'
