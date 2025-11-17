@@ -21,3 +21,7 @@ Then, run the tests using:
 pytest test
 ```
 
+## Generating Documentation
+```
+make html
+```

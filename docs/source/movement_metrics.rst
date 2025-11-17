@@ -70,7 +70,7 @@ AUC Ratio
 
 The function :py:func:`~pywib.auc_ratio` calculates the AUC ratio for each session.
 
-That is, the real area under the curve and the optimal area (straight-line) and returns the ratio between their difference and the optimal area.
+That is, the real area under the curve and the optimal area (straight-line) and returns the ratio between their difference and the rael area.
 
 .. |A_real| replace:: :math:`A_{real}`
 .. |A_opt| replace:: :math:`A_{opt}`
@@ -84,7 +84,7 @@ Given the real area |A_real| and the optimal area |A_opt| the AUC ratio is compu
 
 This small epsilon prevents division-by-zero when the optimal area is 0.
 
-Metrics are also provided via :py:func:`~pywib.auc_ratio_metrics`, which computes mean, max, and min AUC ratios for each session.
+Metrics are also provided via :py:func:`~pywib.auc_ratio_metrics`, which computes mean, max, and min AUC and AUC ratio for each session.
 
 Reference
 ---------

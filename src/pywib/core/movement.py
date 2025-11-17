@@ -268,7 +268,7 @@ def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, pe
         computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
     
     Returns:
-        auc_per_session (dict): A dictionary with sessionId as keys and a tuple (area_real, area_optimal, auc_ratio) as values.
+        auc_per_session (dict): A dictionary with sessionId as keys and a tuple (auc, auc_ratio) as values. Where the auc is the area under the curve and auc_ratio is the ratio between the AUC and the optimal AUC.
     """
 
     if df is None and traces is None:
@@ -287,8 +287,15 @@ def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, pe
 
 def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
-    Calculate auc ratio metrics for the given DataFrame or traces.
-    This function computes the mean, max, and min auc ratio for each session.
+    This function computes the mean, max, and min auc ratio for each session on the given dataframe or list of traces.
+    The optimal auc is not given in the output, only the auc ratio and auc, since it can be derived from them if needed.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing interaction data.
+        computed_auc (dict): Precomputed AUC ratios. If None, they will be computed from df or traces.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean_ratio', 'max_ratio', 'min_ratio' for the auc ratio and 'mean', 'max', and 'min' auc.
     """
     if (traces is None):
         if(df is None):

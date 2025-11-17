@@ -3,6 +3,13 @@ import matplotlib.pyplot as plt
 def visualize_trace(df, stroke_indices, stroke_id):
     """"
     Geenrates a plot visualizing the trace of a stroke.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing the stroke data with 'x', 'y and 'timeStamp' columns.
+        stroke_indices (list): List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index.
+        stroke_id (str): Identifier for the stroke to be displayed in the title.
+    Returns:
+        None: Displays a plot of the stroke trace.
     """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))

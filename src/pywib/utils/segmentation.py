@@ -1,3 +1,4 @@
+from cv2 import threshold
 import pandas as pd
 from ..constants import EventTypes, ColumnNames
 from ..utils.validation import validate_dataframe
@@ -41,3 +42,60 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
                 traces.append(sub_group)
         traces_by_session[session_id] = traces
     return traces_by_session
+
+def extract_mouse_click_traces_by_ession(dt: pd.DataFrame) -> dict:
+    """
+    Extracts those traces with event movements that end with ON_MOUSE_CLICK or ON_TOUCH_TAP events,
+    grouped by sessionId.
+    """
+    validate_dataframe(dt)
+    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    click_traces_by_session = {}
+    for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
+        is_move = (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_MOVE) | (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_TOUCH_MOVE)
+        group_id = (~is_move).cumsum()
+        click_traces = []
+        for _, sub_group in group[is_move].groupby(group_id[is_move]):
+            if len(sub_group) > 1:
+                last_index = sub_group.index[-1]
+                # get the integer position of last_index within `group`'s index to avoid assuming contiguous indices
+                try:
+                    pos = group.index.get_loc(last_index)
+                except KeyError:
+                    # if for some reason the index is not found, skip this sub_group
+                    continue
+                if pos + 1 < len(group):
+                    next_event = group.iloc[pos + 1][ColumnNames.EVENT_TYPE]
+                    if next_event in [EventTypes.EVENT_ON_CLICK, EventTypes.EVENT_ON_MOUSE_DOWN, EventTypes.EVENT_ON_MOUSE_UP]:
+                        click_traces.append(sub_group)
+        click_traces_by_session[session_id] = click_traces
+    return click_traces_by_session
+
+def extract_mouse_click_traces_by_session_with_intial_pause(dt: pd.DataFrame, pause_threshold: float = 200) -> dict:
+    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    click_traces_by_session = {}
+    for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
+        is_move = (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_MOVE) | (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_TOUCH_MOVE)
+        group_id = (~is_move).cumsum()
+        click_traces = []
+        for _, sub_group in group[is_move].groupby(group_id[is_move]):
+            if len(sub_group) > 1:
+                last_index = sub_group.index[-1]
+                # get the integer position of last_index within `group`'s index to avoid assuming contiguous indices
+                try:
+                    pos = group.index.get_loc(last_index)
+                except KeyError:
+                    # if for some reason the index is not found, skip this sub_group
+                    continue
+                if pos + 1 < len(group):
+                    next_event = group.iloc[pos + 1][ColumnNames.EVENT_TYPE]
+                    if next_event in [EventTypes.EVENT_ON_CLICK, EventTypes.EVENT_ON_MOUSE_DOWN, EventTypes.EVENT_ON_MOUSE_UP]:
+                        sub_group = sub_group.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+                        sub_group[ColumnNames.DT] = sub_group[ColumnNames.TIME_STAMP].diff().fillna(0)
+                        pauses = sub_group[sub_group[ColumnNames.DT] > pause_threshold]
+                        # Now check if there is a pause at the beginning and no pauses in between
+                        if not pauses.empty and pauses.index[0] == 1 and pauses.shape[0] == 1:
+                            click_traces.append(sub_group)
+
+        click_traces_by_session[session_id] = click_traces
+    return click_traces_by_session
