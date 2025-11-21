@@ -1,4 +1,9 @@
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import cv2
+
+from pywib.constants import ColumnNames
 
 def visualize_trace(df, stroke_indices, stroke_id):
     """"
@@ -31,3 +36,42 @@ def visualize_trace(df, stroke_indices, stroke_id):
     plt.gca().invert_yaxis()
     plt.show()
 
+def video_from_trace(df, user_id, outfile: str, width=640, height=480,  fps=30):
+    """
+    Generates a video visualizing the mouse trace of a user.
+    
+    Parameters:
+        df (pd.DataFrame): DataFrame containing the mouse trace data with 'x', 'y', 'eventType', and 'sessionId' columns.
+        user_id (str/int): Identifier of the user whose trace is to be visualized.
+        outfile (str): Path to save the output video file.
+        width (int): Width of the video frame.
+        height (int): Height of the video frame.
+        fps (int): Frames per second for the video.
+    Returns:
+        None: Saves the video file to the specified path.
+    """
+    user_data = df[df[ColumnNames.SESSION_ID] == user_id].sort_values(ColumnNames.TIME_STAMP)
+    xs = user_data[ColumnNames.X].values
+    ys = user_data[ColumnNames.Y].values
+    eventType = user_data[ColumnNames.EVENT_TYPE].values
+    n = len(xs)
+    # Nombre del vídeo
+    output_video = f"trayectoria_usuario_{user_id}.mp4"
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(output_video, fourcc, fps, (width, height))
+    
+    # Generar frames
+    frame = np.ones((height, width, 3), dtype=np.uint8) * 255  # fondo blanco
+    for i in range(1, n):
+        # Dibujar línea de movimiento
+        cv2.line(frame, (xs[i-1], ys[i-1]), (xs[i], ys[i]), color=(0, 0, 255), thickness=2)
+        
+        # Dibujar clics
+        if eventType[i] == 1:
+            cv2.circle(frame, (xs[i], ys[i]), radius=5, color=(0, 0, 255), thickness=-1)
+        
+        # Escribir frame en vídeo
+        video.write(frame.copy())
+    
+    video.release()
+    print(f"Vídeo generado para el usuario {user_id}: {outfile}")
