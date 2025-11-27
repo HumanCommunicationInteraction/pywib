@@ -62,20 +62,31 @@ def num_pauses(df: pd.DataFrame, threshold: float = 100, computeTraces: bool = T
         tuple (tuple[dict, dict]): A tuple containing two dictionaries with the number of pauses per session and the mean number of pauses per trace, with the sessionId as keys.
     """
 
+    validate_dataframe(df)
+    
     if computeTraces:
-        validate_dataframe(df)
         df = extract_traces_by_session(df)
+    else:
+        df_pauses = _num_pauses_trace(df, threshold)
+        total_pauses_session = df_pauses.shape[0]
+        metrics = {}
+        metrics[df[ColumnNames.SESSION_ID].iloc[0]] = {
+            "num_pauses": total_pauses_session,
+            "mean_pauses_per_trace": total_pauses_session
+        }
+        return metrics
 
-    num_pauses_per_session = {}
-    mean_pause_per_trace = {}
+    metrics_per_session = {}
     for session_id, session_traces in df.items():
         total_pauses_session = 0
         for trace in session_traces:
             df_pauses = _num_pauses_trace(trace, threshold)
             total_pauses_session += df_pauses.shape[0]
-        num_pauses_per_session[session_id] = total_pauses_session
-        mean_pause_per_trace[session_id] = total_pauses_session / len(session_traces) if len(session_traces) > 0 else 0
-    return num_pauses_per_session, mean_pause_per_trace
+        metrics_per_session[session_id] = {
+            "num_pauses": total_pauses_session,
+            "mean_pauses_per_trace": total_pauses_session / len(session_traces) if len(session_traces) > 0 else 0
+        }
+    return  metrics_per_session
 
 def _num_pauses_trace(df: pd.DataFrame, threshold: float) -> pd.DataFrame:
     """
