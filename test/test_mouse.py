@@ -9,7 +9,7 @@ import_pyModule()
 
 from pywib import number_of_clicks, click_slip
 
-DEBUG = False
+DEBUG = True
 
 class TestData:
     

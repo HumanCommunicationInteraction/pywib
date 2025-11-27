@@ -9,7 +9,7 @@ import_pyModule()
 
 from pywib import movement_time, execution_time
 
-DEBUG = False
+DEBUG = True
 
 class TestData:
     window_resize_error_file = 'test/test_data/test_window_resize_error.csv'

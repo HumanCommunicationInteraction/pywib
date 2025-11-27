@@ -11,7 +11,7 @@ from pywib import (velocity, acceleration, compute_space_time_diff,
                    jerkiness, jerkiness_metrics)
 
 # Cambiar a True solo al probar en desarrollo
-DEBUG = False
+DEBUG = True
 
 class TestMovement(unittest.TestCase):
     
