@@ -9,7 +9,10 @@ import_pyModule()
 
 from pywib import number_of_clicks, click_slip
 
+DEBUG = True
+
 class TestData:
+    
     dataFile = 'test/test_data/test_mouse.csv'
     expected_clicks = {
         'SESSION_A': 2,
@@ -25,7 +28,10 @@ class TestMouse(unittest.TestCase):
     def setUp(self):
         """Set up test data"""
         # Create sample test data instead of relying on external CSV
-        self.test_data = process_csv(TestData.dataFile)
+        if(DEBUG):
+            self.test_data = process_csv(TestData.dataFile)
+        else:
+            self.test_data = process_csv('pywib/' + TestData.dataFile)
         
     def test_number_of_clicks(self):
         clicks = number_of_clicks(self.test_data)
