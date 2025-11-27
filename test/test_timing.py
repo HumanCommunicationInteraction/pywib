@@ -9,6 +9,8 @@ import_pyModule()
 
 from pywib import movement_time, execution_time
 
+DEBUG = False
+
 class TestData:
     window_resize_error_file = 'test/test_data/test_window_resize_error.csv'
     window_resize_error_execution_time = 18100  # in milliseconds
@@ -18,7 +20,11 @@ class TestTiming(unittest.TestCase):
     def setUp(self):
         """Set up test data"""
         # Create sample test data instead of relying on external CSV
-        self.test_data = process_csv(TestData.window_resize_error_file)
+        
+        if(DEBUG):
+            self.test_data = process_csv(TestData.window_resize_error_file)
+        else:
+            self.test_data = process_csv('pywib/' + TestData.window_resize_error_file)
         
     def test_execution_time(self):
         """Test execution_time function"""
