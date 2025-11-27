@@ -10,7 +10,8 @@ from pywib import (velocity, acceleration, compute_space_time_diff,
                    auc_ratio_metrics, auc_ratio, velocity_metrics, acceleration_metrics,
                    jerkiness, jerkiness_metrics)
 
-DEBUG = False
+# Cambiar a True solo al probar en desarrollo
+DEBUG = True
 
 class TestMovement(unittest.TestCase):
     
@@ -20,6 +21,7 @@ class TestMovement(unittest.TestCase):
         if(DEBUG):
             self.test_data = process_csv('pywib/test/test_data/test_window_resize_error.csv')
             self.test_data_auc = process_csv('pywib/test/test_data/test_auc.csv')
+            self.test_pause = process_csv('pywib/test/test_data/pauses.csv')
         else:
             self.test_data = process_csv('test/test_data/test_window_resize_error.csv')
             self.test_data_auc = process_csv('test/test_data/test_auc.csv')
