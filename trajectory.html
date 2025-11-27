@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Introducción" href="introduction.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Mouse Metrics" href="mouse.html"><link rel="prev" title="Movement Metrics" href="movement.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
-        <title>pywib 0.1.0 documentation</title>
+        <title>Trajectory Metrics - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ae546fa" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">pywib 0.1.0 documentation</div></a>
+      <a href="index.html"><div class="brand">pywib 0.1.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -173,7 +173,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -181,7 +181,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   <span class="sidebar-brand-text">pywib 0.1.0 documentation</span>
   
@@ -192,10 +192,10 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="movement.html">Movement Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Metrics</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Trajectory Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mouse.html">Mouse Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
@@ -243,7 +243,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/index.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/trajectory.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -256,63 +256,71 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="pywib-documentation">
-<h1>pywib documentation<a class="headerlink" href="#pywib-documentation" title="Link to this heading">¶</a></h1>
-<p>Pywib (Python Web Interaction Behavior) is a library designed to analyze user interaction data from web applications. It provides tools to process, analyze, and visualize user behavior patterns, helping developers and researchers understand how users interact with their web interfaces.</p>
-<p>The library includes various modules for different aspects of web interaction analysis, such as movement tracking, timing analysis, and pause detection.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducción</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="movement.html">Movement Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="movement.html#velocity">Velocity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movement.html#acceleration">Acceleration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movement.html#jerkiness">Jerkiness</a></li>
-<li class="toctree-l2"><a class="reference internal" href="movement.html#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="trajectory.html#path">Path</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectory.html#auc-ratio">AUC Ratio</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectory.html#maximum-absolute-deviation">Maximum Absolute Deviation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectory.html#average-absolute-deviation">Average Absolute Deviation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="trajectory.html#references">References</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="mouse.html">Mouse Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mouse.html#clicks">Clicks</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="timing.html">Timing Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="timing.html#execution-time">Execution Time</a></li>
-<li class="toctree-l2"><a class="reference internal" href="timing.html#movement-time">Movement Time</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="constants.html#event-types">Event Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constants.html#component-types">Component Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constants.html#dataframe-columns">DataFrame Columns</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/movement/index.html">Movement Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/utils/index.html">Other utility Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/timing/index.html">Timing Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/mouse/clicks.html">Clicks</a></li>
-</ul>
-</li>
-</ul>
+          <section id="trajectory-metrics">
+<h1>Trajectory Metrics<a class="headerlink" href="#trajectory-metrics" title="Link to this heading">¶</a></h1>
+<p>This section covers various trajectory metrics used to analyze the users trajectory, such as path length or AUC, which provide insights into movement efficiency and accuracy during user interactions in a mathematically rigorous manner.</p>
+<section id="path">
+<h2>Path<a class="headerlink" href="#path" title="Link to this heading">¶</a></h2>
+<p>The path or total distance traveled during user interactions is a key metric for analyzing movement efficiency <span id="id1">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
+<p>The function <a class="reference internal" href="api/movement/path.html#pywib.path" title="pywib.path"><code class="xref py py-func docutils literal notranslate"><span class="pre">path()</span></code></a> calculates the path length for interaction points from a DataFrame or session traces.
+This function computes the path length based on the Euclidean distance between consecutive points.</p>
+<p>The distance between consecutive points is calculated as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[d_i = \sqrt{(x_{i} - x_{i-1})^2 + (y_{i} - y_{i-1})^2}\]</div>
 </div>
-<p>This library has been developed by the <a class="reference external" href="https://www.hci.uniovi.es/">HCI research group</a> from the University of Oviedo and is maintained on <a class="reference external" href="https://github.com/HumanCommunicationInteraction/pywib">GitHub</a>.</p>
+</section>
+<section id="auc-ratio">
+<h2>AUC Ratio<a class="headerlink" href="#auc-ratio" title="Link to this heading">¶</a></h2>
+<p>The Area Under the Curve (AUC) is a metric that quantifies the overall movement efficiency during user interactions in computers <span id="id2">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span> or even in mobile devices <span id="id3">[<a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
+<p>The function <a class="reference internal" href="api/movement/auc.html#pywib.auc_ratio" title="pywib.auc_ratio"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio()</span></code></a> calculates the AUC ratio for each session.</p>
+<p>That is, the real area under the curve and the optimal area (straight-line) and returns the ratio between their difference and the rael area.</p>
+<p>Given the real area <span class="math notranslate nohighlight">\(A_{real}\)</span> and the optimal area <span class="math notranslate nohighlight">\(A_{opt}\)</span> the AUC ratio is computed as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[AUC Ratio = \frac{|A_{real} - A_{opt}|}{|A_{opt}| + 10^{-6}}\]</div>
+</div>
+<p>This small epsilon prevents division-by-zero when the optimal area is 0.</p>
+<p>Metrics are also provided via <a class="reference internal" href="api/movement/auc.html#pywib.auc_ratio_metrics" title="pywib.auc_ratio_metrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio_metrics()</span></code></a>, which computes mean, max, and min AUC and AUC ratio for each session.</p>
+</section>
+<section id="maximum-absolute-deviation">
+<h2>Maximum Absolute Deviation<a class="headerlink" href="#maximum-absolute-deviation" title="Link to this heading">¶</a></h2>
+<p>The Maximum Absolute Deviation (MAD) is a metric that quantifies the maximum deviation of the actual movement path from the optimal straight-line path during user interactions <span id="id4">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
+<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">MAD()</span></code> calculates the MAD for each session or interaction trace.</p>
+<p>The MAD is calculated as the maximum perpendicular distance from any point on the actual path to the straight line connecting the start and end points of the movement.</p>
+</section>
+<section id="average-absolute-deviation">
+<h2>Average Absolute Deviation<a class="headerlink" href="#average-absolute-deviation" title="Link to this heading">¶</a></h2>
+<p>The Average Absolute Deviation (AAD) is a metric that quantifies the average deviation of the actual movement path from the optimal straight-line path during user interactions <span id="id5">[<a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
+<p>It consists of the average value of the perpendicular distances from each point of the trajectory to the straight line connecting the start and end points of the movement (optimal trajectory).</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<div class="docutils container" id="id6">
+<div role="list" class="citation-list">
+<div class="citation" id="id9" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id4">3</a>)</span>
+<p>Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In <em>A Handbook of Process Tracing Methods</em>, pages 20. Routledge, 2nd edition edition, 2019. URL: <a class="reference external" href="https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck">https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck</a>.</p>
+</div>
+<div class="citation" id="id7" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id4">3</a>)</span>
+<p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="\url{https://doi.org/10.1016/j.chb.2018.02.012}">\url{https://doi.org/10.1016/j.chb.2018.02.012}</a>.</p>
+</div>
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>)</span>
+<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 
         </article>
@@ -320,16 +328,26 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="introduction.html">
+          <a class="next-page" href="mouse.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Introducción</div>
+                <div class="title">Mouse Metrics</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          
+          <a class="prev-page" href="movement.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Movement Metrics</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -348,8 +366,31 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Trajectory Metrics</a><ul>
+<li><a class="reference internal" href="#path">Path</a></li>
+<li><a class="reference internal" href="#auc-ratio">AUC Ratio</a></li>
+<li><a class="reference internal" href="#maximum-absolute-deviation">Maximum Absolute Deviation</a></li>
+<li><a class="reference internal" href="#average-absolute-deviation">Average Absolute Deviation</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
