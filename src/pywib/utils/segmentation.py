@@ -1,4 +1,3 @@
-from cv2 import threshold
 import pandas as pd
 from ..constants import EventTypes, ColumnNames
 from ..utils.validation import validate_dataframe
