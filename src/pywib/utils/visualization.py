@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import cv2
+from pywib.constants import EventTypes
 
 from pywib.constants import ColumnNames
 
@@ -56,19 +57,24 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480,  fps=30):
     eventType = user_data[ColumnNames.EVENT_TYPE].values
     n = len(xs)
     # Nombre del vídeo
-    output_video = f"trayectoria_usuario_{user_id}.mp4"
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video = cv2.VideoWriter(output_video, fourcc, fps, (width, height))
+    video = cv2.VideoWriter(outfile, fourcc, fps, (width, height))
     
     # Generar frames
     frame = np.ones((height, width, 3), dtype=np.uint8) * 255  # fondo blanco
+    last_x, last_y = xs[0], ys[0]
     for i in range(1, n):
         # Dibujar línea de movimiento
         cv2.line(frame, (xs[i-1], ys[i-1]), (xs[i], ys[i]), color=(0, 0, 255), thickness=2)
         
         # Dibujar clics
-        if eventType[i] == 1:
+        if eventType[i] == EventTypes.EVENT_ON_CLICK:
             cv2.circle(frame, (xs[i], ys[i]), radius=5, color=(0, 0, 255), thickness=-1)
+        elif eventType[i] == EventTypes.EVENT_KEY_DOWN or eventType[i] == EventTypes.EVENT_KEY_UP:
+            # This event has coordinates (0,0) or (-1,-1)
+            cv2.rectangle(frame, (last_x-5, last_y-5), (xs[i]+5, ys[i]+5), color=(255, 0, 0), thickness=-1)
+        else:
+            last_x, last_y = xs[i], ys[i]
         
         # Escribir frame en vídeo
         video.write(frame.copy())

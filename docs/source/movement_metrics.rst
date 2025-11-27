@@ -5,6 +5,8 @@ Movement Metrics
 
 Velocity
 --------
+The velocity is the rate of change of position with respect to time. Commonly used to analyze the speed of movement during user interactions :cite:p:`Kieslich2019-mt, Katerina2018-ch`.
+
 The function :py:func:`~pywib.velocity` computes the velocity based on the distance and time difference between consecutive points.
 The velocity is calculated as:
 
@@ -24,6 +26,8 @@ The function :py:func:`~pywib.velocity_metrics` computes velocity metrics such a
 
 Acceleration
 ------------
+The acceleration is the rate of change of velocity with respect to time, which provides insights into how quickly users change their speed during interactions :cite:p:`Kieslich2019-mt,Katerina2018-ch`.
+
 The function :py:func:`~pywib.acceleration` computes the acceleration based on the change in velocity over time from a DataFrame or session traces.
 
 The acceleration is calculated as:
@@ -55,6 +59,7 @@ The function :py:func:`~pywib.jerkiness_metrics` computes jerkiness metrics such
 
 Path
 ----
+The path or total distance traveled during user interactions is a key metric for analyzing movement efficiency :cite:p:`Kieslich2019-mt,Katerina2018-ch`.
 
 The function :py:func:`~pywib.path` calculates the path length for interaction points from a DataFrame or session traces.
 This function computes the path length based on the Euclidean distance between consecutive points.
@@ -67,6 +72,7 @@ The distance between consecutive points is calculated as:
 
 AUC Ratio
 ---------
+The Area Under the Curve (AUC) is a metric that quantifies the overall movement efficiency during user interactions :cite:p:`Kieslich2019-mt,Katerina2018-ch`
 
 The function :py:func:`~pywib.auc_ratio` calculates the AUC ratio for each session.
 
@@ -92,3 +98,5 @@ Reference
 For more information on geometric features of drag-and-drop trajectories, see:
 
 - `Using Geometric Features of Drag-and-Drop Trajectories to Understand Students Learning <https://dl.acm.org/doi/10.1145/3544548.3581143>`_.
+
+.. bibliography::

@@ -297,10 +297,13 @@ def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean_ratio', 'max_ratio', 'min_ratio' for the auc ratio and 'mean', 'max', and 'min' auc.
     """
-    if (traces is None):
+    if (computed_auc is None):
         if(df is None):
             raise ValueError("Either 'df' or 'traces' must be provided.")
-        computed_auc = auc_ratio(df)
+        if (traces is not None):
+            computed_auc = auc_ratio(None, traces=traces, per_traces=True)
+        else:
+            computed_auc = auc_ratio(df)
 
     for session_id in computed_auc.keys():
         auc_ratios = [trace_metrics['auc_ratio'] for trace_metrics in computed_auc[session_id]]
