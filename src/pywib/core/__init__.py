@@ -5,7 +5,7 @@ from .timing import execution_time, movement_time, num_pauses, pauses_metrics
 from .movement import (velocity, acceleration, jerkiness, 
                        path, auc_optimal, auc_ratio, auc, auc_ratio_metrics,
                        velocity_metrics, acceleration_metrics, jerkiness_metrics,
-                       MAD)
+                       deviations)
 from .mouse import click_slip, number_of_clicks
 
 __all__ = [
@@ -26,5 +26,5 @@ __all__ = [
     "jerkiness_metrics",
     "click_slip",
     "number_of_clicks",
-    "MAD"
+    "deviations"
 ]

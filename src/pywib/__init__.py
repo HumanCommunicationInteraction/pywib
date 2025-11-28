@@ -11,7 +11,7 @@ from .utils import (validate_dataframe, validate_dataframe_keyboard,
 from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
                    execution_time, movement_time, pauses_metrics, velocity_metrics, 
                    acceleration_metrics, jerkiness_metrics, number_of_clicks, 
-                   click_slip, num_pauses, MAD, auc_ratio_metrics)
+                   click_slip, num_pauses, deviations, auc_ratio_metrics)
 __all__ = [
     # Version info
     "__version__",
@@ -40,7 +40,7 @@ __all__ = [
     "velocity_metrics",
     "acceleration_metrics",
     "jerkiness_metrics",
-    "MAD",
+    "deviations",
     "auc_ratio_metrics",
 
     # Mouse functions

@@ -8,3 +8,4 @@ API Documentation
    utils/index
    timing/index
    mouse/clicks
+   trajectory/index

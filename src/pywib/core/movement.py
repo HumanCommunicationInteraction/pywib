@@ -319,9 +319,15 @@ def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces
     return computed_auc
     
 
-def MAD(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def deviations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate the Mean Absolute Deviation (MAD) for the given DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'y' column.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mad_mean' (mean of maximum absolute deviations), 'mad_max' (maximum absolute deviation across all traces), 'mad_min' (minimum absolute deviation across all traces) and 'aad' (average absolute deviation).
     """
     if traces is None:
         validate_dataframe(df)
@@ -329,14 +335,16 @@ def MAD(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -
 
     metrics = {}
     for session_id, session_traces in traces.items():
-        session_mad = []
+        session_average_absolute_deviation = []
         session_mad_max = []
         for trace in session_traces:
-            session_mad.append(np.mean(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+            session_average_absolute_deviation.append(np.mean(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
             session_mad_max.append(np.max(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
         metrics[session_id] = {
-            'mad': np.mean(session_mad) if session_mad else 0,
-            'mad_max': np.mean(session_mad_max) if session_mad_max else 0
+            'aad': np.mean(session_average_absolute_deviation) if session_average_absolute_deviation else 0,
+            'mad_max': np.max(session_mad_max) if session_mad_max else 0,
+            'mad_mean': np.mean(session_mad_max) if session_mad_max else 0,
+            'mad_min': np.min(session_mad_max) if session_mad_max else 0,
         }
 
     return metrics
