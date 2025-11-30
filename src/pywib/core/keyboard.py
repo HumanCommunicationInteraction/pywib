@@ -7,6 +7,7 @@ This module provides methods to analyze interaction data from DataFrames.
 import pandas as pd
 import numpy as np
 from pywib.utils.segmentation import extract_keystroke_traces_by_session
+from pywib.utils.validation import validate_dataframe_keyboard
 from pywib.constants import EventTypes, ColumnNames
 
 def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_trace: bool = True) -> list:
@@ -130,13 +131,19 @@ def backspace_usage(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame
         dict: A dictionary with session IDs as keys and their corresponding backspace counts as values.
     """
     if traces is None and per_trace:
+        validate_dataframe_keyboard(df)
         traces = extract_keystroke_traces_by_session(df)
     if not per_trace:
+        validate_dataframe_keyboard(df)
         raise NotImplementedError("Calculation without traces is not implemented yet.")
     
     times_per_session = {}
     for session_id, keystroke_traces in traces.items():
+        backspace_count = 0
         for trace in keystroke_traces:
-            backspaces = trace[(trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN) & (trace[ColumnNames.KEY_CODE_EVENT] == 8 | trace[ColumnNames.KEY_CODE_EVENT] == 46)]
-        times_per_session[session_id] = backspaces.shape[0]
+            backspace_count = 0
+            for trace in keystroke_traces:
+                mask = (trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN) & ( (trace[ColumnNames.KEY_CODE_EVENT] == 8) | (trace[ColumnNames.KEY_CODE_EVENT] == 46))
+            backspace_count += int(mask.sum())
+        times_per_session[session_id] = backspace_count
     return times_per_session
