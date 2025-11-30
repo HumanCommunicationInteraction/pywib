@@ -15,7 +15,8 @@ The library includes various modules for different aspects of web interaction an
    :caption: Contents:
 
    introduction
-   movement_metrics
+   movement
+   trajectory
    mouse
    timing
    constants

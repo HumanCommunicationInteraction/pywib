@@ -5,6 +5,8 @@ Movement Metrics
 
 Velocity
 --------
+The velocity is the rate of change of position with respect to time. Commonly used to analyze the speed of movement during user interactions :cite:p:`Kieslich2019-mt, Katerina2018-ch`.
+
 The function :py:func:`~pywib.velocity` computes the velocity based on the distance and time difference between consecutive points.
 The velocity is calculated as:
 
@@ -24,6 +26,8 @@ The function :py:func:`~pywib.velocity_metrics` computes velocity metrics such a
 
 Acceleration
 ------------
+The acceleration is the rate of change of velocity with respect to time, which provides insights into how quickly users change their speed during interactions :cite:p:`Kieslich2019-mt,Katerina2018-ch`.
+
 The function :py:func:`~pywib.acceleration` computes the acceleration based on the change in velocity over time from a DataFrame or session traces.
 
 The acceleration is calculated as:
@@ -53,42 +57,7 @@ where \(|ai|\) is the acceleration at point \(|i|\) and \(|ti|\) is the timestam
 
 The function :py:func:`~pywib.jerkiness_metrics` computes jerkiness metrics such as mean, max, and min jerkiness for each session.
 
-Path
-----
-
-The function :py:func:`~pywib.path` calculates the path length for interaction points from a DataFrame or session traces.
-This function computes the path length based on the Euclidean distance between consecutive points.
-
-The distance between consecutive points is calculated as:
-
-.. math::
-
-   d_i = \sqrt{(x_{i} - x_{i-1})^2 + (y_{i} - y_{i-1})^2}
-
-AUC Ratio
----------
-
-The function :py:func:`~pywib.auc_ratio` calculates the AUC ratio for each session.
-
-That is, the real area under the curve and the optimal area (straight-line) and returns the ratio between their difference and the optimal area.
-
-.. |A_real| replace:: :math:`A_{real}`
-.. |A_opt| replace:: :math:`A_{opt}`
-
-
-Given the real area |A_real| and the optimal area |A_opt| the AUC ratio is computed as:
-
-.. math::
-
-   AUC Ratio = \frac{|A_{real} - A_{opt}|}{|A_{opt}| + 10^{-6}}
-
-This small epsilon prevents division-by-zero when the optimal area is 0.
-
-Metrics are also provided via :py:func:`~pywib.auc_ratio_metrics`, which computes mean, max, and min AUC ratios for each session.
-
-Reference
----------
-
-For more information on geometric features of drag-and-drop trajectories, see:
-
-- `Using Geometric Features of Drag-and-Drop Trajectories to Understand Students Learning <https://dl.acm.org/doi/10.1145/3544548.3581143>`_.
+References
+----------
+.. bibliography::
+   :style: apa

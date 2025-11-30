@@ -7,7 +7,7 @@ __email__ = "carvajalguillermo@uniovi.es"
 
 from .constants import *
 from .utils import (validate_dataframe, validate_dataframe_keyboard, 
-                    extract_traces_by_session, visualize_trace, compute_space_time_diff)
+                    extract_traces_by_session, visualize_trace, compute_space_time_diff, video_from_trace)
 from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
                    execution_time, movement_time, pauses_metrics, velocity_metrics, 
                    acceleration_metrics, jerkiness_metrics, number_of_clicks, 
@@ -27,6 +27,9 @@ __all__ = [
     "validate_dataframe_keyboard",
     "extract_trace",
     "visualize_trace",
+    "compute_space_time_diff",
+    "extract_traces_by_session",
+    "video_from_trace"
 
     # Movement functions
     "velocity",
@@ -54,7 +57,4 @@ __all__ = [
     "movement_time",
     "num_pauses",
 
-    # Utils
-    "compute_space_time_diff",
-    "extract_traces_by_session",
 ]

@@ -26,13 +26,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints sphinxcontrib-bibtex myst-parser furo
+          pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints sphinxcontrib-bibtex myst-parser furo sphinx-apa-references
           pip install -r requirements.txt
 
       # 4️⃣ Construir la documentación
       - name: Build documentation
         run: |
-          cd docs && make html
+          cd docs && make clean && make html
 
       # 5️⃣ Desplegar a GitHub Pages
       - name: Deploy to GitHub Pages

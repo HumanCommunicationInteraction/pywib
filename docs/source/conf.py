@@ -1,6 +1,11 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../src'))
+import pybtex.plugin
+from pybtex.style.formatting.unsrt import Style as UnsrtStyle
+from pybtex.style.template import (
+    names, sentence, field, optional, words, 
+)
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -40,6 +45,57 @@ add_module_names = False
 
 # Bibliography for sphinxcontrib-bibtex
 bibtex_bibfiles = ['references.bib']
+
+class APAStyle(UnsrtStyle):
+    def format_article(self, e):
+        template = sentence [
+            names('author', sep=', ', sep2=', ', last_sep=', '),  
+            field('year', prefix='. (', suffix='). '),           
+            field('title', suffix='. '),                          
+            field('journal', suffix='. '),
+            optional [ field('volume', prefix='Vol. ', suffix='. ') ],
+            optional [ field('pages', prefix='pp. ', suffix='. ') ],
+            optional [ field('url', prefix='', suffix='') ],
+        ]
+        return template.format_data(e)
+
+    def format_incollection(self, e):
+        template = sentence [
+            names('author', sep=', ', sep2=', ', last_sep=', '),
+            field('year', prefix='. (', suffix=').' ),
+            field('title', suffix='. '),
+            words [
+                field('booktitle', prefix='In ', suffix=''),
+                optional [ field('edition', prefix=' (', suffix=' ed.)') ],
+                optional [ field('pages', prefix=', pp. ', suffix='') ],
+                field('publisher', prefix='. ', suffix='.'),
+            ],
+            optional [ field('url', prefix=' ', suffix='') ],
+        ]
+        return template.format_data(e)
+
+    def format_book(self, e):
+        template = sentence [
+            names('author', sep=', ', sep2=', ', last_sep=', '),
+            field('year', prefix='. (', suffix='). '),
+            field('title', suffix='. '),
+            field('publisher', suffix='. '),
+            optional [ field('edition', suffix=' ed. ') ],
+            optional [ field('pages', prefix='pp. ', suffix='. ') ],
+            optional [ field('url', prefix='', suffix='') ],
+        ]
+        return template.format_data(e)
+
+    def format_labels(self, sorted_entries):
+        for entry in sorted_entries:
+            label = self.format_label(entry)
+            yield [label]
+    
+pybtex.plugin.register_plugin('pybtex.style.formatting', 'apa', APAStyle)
+
+# Use your new style for sphinxcontrib-bibtex
+bibtex_default_style = 'apa'
+bibtex_reference_style = 'author_year'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
