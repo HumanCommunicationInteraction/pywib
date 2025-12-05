@@ -10,7 +10,7 @@ import_pyModule()
 
 from pywib import typing_speed_metrics, typing_speed, backspace_usage
 
-DEBUG = False
+DEBUG = True
 
 class TestData:
     if(DEBUG):

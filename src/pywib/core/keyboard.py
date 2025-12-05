@@ -14,15 +14,12 @@ def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFram
     """
     Calculate the durations of individual keystrokes.
 
-    Parameters
-    ----------
-    df : pd.DataFrame
-        DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
-
-    Returns
-    -------
-    list
-        List of keystroke durations in milliseconds.
+    Parameters:
+        df (pd.DataFrame): DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
+        traces (dict[str, list[pd.DataFrame]]): optional Pre-extracted keystroke traces by session.
+        per_trace (bool): optional Whether to calculate durations per trace. Default is True.
+    Returns:
+        list: List of keystroke durations in milliseconds.
     """
     if traces is None and per_trace:
         traces = extract_keystroke_traces_by_session(df)

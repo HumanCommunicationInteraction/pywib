@@ -33,7 +33,7 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
     dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
     traces_by_session = {}
     for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
-        is_move = group[ColumnNames.EVENT_TYPE].isIn([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
+        is_move = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
         group_id = (~is_move).cumsum()
         traces = []
         for _, sub_group in group[is_move].groupby(group_id[is_move]):
