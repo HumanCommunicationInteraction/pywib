@@ -17,3 +17,10 @@ You can install **pywib** using pip:
 
 Getting Started
 -----------------
+
+.. code-block:: Python
+
+   from pywib import velocity, velocity_metrics
+
+   v = velocity(df_all_sessions)
+   v_metrics = velocity_metrics(None, v)

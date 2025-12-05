@@ -18,6 +18,7 @@ The library includes various modules for different aspects of web interaction an
    movement
    trajectory
    mouse
+   keyboard
    timing
    constants
    api/index

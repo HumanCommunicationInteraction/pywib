@@ -54,3 +54,11 @@ def process_csv(file_path):
     df_all_sessions['timeStamp'] = df_all_sessions['timeStamp'].astype(str).str.replace(',', '', regex=False)
     df_all_sessions['timeStamp'] = pd.to_numeric(df_all_sessions['timeStamp'], errors='coerce')
     return df_all_sessions
+
+def csv_to_df_no_checks(file_path):
+    """
+    Reads a semicolon-separated CSV file into a DataFrame without any validation checks.
+    Args:
+        file_path (str): Path to the CSV file.
+    """
+    return pd.read_csv(file_path, encoding='utf-8', sep=',')
