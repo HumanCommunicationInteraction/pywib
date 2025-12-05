@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Movement Metrics" href="movement.html"><link rel="prev" title="pywib documentation" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Timing Metrics" href="timing.html"><link rel="prev" title="Mouse Metrics" href="mouse.html">
 
     <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
-        <title>Introducción - pywib 0.1.0 documentation</title>
+        <title>Kestroke Metrics - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ae546fa" />
@@ -193,11 +193,11 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Introducción</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducción</a></li>
 <li class="toctree-l1"><a class="reference internal" href="movement.html">Movement Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mouse.html">Mouse Metrics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="keyboard.html">Kestroke Metrics</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Kestroke Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Documentation</a><input aria-label="Toggle navigation of API Documentation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -248,7 +248,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="_sources/introduction.rst.txt" title="View this page">
+  <a class="muted-link" href="_sources/keyboard.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -266,25 +266,77 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="introduccion">
-<h1>Introducción<a class="headerlink" href="#introduccion" title="Link to this heading">¶</a></h1>
-<p>Welcome to <strong>pywib</strong> (Python Web Interaction Behaviour).</p>
-<p>This proyect aims to analyze user interaction with web applications by processing interaction event data (such as clicks, mouse movements, scrolls, etc.) recorded in CSV files.
-It provides tools to compute various movement metrics (like velocity, acceleration, jerkiness, etc.) and others such as visualizing interaction traces.</p>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>You can install <strong>pywib</strong> using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pywib
-</pre></div>
-</div>
+          <section id="kestroke-metrics">
+<h1>Kestroke Metrics<a class="headerlink" href="#kestroke-metrics" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>“<em>Keystroke dyanmics is the study of the unique timing patterns in an indiviual’s typing, and typically includes extracting keystroke timing features such as the duration of a key press and the time elapsed between key presses.</em>” <span id="id1">[<a class="reference internal" href="trajectory.html#id12" title="Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems. New York, NY, USA, May 2011. ACM.">Epp <em>et al.</em>, 2011</a>]</span></p>
+</div></blockquote>
+<p>This metrics (or dyanmics) obtained from keyboard interaction have been widely used in various applications, including user authentication, behavioral biometrics, affective computing, and human-computer interaction studies. <span id="id2">[<a class="reference internal" href="trajectory.html#id12" title="Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems. New York, NY, USA, May 2011. ACM.">Epp <em>et al.</em>, 2011</a>, <a class="reference internal" href="trajectory.html#id13" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>, <a class="reference internal" href="trajectory.html#id16" title="Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. Int. J. Hum. Comput. Stud., 67(10):870–886, October 2009.">Vizer <em>et al.</em>, 2009</a>, <a class="reference internal" href="trajectory.html#id15" title="Iftikhar Ahmed Khan, Willem-Paul Brinkman, Nick Fine, and Robert M Hierons. Measuring personality from keyboard and mouse use. In Proceedings of the 15th European conference on Cognitive ergonomics: the ergonomics of cool interaction. New York, NY, USA, January 2008. ACM.">Khan <em>et al.</em>, 2008</a>, <a class="reference internal" href="trajectory.html#id14" title="A F M Nazmul Haque Nahin, Jawad Mohammad Alam, Hasan Mahmud, and Kamrul Hasan. Identifying emotion by keystroke dynamics and text pattern analysis. Behav. Inf. Technol., 33(9):987–996, September 2014.">Nahin <em>et al.</em>, 2014</a>, <a class="reference internal" href="trajectory.html#id17" title="Maarten Dijkstra. The diagnosis of self-efficacy using mouse and keyboard input. PhD thesis, Utrecht University, 2013.">Dijkstra, 2013</a>]</span></p>
+<p>There is not much research on the use of keystroke dynamics and behavioral user patterns.
+In <span id="id3">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span> the authors explore the use of keystroke dynamics in correlation with end-user’s behavior attributes during web-based EUD activities, revealing that this metrics reflect some correlatinons with perceieved usefulness or self-efficacy.</p>
 </section>
-<section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">velocity_metrics</span>
-
-<span class="n">v</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">df_all_sessions</span><span class="p">)</span>
-<span class="n">v_metrics</span> <span class="o">=</span> <span class="n">velocity_metrics</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</pre></div>
+<section id="typing-duration">
+<h2>Typing Duration<a class="headerlink" href="#typing-duration" title="Link to this heading">¶</a></h2>
+<p>When users type on a keyboard, each keystroke involves a key press followed by a key release. The typing duration metric captures the time interval between these two events for each keystroke. This metric is useful for analyzing typing speed or patterns. <span id="id4">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id13" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
+The function <code class="xref py py-func docutils literal notranslate"><span class="pre">typing_durations()</span></code> computes the typing durations from a DataFrame containing keyboard interaction data. The DataFrame should include columns for event type (key press or key release), timestamps, and keys (session or user identifiers).</p>
+</section>
+<section id="tpying-speed">
+<h2>Tpying Speed<a class="headerlink" href="#tpying-speed" title="Link to this heading">¶</a></h2>
+<p>This metric refers to the average number of characters typed per minute (CPM) by a user during a typing session. It provides insights into the user’s typing proficiency, ease of use or emotional state <span id="id5">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id13" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
+The function <a class="reference internal" href="api/keyboard/keystrokes.html#pywib.typing_speed" title="pywib.typing_speed"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing_speed()</span></code></a> calculates the average typing speed from a DataFrame containing keyboard interaction data. The DataFrame should include columns for event type (key press or key release), timestamps, and keys (session or user identifiers).
+With the function <code class="xref py py-func docutils literal notranslate"><span class="pre">typing_speed_metrics()</span></code> the metrics returned include: average CPM, total characters typed, and total time spent typing.</p>
+</section>
+<section id="backspace-usage">
+<h2>Backspace Usage<a class="headerlink" href="#backspace-usage" title="Link to this heading">¶</a></h2>
+<p>The number of times a user presses the backspace key during a typing session can be a helpful metric to assess a negative emotional state and error correction behavior <span id="id6">[<a class="reference internal" href="trajectory.html#id13" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
+The function <a class="reference internal" href="api/keyboard/keystrokes.html#pywib.backspace_usage" title="pywib.backspace_usage"><code class="xref py py-func docutils literal notranslate"><span class="pre">backspace_usage()</span></code></a> computes the backspace usage from a DataFrame containing keyboard interaction data. The DataFrame should include columns for event type (key press or key release), timestamps, and keys (session or user identifiers).</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<div class="docutils container" id="id7">
+<div role="list" class="citation-list">
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In <em>A Handbook of Process Tracing Methods</em>, pages 20. Routledge, 2nd edition edition, 2019. URL: <a class="reference external" href="https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck">https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck</a>.</p>
+</div>
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>)</span>
+<p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="\url{https://doi.org/10.1016/j.chb.2018.02.012}">\url{https://doi.org/10.1016/j.chb.2018.02.012}</a>.</p>
+</div>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
+</div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p>Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>. New York, NY, USA, May 2011. ACM.</p>
+</div>
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>,<a role="doc-backlink" href="#id6">4</a>)</span>
+<p>Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. <em>Int. J. Comput. Appl.</em>, 11(9):1–5, December 2010.</p>
+</div>
+<div class="citation" id="id17" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">6</a><span class="fn-bracket">]</span></span>
+<p>Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. <em>Int. J. Hum. Comput. Stud.</em>, 67(10):870–886, October 2009.</p>
+</div>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">7</a><span class="fn-bracket">]</span></span>
+<p>Iftikhar Ahmed Khan, Willem-Paul Brinkman, Nick Fine, and Robert M Hierons. Measuring personality from keyboard and mouse use. In <em>Proceedings of the 15th European conference on Cognitive ergonomics: the ergonomics of cool interaction</em>. New York, NY, USA, January 2008. ACM.</p>
+</div>
+<div class="citation" id="id15" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">8</a><span class="fn-bracket">]</span></span>
+<p>A F M Nazmul Haque Nahin, Jawad Mohammad Alam, Hasan Mahmud, and Kamrul Hasan. Identifying emotion by keystroke dynamics and text pattern analysis. <em>Behav. Inf. Technol.</em>, 33(9):987–996, September 2014.</p>
+</div>
+<div class="citation" id="id18" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">9</a><span class="fn-bracket">]</span></span>
+<p>Maarten Dijkstra. <em>The diagnosis of self-efficacy using mouse and keyboard input</em>. PhD thesis, Utrecht University, 2013.</p>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -294,23 +346,23 @@ It provides tools to compute various movement metrics (like velocity, accelerati
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="movement.html">
+          <a class="next-page" href="timing.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Movement Metrics</div>
+                <div class="title">Timing Metrics</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="mouse.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Mouse Metrics</div>
                 
               </div>
             </a>
@@ -344,9 +396,12 @@ It provides tools to compute various movement metrics (like velocity, accelerati
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Introducción</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#">Kestroke Metrics</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#typing-duration">Typing Duration</a></li>
+<li><a class="reference internal" href="#tpying-speed">Tpying Speed</a></li>
+<li><a class="reference internal" href="#backspace-usage">Backspace Usage</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
