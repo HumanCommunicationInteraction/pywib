@@ -8,8 +8,8 @@ import pandas as pd
 import numpy as np
 from pywib.utils.segmentation import extract_keystroke_traces_by_session
 from pywib.utils.validation import validate_dataframe_keyboard
-from pywib.constants import EventTypes, ColumnNames
-from pywib.utils.keyboard import typing_durations_df, typing_durations_traces
+from pywib.constants import EventTypes, ColumnNames, KeyCodeEvents
+from pywib.utils.keyboard import (backspace_usage_df, backspace_usage_traces, typing_durations_df, typing_durations_traces, typing_speed_df, typing_speed_traces)
 
 def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> list:
     """
@@ -24,51 +24,36 @@ def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFram
     """
     if traces is None and per_traces:
         traces = extract_keystroke_traces_by_session(df)
+        return typing_durations_traces(traces, False)
 
     if not per_traces:
         return typing_durations_df(df)
 
     return typing_durations_traces(traces)
 
-def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces : bool = True) -> dict[list[float]]:
+def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces : bool = True) -> dict[list[float]] | float:
     """
     Calculate the average typing speed in characters per minute (CPM).
 
     Parameters:
         df (pd.DataFrame): DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
         traces (dict[str, list[pd.DataFrame]]): optional Pre-extracted keystroke traces by session.
-        per_traces (bool): optional Whether to calculate speed per trace. Default is True.
+        per_traces (bool): optional Whether to calculate speed per trace. Default is True. if False, mind that the df must only contain typing data in order to obtain the correct CPM calculation.
 
     Returns:
-        dict (dict[list[float]]) : A dictionary with session IDs as keys and lists of typing speeds (CPM) per trace as values.
+        dict (dict[list[float]] | float) : A dictionary with session IDs as keys and lists of typing speeds (CPM) per trace as values, or a float representing the typing speed if per_traces is False.
     """
 
     if per_traces and traces is None:
         traces = extract_keystroke_traces_by_session(df)
+        return typing_speed_traces(traces, False)
 
     elif not per_traces:
-        raise NotImplementedError("Calculation without traces is not implemented yet.")
+        return typing_speed_df(df)
 
-    speed_by_session = {}
-    for session_id, keystroke_traces in traces.items():
-        speed_by_trace = []
-        for trace in keystroke_traces:
-            total_chars = 0
-            total_time = 0.0  # in seconds
-            strokes = trace[trace[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_KEY_UP, EventTypes.EVENT_KEY_DOWN])]
-            keys = trace[trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_UP]
-            total_chars += len(keys)
-            if not strokes.empty:
-                time_start = strokes[ColumnNames.TIME_STAMP].iloc[0]
-                time_end = strokes[ColumnNames.TIME_STAMP].iloc[-1]
-                total_time = (time_end - time_start) / 1000.0  # convert ms to s
-                if total_time > 0:
-                    cpm = (total_chars / total_time) * 60.0
-                    speed_by_trace.append(cpm)
-        speed_by_session[session_id] = speed_by_trace
-    return speed_by_session
+    return typing_speed_traces(traces)
 
-def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_trace: bool = True) -> dict:
+def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate typing speed metrics including average CPM, total characters typed, and total time spent typing.
 
@@ -79,12 +64,9 @@ def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
     Returns:
         dict: A dictionary with session IDs as keys and their corresponding typing speed metrics as values. This metrics include average typing speed (CPM), total characters typed, and total time spent typing (in seconds).
     """
-    if traces is None and per_trace:
+    if traces is None:
         traces = extract_keystroke_traces_by_session(df)
     
-    if not per_trace:
-        raise NotImplementedError("Calculation without traces is not implemented yet.")
-
     session_speeds = typing_speed(None, traces=traces, per_traces=True)
 
     metrics_by_session = {}
@@ -97,7 +79,7 @@ def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
                 "average_typing_speed": avg_speed,
                 "total_characters": total_chars,
                 "total_time_seconds": total_time,
-                "avg_keydown_to_keyup_duration": -1  # Placeholder for future implementation
+                "avg_keydown_to_keyup_duration": -1  # TODO Placeholder for future implementation
             }
     return metrics_by_session
 
@@ -116,17 +98,9 @@ def backspace_usage(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame
     if traces is None and per_trace:
         validate_dataframe_keyboard(df)
         traces = extract_keystroke_traces_by_session(df)
+        return backspace_usage_traces(traces, False)
     if not per_trace:
         validate_dataframe_keyboard(df)
-        raise NotImplementedError("Calculation without traces is not implemented yet.")
+        return backspace_usage_df(df)
     
-    times_per_session = {}
-    for session_id, keystroke_traces in traces.items():
-        backspace_count = 0
-        for trace in keystroke_traces:
-            backspace_count = 0
-            for trace in keystroke_traces:
-                mask = (trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN) & ( (trace[ColumnNames.KEY_CODE_EVENT] == 8) | (trace[ColumnNames.KEY_CODE_EVENT] == 46))
-            backspace_count += int(mask.sum())
-        times_per_session[session_id] = backspace_count
-    return times_per_session
+    return backspace_usage_traces(traces)

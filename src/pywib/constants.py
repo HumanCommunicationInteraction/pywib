@@ -75,3 +75,10 @@ class ColumnNames:
     ACCELERATION = 'acceleration'
     JERKINESS = 'jerkiness'
     AUC_RATIO = 'auc_ratio'
+
+class KeyCodeEvents:
+    """ Key code event constants for keyboard interactions."""
+    KEY_CODE_BACKSPACE = 8
+    """Key code for the Backspace key."""
+    KEY_CODE_DELETE = 46
+    """Key code for the Delete key."""

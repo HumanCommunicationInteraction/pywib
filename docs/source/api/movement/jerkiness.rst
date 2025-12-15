@@ -2,6 +2,10 @@ Jerkiness
 =========
 .. autofunction:: pywib.jerkiness
 
+.. role:: python(code)
+   :language: python
+
+
 Practical Example
 --------------------
 .. code-block:: python
@@ -13,7 +17,11 @@ Practical Example
         for trace in traces:
             print(trace[['time', 'x', 'y', 'jerkiness']].head())
    
+Notes
+------
+The method can be either run with either :python:`per_traces=True` or :python:`per_traces=False`, the first one segments the data by movement traces, while the second one computes the jerkiness for the entire DataFrame.
 
+This is important to consider for the specific given dataset, if the data contains **anything else than movement data**, then :python:`per_traces=True` should be used to avoid incorrect jerkiness calculations. Whereas a dataset of consecutive movement events can be processed with `per_traces=False` to obtain a single jerkiness DataFrame.
 
 Jerkiness Metrics
 =================
