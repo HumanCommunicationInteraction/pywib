@@ -9,40 +9,26 @@ import numpy as np
 from pywib.utils.segmentation import extract_keystroke_traces_by_session
 from pywib.utils.validation import validate_dataframe_keyboard
 from pywib.constants import EventTypes, ColumnNames
+from pywib.utils.keyboard import typing_durations_df, typing_durations_traces
 
-def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_trace: bool = True) -> list:
+def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> list:
     """
     Calculate the durations of individual keystrokes.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
         traces (dict[str, list[pd.DataFrame]]): optional Pre-extracted keystroke traces by session.
-        per_trace (bool): optional Whether to calculate durations per trace. Default is True.
+        per_traces (bool): optional Whether to calculate durations per trace. Default is True.
     Returns:
         list: List of keystroke durations in milliseconds.
     """
-    if traces is None and per_trace:
+    if traces is None and per_traces:
         traces = extract_keystroke_traces_by_session(df)
 
-    if not per_trace:
-        raise NotImplementedError("Calculation without traces is not implemented yet.")
+    if not per_traces:
+        return typing_durations_df(df)
 
-    durations_per_session = {}
-    for session_id, keystroke_traces in traces.items():
-        durations = []
-        for trace in keystroke_traces:
-            key_down_events = trace[trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN]
-            key_up_events = trace[trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_UP]
-            for key in key_down_events[ColumnNames.KEY].unique():
-                down_times = key_down_events[key_down_events[ColumnNames.KEY] == key][ColumnNames.TIME_STAMP].values
-                up_times = key_up_events[key_up_events[ColumnNames.KEY] == key][ColumnNames.TIME_STAMP].values
-                paired_times = zip(down_times, up_times)
-                for down_time, up_time in paired_times:
-                    duration = up_time - down_time
-                    if duration >= 0:
-                        durations.append(duration)
-        durations_per_session[session_id] = durations
-    return durations_per_session
+    return typing_durations_traces(traces)
 
 def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces : bool = True) -> dict[list[float]]:
     """
