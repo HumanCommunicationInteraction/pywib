@@ -23,5 +23,6 @@ pytest test
 
 ## Generating Documentation
 ```
+cd pywib/docs
 make html
 ```

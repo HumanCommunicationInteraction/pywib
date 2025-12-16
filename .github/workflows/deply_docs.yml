@@ -32,7 +32,7 @@ jobs:
       # 4️⃣ Construir la documentación
       - name: Build documentation
         run: |
-          cd docs && make html
+          cd docs && make clean && make html
 
       # 5️⃣ Desplegar a GitHub Pages
       - name: Deploy to GitHub Pages
