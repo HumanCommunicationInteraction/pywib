@@ -9,3 +9,4 @@ API Documentation
    timing/index
    mouse/clicks
    trajectory/index
+   keyboard/index

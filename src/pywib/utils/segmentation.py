@@ -1,6 +1,6 @@
 import pandas as pd
 from ..constants import EventTypes, ColumnNames
-from ..utils.validation import validate_dataframe
+from ..utils.validation import validate_dataframe, validate_dataframe_keyboard
 
 def extract_trace(dt: pd.DataFrame) -> list:
     """
@@ -33,7 +33,7 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
     dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
     traces_by_session = {}
     for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
-        is_move = (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_MOVE) | (group[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_TOUCH_MOVE)
+        is_move = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
         group_id = (~is_move).cumsum()
         traces = []
         for _, sub_group in group[is_move].groupby(group_id[is_move]):
@@ -42,6 +42,29 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
         traces_by_session[session_id] = traces
     return traces_by_session
 
+def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.DataFrame]]:
+    """
+    Extracts keystroke traces from the DataFrame, grouped by (sessionId, sceneId).
+    Each keystroke trace is considered as a sequence of consecutive key events
+    between two non-keyboard events.
+    Parameters:
+        dt (pd.DataFrame): DataFrame containing 'sessionId', 'sceneId', 'eventType', and 'timeStamp' columns.
+    Returns:
+        dict: a dictionary with keys as (sessionId) and values as lists of DataFrames.
+    """
+    validate_dataframe_keyboard(dt)
+    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    keystroke_traces_by_session = {}
+    for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
+        is_keydown = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_KEY_UP, EventTypes.EVENT_KEY_DOWN, EventTypes.EVENT_KEY_PRESS])
+        group_id = (~is_keydown).cumsum()
+        keystroke_traces = []
+        for _, sub_group in group[is_keydown].groupby(group_id[is_keydown]):
+            if len(sub_group) > 0:
+                keystroke_traces.append(sub_group)
+        keystroke_traces_by_session[session_id] = keystroke_traces
+    return keystroke_traces_by_session
+    
 def extract_mouse_click_traces_by_ession(dt: pd.DataFrame) -> dict:
     """
     Extracts those traces with event movements that end with ON_MOUSE_CLICK or ON_TOUCH_TAP events,

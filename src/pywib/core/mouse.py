@@ -52,6 +52,8 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
         last_move_y = None
         accumulated_move_distance = 0.0
         distances = []
+        durations = []
+        mouse_down_time = None
         for _, row in group.iterrows():
             # Mouse down: start a new segment
             if row[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_DOWN:
@@ -60,6 +62,7 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
                 last_move_x = row[ColumnNames.X]
                 last_move_y = row[ColumnNames.Y]
                 accumulated_move_distance = 0.0
+                mouse_down_time = row[ColumnNames.TIME_STAMP]
 
             # While between down and up, accumulate move distances
             if in_down and row[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_MOVE:
@@ -75,15 +78,18 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
             if row[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_UP and in_down:
                 x = row[ColumnNames.X]
                 y = row[ColumnNames.Y]
+                duration = row[ColumnNames.TIME_STAMP] - mouse_down_time if mouse_down_time is not None else 0
                 if last_move_x is not None and last_move_y is not None:
                     d = np.hypot(x - last_move_x, y - last_move_y)
                     accumulated_move_distance += d
                 if accumulated_move_distance >= threshold:
                     slips += 1
                     distances.append(accumulated_move_distance)
+                durations.append(duration)
                 in_down = False
                 last_move_x = None
                 last_move_y = None
+                mouse_down_time = None
                 accumulated_move_distance = 0.0
         click_slips_per_session[session_id] = {
             "slips": slips,
@@ -95,6 +101,9 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
             "shortest_click_slip": min(distances) if distances else 0,
             "average_click_slip": slips / len(distances) if distances else 0,
             "average_click_slip_distance": np.mean(distances) if distances else 0,
+            "average_click_duration": np.mean(durations) if durations else 0,
+            "max_click_duration": max(durations) if durations else 0,
+            "min_click_duration": min(durations) if durations else 0,
         }
         metrics_per_session[session_id] = metrics
     return metrics_per_session
