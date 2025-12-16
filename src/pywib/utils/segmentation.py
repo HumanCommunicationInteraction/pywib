@@ -1,3 +1,5 @@
+from typing import List, Optional, Tuple
+import concurrent.futures
 import pandas as pd
 from ..constants import EventTypes, ColumnNames
 from ..utils.validation import validate_dataframe, validate_dataframe_keyboard
@@ -41,6 +43,47 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
                 traces.append(sub_group)
         traces_by_session[session_id] = traces
     return traces_by_session
+
+def extract_traces_by_session_parallel(dt: pd.DataFrame, n_jobs: Optional[int] = None) -> dict:
+    """
+    Extracts traces from the DataFrame, grouped by (sessionId, sceneId).
+    Each trace is considered as a sequence of consecutive ON_MOUSE_MOVE events
+    between two non-move events.
+    Parameters:
+        dt (pd.DataFrame): DataFrame containing 'sessionId', 'sceneId', 'eventType', and 'timeStamp' columns.
+        n_jobs (Optional[int]): The number of threads to use for parallel processing.
+    Returns:
+        dict: a dictionary with keys as (sessionId) and values as lists of DataFrames.
+    """
+    validate_dataframe(dt)
+    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    traces_by_session : dict = {}
+    groups = list(dt.groupby(ColumnNames.SESSION_ID))
+    # For small number of groups or forced sequential, keep single-threaded
+    if n_jobs == 1 or len(groups) < 2:
+        for session_id, group in groups:
+            _, traces = _extract_traces_for_session((session_id, group))
+            traces_by_session[session_id] = traces
+        return traces_by_session
+
+    # ThreadPoolExecutor chosen to avoid Windows multiprocessing spawn/pickle overhead.
+    max_workers = n_jobs if n_jobs is not None else None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as exc:
+        for session_id, traces in exc.map(_extract_traces_for_session, groups):
+            traces_by_session[session_id] = traces
+
+    return traces_by_session
+
+def _extract_traces_for_session(item: Tuple[str, pd.DataFrame]) -> Tuple[str, List[pd.DataFrame]]:
+    session_id, group = item
+    is_move = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
+    group_id = (~is_move).cumsum()
+    traces: List[pd.DataFrame] = []
+    for _, sub_group in group[is_move].groupby(group_id[is_move]):
+        if len(sub_group) > 1:
+            traces.append(sub_group)
+    return session_id, traces
+
 
 def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.DataFrame]]:
     """

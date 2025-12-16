@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 from pywib.utils.segmentation import extract_keystroke_traces_by_session
 from pywib.utils.validation import validate_dataframe_keyboard
-from pywib.constants import EventTypes, ColumnNames, KeyCodeEvents
+from pywib.constants import EventTypes, ColumnNames
 from pywib.utils.keyboard import (backspace_usage_df, backspace_usage_traces, typing_durations_df, typing_durations_traces, typing_speed_df, typing_speed_traces)
 
 def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> list:

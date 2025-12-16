@@ -1,6 +1,5 @@
 
 import pandas as pd
-import numpy as np
 from pywib.constants import ColumnNames, EventTypes, KeyCodeEvents
 from pywib.utils.validation import validate_dataframe_keyboard 
 
