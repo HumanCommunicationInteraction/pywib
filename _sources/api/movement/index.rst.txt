@@ -7,5 +7,3 @@ Movement Functions
    velocity
    acceleration
    jerkiness
-   path
-   auc

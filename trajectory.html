@@ -208,8 +208,6 @@
 <li class="toctree-l3"><a class="reference internal" href="api/movement/acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/movement/jerkiness.html">Jerkiness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/movement/jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/movement/path.html">Distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/movement/auc.html">Area Under the Curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -222,7 +220,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api/mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/auc.html">Area Under the Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/deviations.html">Deviations from trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/keyboard/keystrokes.html">Keystorke Dynamics</a></li>
 </ul>
 </li>
@@ -271,8 +275,8 @@
 <p>This section covers various trajectory metrics used to analyze the users trajectory, such as path length or AUC, which provide insights into movement efficiency and accuracy during user interactions in a mathematically rigorous manner.</p>
 <section id="path">
 <h2>Path<a class="headerlink" href="#path" title="Link to this heading">¶</a></h2>
-<p>The path or total distance traveled during user interactions is a key metric for analyzing movement efficiency <span id="id1">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
-<p>The function <a class="reference internal" href="api/movement/path.html#pywib.path" title="pywib.path"><code class="xref py py-func docutils literal notranslate"><span class="pre">path()</span></code></a> calculates the path length for interaction points from a DataFrame or session traces.
+<p>The path or total distance traveled during user interactions is a key metric for analyzing movement efficiency <span id="id1">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="#id12" title="Adriana Seelye, Stuart Hagler, Nora Mattek, Diane B Howieson, Katherine Wild, Hiroko H Dodge, and Jeffrey A Kaye. Computer mouse movement patterns: a potential marker of mild cognitive impairment. Alzheimers Dement. (Amst.), 1(4):472–480, December 2015. URL: https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006.">Seelye <em>et al.</em>, 2015</a>, <a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
+<p>The function <a class="reference internal" href="api/trajectory/path.html#pywib.path" title="pywib.path"><code class="xref py py-func docutils literal notranslate"><span class="pre">path()</span></code></a> calculates the path length for interaction points from a DataFrame or session traces.
 This function computes the path length based on the Euclidean distance between consecutive points.</p>
 <p>The distance between consecutive points is calculated as:</p>
 <div class="math-wrapper docutils container">
@@ -283,7 +287,7 @@ This function computes the path length based on the Euclidean distance between c
 <section id="auc-ratio">
 <h2>AUC Ratio<a class="headerlink" href="#auc-ratio" title="Link to this heading">¶</a></h2>
 <p>The Area Under the Curve (AUC) is a metric that quantifies the overall movement efficiency during user interactions in computers <span id="id2">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span> or even in mobile devices <span id="id3">[<a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
-<p>The function <a class="reference internal" href="api/movement/auc.html#pywib.auc_ratio" title="pywib.auc_ratio"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio()</span></code></a> calculates the AUC ratio for each session.</p>
+<p>The function <a class="reference internal" href="api/trajectory/auc.html#pywib.auc_ratio" title="pywib.auc_ratio"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio()</span></code></a> calculates the AUC ratio for each session.</p>
 <p>That is, the real area under the curve and the optimal area (straight-line) and returns the ratio between their difference and the rael area.</p>
 <p>Given the real area <span class="math notranslate nohighlight">\(A_{real}\)</span> and the optimal area <span class="math notranslate nohighlight">\(A_{opt}\)</span> the AUC ratio is computed as:</p>
 <div class="math-wrapper docutils container">
@@ -291,18 +295,31 @@ This function computes the path length based on the Euclidean distance between c
 \[AUC Ratio = \frac{|A_{real} - A_{opt}|}{|A_{opt}| + 10^{-6}}\]</div>
 </div>
 <p>This small epsilon prevents division-by-zero when the optimal area is 0.</p>
-<p>Metrics are also provided via <a class="reference internal" href="api/movement/auc.html#pywib.auc_ratio_metrics" title="pywib.auc_ratio_metrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio_metrics()</span></code></a>, which computes mean, max, and min AUC and AUC ratio for each session.</p>
+<p>Metrics are also provided via <a class="reference internal" href="api/trajectory/auc.html#pywib.auc_ratio_metrics" title="pywib.auc_ratio_metrics"><code class="xref py py-func docutils literal notranslate"><span class="pre">auc_ratio_metrics()</span></code></a>, which computes mean, max, and min AUC and AUC ratio for each session.</p>
 </section>
 <section id="maximum-absolute-deviation">
 <h2>Maximum Absolute Deviation<a class="headerlink" href="#maximum-absolute-deviation" title="Link to this heading">¶</a></h2>
 <p>The Maximum Absolute Deviation (MAD) is a metric that quantifies the maximum deviation of the actual movement path from the optimal straight-line path during user interactions <span id="id4">[<a class="reference internal" href="#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
-<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">MAD()</span></code> calculates the MAD for each session or interaction trace.</p>
+<p>The function <a class="reference internal" href="api/trajectory/deviations.html#pywib.deviations" title="pywib.deviations"><code class="xref py py-func docutils literal notranslate"><span class="pre">deviations()</span></code></a> calculates the MAD for each session or interaction trace, returning both the mean, maximum and minimum MAD values.</p>
 <p>The MAD is calculated as the maximum perpendicular distance from any point on the actual path to the straight line connecting the start and end points of the movement.</p>
+<figure class="align-center" id="id21">
+<img alt="Diagram illustrating Maximum Absolute Deviation (MAD)" src="_images/mad_diagram.svg" />
+<figcaption>
+<p><span class="caption-text">Diagram illustrating Maximum Absolute Deviation (MAD)</span><a class="headerlink" href="#id21" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="average-absolute-deviation">
 <h2>Average Absolute Deviation<a class="headerlink" href="#average-absolute-deviation" title="Link to this heading">¶</a></h2>
 <p>The Average Absolute Deviation (AAD) is a metric that quantifies the average deviation of the actual movement path from the optimal straight-line path during user interactions <span id="id5">[<a class="reference internal" href="#id10" title="Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: https://dl.acm.org/doi/10.1145/3544548.3581143.">Rhim <em>et al.</em>, 2023</a>]</span>.</p>
 <p>It consists of the average value of the perpendicular distances from each point of the trajectory to the straight line connecting the start and end points of the movement (optimal trajectory).</p>
+<p>The function <a class="reference internal" href="api/trajectory/deviations.html#pywib.deviations" title="pywib.deviations"><code class="xref py py-func docutils literal notranslate"><span class="pre">deviations()</span></code></a> calculates the AAD for each session or interaction trace, returning the AAD value along with MAD metrics.</p>
+<figure class="align-center" id="id22">
+<img alt="Diagram illustrating Average Absolute Deviation (AAD)" src="_images/aad_diagram.svg" />
+<figcaption>
+<p><span class="caption-text">Diagram illustrating Average Absolute Deviation (AAD)</span><a class="headerlink" href="#id22" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
@@ -318,33 +335,45 @@ This function computes the path length based on the Euclidean distance between c
 <span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id4">3</a>)</span>
 <p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="\url{https://doi.org/10.1016/j.chb.2018.02.012}">\url{https://doi.org/10.1016/j.chb.2018.02.012}</a>.</p>
 </div>
-<div class="citation" id="id10" role="doc-biblioentry">
+<div class="citation" id="id11" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>)</span>
-<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
+<p>Christian O'Reilly and Réjean Plamondon. Can computer mice be used as low-cost devices for the acquisition of planar human movement velocity signals? <em>Behav. Res. Methods</em>, 43(1):229–238, March 2011. URL: <a class="reference external" href="https://link.springer.com/article/10.3758/s13428-010-0030-3#notes">https://link.springer.com/article/10.3758/s13428-010-0030-3#notes</a>.</p>
 </div>
 <div class="citation" id="id12" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
-<p>Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>. New York, NY, USA, May 2011. ACM.</p>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">4</a><span class="fn-bracket">]</span></span>
+<p>Adriana Seelye, Stuart Hagler, Nora Mattek, Diane B Howieson, Katherine Wild, Hiroko H Dodge, and Jeffrey A Kaye. Computer mouse movement patterns: a potential marker of mild cognitive impairment. <em>Alzheimers Dement. (Amst.)</em>, 1(4):472–480, December 2015. URL: <a class="reference external" href="https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006">https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006</a>.</p>
 </div>
 <div class="citation" id="id13" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
-<p>Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. <em>Int. J. Comput. Appl.</em>, 11(9):1–5, December 2010.</p>
+<p>Beatriz Pariente-Martinez, Martin Gonzalez-Rodriguez, Daniel Fernandez-Lanvin, and Javier De Andres-Suarez. Measuring the role of age in user performance during interaction with computers. <em>Univers. Access Inf. Soc.</em>, 15(2):237–247, June 2016. URL: <a class="reference external" href="https://link.springer.com/article/10.1007/s10209-014-0388-6">https://link.springer.com/article/10.1007/s10209-014-0388-6</a>.</p>
 </div>
-<div class="citation" id="id16" role="doc-biblioentry">
+<div class="citation" id="id10" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
-<p>Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. <em>Int. J. Hum. Comput. Stud.</em>, 67(10):870–886, October 2009.</p>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id5">4</a>)</span>
+<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
 </div>
 <div class="citation" id="id15" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<p>Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>. New York, NY, USA, May 2011. ACM.</p>
+</div>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<p>Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. <em>Int. J. Comput. Appl.</em>, 11(9):1–5, December 2010.</p>
+</div>
+<div class="citation" id="id19" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<p>Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. <em>Int. J. Hum. Comput. Stud.</em>, 67(10):870–886, October 2009.</p>
+</div>
+<div class="citation" id="id18" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
 <p>Iftikhar Ahmed Khan, Willem-Paul Brinkman, Nick Fine, and Robert M Hierons. Measuring personality from keyboard and mouse use. In <em>Proceedings of the 15th European conference on Cognitive ergonomics: the ergonomics of cool interaction</em>. New York, NY, USA, January 2008. ACM.</p>
 </div>
-<div class="citation" id="id14" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<div class="citation" id="id17" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
 <p>A F M Nazmul Haque Nahin, Jawad Mohammad Alam, Hasan Mahmud, and Kamrul Hasan. Identifying emotion by keystroke dynamics and text pattern analysis. <em>Behav. Inf. Technol.</em>, 33(9):987–996, September 2014.</p>
 </div>
-<div class="citation" id="id17" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
 <p>Maarten Dijkstra. <em>The diagnosis of self-efficacy using mouse and keyboard input</em>. PhD thesis, Utrecht University, 2013.</p>
 </div>
 </div>

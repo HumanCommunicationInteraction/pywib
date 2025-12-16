@@ -1,4 +1,6 @@
 Visualization
 =============
 
-.. automodule:: pywib.utils.visualization
+.. autofunction:: pywib.visualize_trace
+    
+.. autofunction:: pywib.video_from_trace

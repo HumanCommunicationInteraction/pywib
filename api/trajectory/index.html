@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Timing Functions" href="../timing/index.html"><link rel="prev" title="Other utility Functions" href="index.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Distance" href="path.html"><link rel="prev" title="Clicks" href="../mouse/clicks.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
-        <title>Visualization - pywib 0.1.0 documentation</title>
+        <title>Trajectory Functions - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5ae546fa" />
@@ -173,7 +173,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -210,8 +210,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../movement/jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Visualization</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/visualization.html">Visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../timing/index.html">Timing Functions</a><input aria-label="Toggle navigation of Timing Functions" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -220,10 +220,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../trajectory/path.html">Distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../trajectory/auc.html">Area Under the Curve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../trajectory/deviations.html">Deviations from trajectory</a></li>
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deviations.html">Deviations from trajectory</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -252,7 +252,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/api/utils/visualization.rst.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/api/trajectory/index.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -265,59 +265,20 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="visualization">
-<h1>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="pywib.visualize_trace">
-<span class="sig-name descname"><span class="pre">visualize_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.visualize_trace" title="Link to this definition">¶</a></dt>
-<dd><p>”
-Geenrates a plot visualizing the trace of a stroke.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing the stroke data with ‘x’, ‘y and ‘timeStamp’ columns.</p></li>
-<li><p><strong>stroke_indices</strong> (<em>list</em>) – List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index.</p></li>
-<li><p><strong>stroke_id</strong> (<em>str</em>) – Identifier for the stroke to be displayed in the title.</p></li>
+          <section id="trajectory-functions">
+<h1>Trajectory Functions<a class="headerlink" href="#trajectory-functions" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="path.html">Distance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deviations.html">Deviations from trajectory</a></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Displays a plot of the stroke trace.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pywib.video_from_trace">
-<span class="sig-name descname"><span class="pre">video_from_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">640</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">480</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.video_from_trace" title="Link to this definition">¶</a></dt>
-<dd><p>Generates a video visualizing the mouse trace of a user.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing the mouse trace data with ‘x’, ‘y’, ‘eventType’, and ‘sessionId’ columns.</p></li>
-<li><p><strong>user_id</strong> (<em>str/int</em>) – Identifier of the user whose trace is to be visualized.</p></li>
-<li><p><strong>outfile</strong> (<em>str</em>) – Path to save the output video file.</p></li>
-<li><p><strong>width</strong> (<em>int</em>) – Width of the video frame.</p></li>
-<li><p><strong>height</strong> (<em>int</em>) – Height of the video frame.</p></li>
-<li><p><strong>fps</strong> (<em>int</em>) – Frames per second for the video.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Saves the video file to the specified path.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
+</div>
 </section>
 
         </article>
@@ -325,23 +286,23 @@ Geenrates a plot visualizing the trace of a stroke.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../timing/index.html">
+          <a class="next-page" href="path.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Timing Functions</div>
+                <div class="title">Distance</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="../mouse/clicks.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Other utility Functions</div>
+                <div class="title">Clicks</div>
                 
               </div>
             </a>
@@ -363,28 +324,8 @@ Geenrates a plot visualizing the trace of a stroke.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Visualization</a><ul>
-<li><a class="reference internal" href="#pywib.visualize_trace"><code class="docutils literal notranslate"><span class="pre">visualize_trace()</span></code></a></li>
-<li><a class="reference internal" href="#pywib.video_from_trace"><code class="docutils literal notranslate"><span class="pre">video_from_trace()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

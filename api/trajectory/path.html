@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Other utility Functions" href="../utils/index.html"><link rel="prev" title="Distance" href="path.html">
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Area Under the Curve" href="auc.html"><link rel="prev" title="Trajectory Functions" href="index.html">
 
     <link rel="shortcut icon" href="../../_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
-        <title>Area Under the Curve - pywib 0.1.0 documentation</title>
+        <title>Distance - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=5ae546fa" />
@@ -201,15 +201,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../timing.html">Timing Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../constants.html">Constants</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Documentation</a><input aria-label="Toggle navigation of API Documentation" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Movement Functions</a><input aria-label="Toggle navigation of Movement Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="velocity.html">Velocity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="velocity.html#velocity-metrics">Velocity Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="acceleration.html">Acceleration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="jerkiness.html">Jerkiness</a></li>
-<li class="toctree-l3"><a class="reference internal" href="jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="path.html">Distance</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Area Under the Curve</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../movement/index.html">Movement Functions</a><input aria-label="Toggle navigation of Movement Functions" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../movement/velocity.html">Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../movement/velocity.html#velocity-metrics">Velocity Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../movement/acceleration.html">Acceleration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../movement/acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../movement/jerkiness.html">Jerkiness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../movement/jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -222,7 +220,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auc.html">Area Under the Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deviations.html">Deviations from trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../keyboard/keystrokes.html">Keystorke Dynamics</a></li>
 </ul>
 </li>
@@ -248,7 +252,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/api/movement/auc.rst.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/api/trajectory/path.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -266,46 +270,25 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="area-under-the-curve">
-<h1>Area Under the Curve<a class="headerlink" href="#area-under-the-curve" title="Link to this heading">¶</a></h1>
+          <section id="distance">
+<h1>Distance<a class="headerlink" href="#distance" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pywib.auc_ratio">
-<span class="sig-name descname"><span class="pre">auc_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.auc_ratio" title="Link to this definition">¶</a></dt>
-<dd><p>Calculate the AUC ratio for the given DataFrame.</p>
+<dt class="sig sig-object py" id="pywib.path">
+<span class="sig-name descname"><span class="pre">path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.path" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the path length for the given DataFrame.
+This function computes the path length based on the Euclidean distance between consecutive points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘timeStamp’ and ‘y’ columns.</p></li>
-<li><p><strong>computeTraces</strong> (<em>bool</em>) – Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary with sessionId as keys and a tuple (auc, auc_ratio) as values. Where the auc is the area under the curve and auc_ratio is the ratio between the AUC and the optimal AUC.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>auc_per_session (dict)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pywib.auc_ratio_metrics">
-<span class="sig-name descname"><span class="pre">auc_ratio_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computed_auc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.auc_ratio_metrics" title="Link to this definition">¶</a></dt>
-<dd><p>This function computes the mean, max, and min auc ratio for each session on the given dataframe or list of traces.
-The optimal auc is not given in the output, only the auc ratio and auc, since it can be derived from them if needed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing interaction data.</p></li>
-<li><p><strong>computed_auc</strong> (<em>dict</em>) – Precomputed AUC ratios. If None, they will be computed from df or traces.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame containing ‘x’ and ‘y’ columns.</p></li>
 <li><p><strong>traces</strong> (<em>dict</em>) – A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary with keys as (sessionId) and values as dictionaries with ‘mean_ratio’, ‘max_ratio’, ‘min_ratio’ for the auc ratio and ‘mean’, ‘max’, and ‘min’ auc.</p>
+<dd class="field-even"><p>DataFrame with an additional ‘distance’ column representing the path length.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -317,23 +300,23 @@ The optimal auc is not given in the output, only the auc ratio and auc, since it
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../utils/index.html">
+          <a class="next-page" href="auc.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Other utility Functions</div>
+                <div class="title">Area Under the Curve</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="path.html">
+          <a class="prev-page" href="index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Distance</div>
+                <div class="title">Trajectory Functions</div>
                 
               </div>
             </a>
@@ -367,9 +350,8 @@ The optimal auc is not given in the output, only the auc ratio and auc, since it
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Area Under the Curve</a><ul>
-<li><a class="reference internal" href="#pywib.auc_ratio"><code class="docutils literal notranslate"><span class="pre">auc_ratio()</span></code></a></li>
-<li><a class="reference internal" href="#pywib.auc_ratio_metrics"><code class="docutils literal notranslate"><span class="pre">auc_ratio_metrics()</span></code></a></li>
+<li><a class="reference internal" href="#">Distance</a><ul>
+<li><a class="reference internal" href="#pywib.path"><code class="docutils literal notranslate"><span class="pre">path()</span></code></a></li>
 </ul>
 </li>
 </ul>

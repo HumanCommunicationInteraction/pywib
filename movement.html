@@ -208,8 +208,6 @@
 <li class="toctree-l3"><a class="reference internal" href="api/movement/acceleration.html#acceleration-metrics">Acceleration Metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/movement/jerkiness.html">Jerkiness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/movement/jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/movement/path.html">Distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/movement/auc.html">Area Under the Curve</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -222,7 +220,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api/mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/path.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/auc.html">Area Under the Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/trajectory/deviations.html">Deviations from trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/keyboard/keystrokes.html">Keystorke Dynamics</a></li>
 </ul>
 </li>
@@ -270,7 +274,9 @@
 <h1>Movement Metrics<a class="headerlink" href="#movement-metrics" title="Link to this heading">¶</a></h1>
 <section id="velocity">
 <h2>Velocity<a class="headerlink" href="#velocity" title="Link to this heading">¶</a></h2>
-<p>The velocity is the rate of change of position with respect to time. Commonly used to analyze the speed of movement during user interactions <span id="id1">[<a class="reference internal" href="trajectory.html#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span>.</p>
+<p>The velocity is the rate of change of position with respect to time. Commonly used to analyze the speed of movement during user interactions <span id="id1">[<a class="reference internal" href="trajectory.html#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span>.
+Computer mouses have been proven to be reliable enough to measure human velocity <span id="id2">[<a class="reference internal" href="trajectory.html#id11" title="Christian O'Reilly and Réjean Plamondon. Can computer mice be used as low-cost devices for the acquisition of planar human movement velocity signals? Behav. Res. Methods, 43(1):229–238, March 2011. URL: https://link.springer.com/article/10.3758/s13428-010-0030-3#notes.">O'Reilly and Plamondon, 2011</a>]</span> and have even been considered as valid tools to obtain markers for cognitive immpairment <span id="id3">[<a class="reference internal" href="trajectory.html#id12" title="Adriana Seelye, Stuart Hagler, Nora Mattek, Diane B Howieson, Katherine Wild, Hiroko H Dodge, and Jeffrey A Kaye. Computer mouse movement patterns: a potential marker of mild cognitive impairment. Alzheimers Dement. (Amst.), 1(4):472–480, December 2015. URL: https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006.">Seelye <em>et al.</em>, 2015</a>]</span>.
+Velocity and time have also been proven to be affected by aging <span id="id4">[<a class="reference internal" href="trajectory.html#id13" title="Beatriz Pariente-Martinez, Martin Gonzalez-Rodriguez, Daniel Fernandez-Lanvin, and Javier De Andres-Suarez. Measuring the role of age in user performance during interaction with computers. Univers. Access Inf. Soc., 15(2):237–247, June 2016. URL: https://link.springer.com/article/10.1007/s10209-014-0388-6.">Pariente-Martinez <em>et al.</em>, 2016</a>]</span> up to a certain point and for some activies carried out in computers and web enviornments.</p>
 <p>The function <a class="reference internal" href="api/movement/velocity.html#pywib.velocity" title="pywib.velocity"><code class="xref py py-func docutils literal notranslate"><span class="pre">velocity()</span></code></a> computes the velocity based on the distance and time difference between consecutive points.
 The velocity is calculated as:</p>
 <div class="math-wrapper docutils container">
@@ -282,7 +288,7 @@ The velocity is calculated as:</p>
 </section>
 <section id="acceleration">
 <h2>Acceleration<a class="headerlink" href="#acceleration" title="Link to this heading">¶</a></h2>
-<p>The acceleration is the rate of change of velocity with respect to time, which provides insights into how quickly users change their speed during interactions <span id="id2">[<a class="reference internal" href="trajectory.html#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span>.</p>
+<p>The acceleration is the rate of change of velocity with respect to time, which provides insights into how quickly users change their speed during interactions <span id="id5">[<a class="reference internal" href="trajectory.html#id9" title="Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In A Handbook of Process Tracing Methods, pages 20. Routledge, 2nd edition edition, 2019. URL: https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck.">Kieslich <em>et al.</em>, 2019</a>, <a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span>.</p>
 <p>The function <a class="reference internal" href="api/movement/acceleration.html#pywib.acceleration" title="pywib.acceleration"><code class="xref py py-func docutils literal notranslate"><span class="pre">acceleration()</span></code></a> computes the acceleration based on the change in velocity over time from a DataFrame or session traces.</p>
 <p>The acceleration is calculated as:</p>
 <div class="math-wrapper docutils container">
@@ -305,44 +311,56 @@ The velocity is calculated as:</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
-<div class="docutils container" id="id3">
+<div class="docutils container" id="id6">
 <div role="list" class="citation-list">
-<div class="citation" id="id6" role="doc-biblioentry">
+<div class="citation" id="id9" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id5">2</a>)</span>
 <p>Pascal J. Kieslich, Felix Henninger, Dirk U. Wulff, Jonas M. B. Haslbeck, and Michael Schulte-Mecklenbeck. Mouse-tracking: a practical guide to implementation and analysis. In <em>A Handbook of Process Tracing Methods</em>, pages 20. Routledge, 2nd edition edition, 2019. URL: <a class="reference external" href="https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck">https://www.taylorfrancis.com/chapters/edit/10.4324/9781315160559-9/mouse-tracking-pascal-kieslich-felix-henninger-dirk-wulff-jonas-haslbeck-michael-schulte-mecklenbeck</a>.</p>
 </div>
-<div class="citation" id="id4" role="doc-biblioentry">
+<div class="citation" id="id7" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id5">2</a>)</span>
 <p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="\url{https://doi.org/10.1016/j.chb.2018.02.012}">\url{https://doi.org/10.1016/j.chb.2018.02.012}</a>.</p>
 </div>
-<div class="citation" id="id7" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
-</div>
-<div class="citation" id="id9" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
-<p>Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>. New York, NY, USA, May 2011. ACM.</p>
-</div>
-<div class="citation" id="id10" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
-<p>Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. <em>Int. J. Comput. Appl.</em>, 11(9):1–5, December 2010.</p>
-</div>
-<div class="citation" id="id13" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
-<p>Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. <em>Int. J. Hum. Comput. Stud.</em>, 67(10):870–886, October 2009.</p>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
+<p>Christian O'Reilly and Réjean Plamondon. Can computer mice be used as low-cost devices for the acquisition of planar human movement velocity signals? <em>Behav. Res. Methods</em>, 43(1):229–238, March 2011. URL: <a class="reference external" href="https://link.springer.com/article/10.3758/s13428-010-0030-3#notes">https://link.springer.com/article/10.3758/s13428-010-0030-3#notes</a>.</p>
 </div>
 <div class="citation" id="id12" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">4</a><span class="fn-bracket">]</span></span>
+<p>Adriana Seelye, Stuart Hagler, Nora Mattek, Diane B Howieson, Katherine Wild, Hiroko H Dodge, and Jeffrey A Kaye. Computer mouse movement patterns: a potential marker of mild cognitive impairment. <em>Alzheimers Dement. (Amst.)</em>, 1(4):472–480, December 2015. URL: <a class="reference external" href="https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006">https://alz-journals.onlinelibrary.wiley.com/doi/10.1016/j.dadm.2015.09.006</a>.</p>
+</div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">5</a><span class="fn-bracket">]</span></span>
+<p>Beatriz Pariente-Martinez, Martin Gonzalez-Rodriguez, Daniel Fernandez-Lanvin, and Javier De Andres-Suarez. Measuring the role of age in user performance during interaction with computers. <em>Univers. Access Inf. Soc.</em>, 15(2):237–247, June 2016. URL: <a class="reference external" href="https://link.springer.com/article/10.1007/s10209-014-0388-6">https://link.springer.com/article/10.1007/s10209-014-0388-6</a>.</p>
+</div>
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
+<p>Jungwook Rhim, Jiwon Kim, and Gahgene Gweon. Using geometric features of drag-and-drop trajectories to understand students' learning. In <em>Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems</em>, volume 19, 1–14. New York, NY, USA, April 2023. ACM. URL: <a class="reference external" href="https://dl.acm.org/doi/10.1145/3544548.3581143">https://dl.acm.org/doi/10.1145/3544548.3581143</a>.</p>
+</div>
+<div class="citation" id="id15" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<p>Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</em>. New York, NY, USA, May 2011. ACM.</p>
+</div>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<p>Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. <em>Int. J. Comput. Appl.</em>, 11(9):1–5, December 2010.</p>
+</div>
+<div class="citation" id="id19" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<p>Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. <em>Int. J. Hum. Comput. Stud.</em>, 67(10):870–886, October 2009.</p>
+</div>
+<div class="citation" id="id18" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
 <p>Iftikhar Ahmed Khan, Willem-Paul Brinkman, Nick Fine, and Robert M Hierons. Measuring personality from keyboard and mouse use. In <em>Proceedings of the 15th European conference on Cognitive ergonomics: the ergonomics of cool interaction</em>. New York, NY, USA, January 2008. ACM.</p>
 </div>
-<div class="citation" id="id11" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<div class="citation" id="id17" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
 <p>A F M Nazmul Haque Nahin, Jawad Mohammad Alam, Hasan Mahmud, and Kamrul Hasan. Identifying emotion by keystroke dynamics and text pattern analysis. <em>Behav. Inf. Technol.</em>, 33(9):987–996, September 2014.</p>
 </div>
-<div class="citation" id="id14" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
 <p>Maarten Dijkstra. <em>The diagnosis of self-efficacy using mouse and keyboard input</em>. PhD thesis, Utrecht University, 2013.</p>
 </div>
 </div>
