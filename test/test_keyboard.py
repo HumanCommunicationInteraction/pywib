@@ -20,12 +20,13 @@ class TestData:
 
     reults = {
         "SESSION_A":{
-            "speed": [float(400.0), float(600.0)],
+            "speed": [float((1/((1750792681050 - 1750792680900)/1000.0)) * 60.0), float(1/((1750792685500 - 1750792685400)/1000.0) * 60.0)],
             "backspace_usage": 0,
             "typing_durations": [120, 130, 115, 125, 135]
         },
         "SESSION_B":{
-            "speed": [float((2 / (60 / 1000)) * 60.0), float((4 / (550 / 1000)) * 60.0)],
+
+            "speed": [float( (1/((1750792680980 - 1750792680920)/1000.0)) * 60.0), float( (4/((1750792686150 - 1750792685600)/1000.0)) * 60.0)],
             "backspace_usage": 3,
             "typing_durations": [100, 110, 90, 95, 105]
         }
@@ -58,6 +59,12 @@ class TestKeyboard(unittest.TestCase):
         for session_id, usage in backspace_stats.items():
             self.assertEqual(usage, TestData.reults[session_id]["backspace_usage"])
 
+
+    def test_typing_speed_df(self):
+        """Test typing_speed function for DataFrame input"""
+        df_session_b = self.test_data[self.test_data['sessionId'] == 'SESSION_B']
+        speed = typing_speed(df_session_b, per_traces=False)
+        self.assertEqual(speed, (5/((1750792686150 - 1750792680920)/1000.0)) * 60.0)
 
 if __name__ == '__main__':
     unittest.main()
