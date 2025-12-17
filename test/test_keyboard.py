@@ -22,12 +22,14 @@ class TestData:
         "SESSION_A":{
             "speed": [float((1/((1750792681050 - 1750792680900)/1000.0)) * 60.0), float(1/((1750792685500 - 1750792685400)/1000.0) * 60.0)],
             "backspace_usage": 0,
-            "typing_durations": [120, 130, 115, 125, 135]
+            "typing_durations": [120, 130, 115, 125, 135],
+            "total_chars": 2
         },
         "SESSION_B":{
             "speed": [float( (1/((1750792680980 - 1750792680920)/1000.0)) * 60.0), float( (4/((1750792686150 - 1750792685600)/1000.0)) * 60.0)],
             "backspace_usage": 3,
-            "typing_durations": [100, 110, 90, 95, 105]
+            "typing_durations": [100, 110, 90, 95, 105],
+            "total_chars": 5
         }
     }
 
@@ -57,6 +59,16 @@ class TestKeyboard(unittest.TestCase):
         df_session_b = self.test_data[self.test_data['sessionId'] == 'SESSION_B']
         speed = typing_speed(df_session_b, per_traces=False)
         self.assertEqual(speed, (5/((1750792686150 - 1750792680920)/1000.0)) * 60.0)
+
+    def test_typing_speed_metrics(self):
+        """Test typing_speed_metrics function"""
+        metrics = typing_speed_metrics(self.test_data)
+        print(metrics)
+        for session_id, metric in metrics.items():
+            expected_speeds = TestData.reults[session_id]["speed"]
+            avg_expected_speed = sum(expected_speeds) / len(expected_speeds)
+            self.assertAlmostEqual(metric["average_typing_speed"], avg_expected_speed, places=2)
+            self.assertEqual(metric["total_characters"], TestData.reults[session_id]["total_chars"])
 
 if __name__ == '__main__':
     unittest.main()
