@@ -191,9 +191,8 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducción</a></li>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../movement.html">Movement Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../trajectory.html">Trajectory Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../mouse.html">Mouse Metrics</a></li>
@@ -210,24 +209,24 @@
 <li class="toctree-l3"><a class="reference internal" href="jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../utils/visualization.html">Visualization</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../timing/index.html">Timing Functions</a><input aria-label="Toggle navigation of Timing Functions" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../timing/pauses.html">Pauses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../timing/time.html">Timing</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="../mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../trajectory/path.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../trajectory/auc.html">Area Under the Curve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../trajectory/deviations.html">Deviations from trajectory</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../keyboard/keystrokes.html">Keystorke Dynamics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../timing/index.html">Timing Functions</a><input aria-label="Toggle navigation of Timing Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../timing/pauses.html">Pauses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../timing/time.html">Timing</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/visualization.html">Visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -309,6 +308,15 @@
          <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Velocity values:</span><span class="se">\n</span><span class="si">{</span><span class="n">trace</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>The method can be either run with either <code class="code highlight python docutils literal highlight-python"><span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span></code> or <code class="code highlight python docutils literal highlight-python"><span class="n">per_traces</span><span class="o">=</span><span class="kc">False</span></code>, the first one segments the data by movement traces, while the second one computes the velocity for the entire DataFrame.</p>
+<p>This is important to consider for the specific given dataset, if the data contains <strong>anything else than movement data</strong>, then <code class="code highlight python docutils literal highlight-python"><span class="n">per_traces</span><span class="o">=</span><span class="kc">True</span></code> should be used to avoid incorrect velocity calculations. Whereas a dataset of consecutive movement events can be processed with <cite>per_traces=False</cite> to obtain a single velocity DataFrame.</p>
+</section>
+</section>
+<section id="velocity-metrics">
+<h1>Velocity Metrics<a class="headerlink" href="#velocity-metrics" title="Link to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pywib.velocity_metrics">
 <span class="sig-name descname"><span class="pre">velocity_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pywib.velocity_metrics" title="Link to this definition">¶</a></dt>
@@ -330,10 +338,6 @@ This function computes the mean, max, and min velocity for each session.</p>
 </dl>
 </dd></dl>
 
-</section>
-</section>
-<section id="velocity-metrics">
-<h1>Velocity Metrics<a class="headerlink" href="#velocity-metrics" title="Link to this heading">¶</a></h1>
 <section id="id1">
 <h2>Practical Example<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pywib</span><span class="w"> </span><span class="kn">import</span> <span class="n">velocity_metrics</span>
@@ -406,13 +410,12 @@ This function computes the mean, max, and min velocity for each session.</p>
             <ul>
 <li><a class="reference internal" href="#">Velocity</a><ul>
 <li><a class="reference internal" href="#pywib.velocity"><code class="docutils literal notranslate"><span class="pre">velocity()</span></code></a></li>
-<li><a class="reference internal" href="#practical-example">Practical Example</a><ul>
-<li><a class="reference internal" href="#pywib.velocity_metrics"><code class="docutils literal notranslate"><span class="pre">velocity_metrics()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#practical-example">Practical Example</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#velocity-metrics">Velocity Metrics</a><ul>
+<li><a class="reference internal" href="#pywib.velocity_metrics"><code class="docutils literal notranslate"><span class="pre">velocity_metrics()</span></code></a></li>
 <li><a class="reference internal" href="#id1">Practical Example</a></li>
 </ul>
 </li>

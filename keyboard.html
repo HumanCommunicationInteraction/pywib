@@ -191,9 +191,8 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducción</a></li>
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="movement.html">Movement Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trajectory.html">Trajectory Metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mouse.html">Mouse Metrics</a></li>
@@ -210,24 +209,24 @@
 <li class="toctree-l3"><a class="reference internal" href="api/movement/jerkiness.html#jerkiness-metrics">Jerkiness Metrics</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/utils/visualization.html">Visualization</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/timing/index.html">Timing Functions</a><input aria-label="Toggle navigation of Timing Functions" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/timing/pauses.html">Pauses</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/timing/time.html">Timing</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="api/mouse/clicks.html">Clicks</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/trajectory/index.html">Trajectory Functions</a><input aria-label="Toggle navigation of Trajectory Functions" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/trajectory/path.html">Distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/trajectory/auc.html">Area Under the Curve</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/trajectory/deviations.html">Deviations from trajectory</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/keyboard/index.html">Keystroke Functions</a><input aria-label="Toggle navigation of Keystroke Functions" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/keyboard/keystrokes.html">Keystorke Dynamics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/timing/index.html">Timing Functions</a><input aria-label="Toggle navigation of Timing Functions" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/timing/pauses.html">Pauses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/timing/time.html">Timing</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/index.html">Other utility Functions</a><input aria-label="Toggle navigation of Other utility Functions" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/visualization.html">Visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -279,16 +278,23 @@
 </div></blockquote>
 <p>This metrics (or dyanmics) obtained from keyboard interaction have been widely used in various applications, including user authentication, behavioral biometrics, affective computing, and human-computer interaction studies. <span id="id2">[<a class="reference internal" href="trajectory.html#id15" title="Clayton Epp, Michael Lippold, and Regan L Mandryk. Identifying emotional states using keystroke dynamics. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems. New York, NY, USA, May 2011. ACM.">Epp <em>et al.</em>, 2011</a>, <a class="reference internal" href="trajectory.html#id16" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>, <a class="reference internal" href="trajectory.html#id19" title="Lisa M Vizer, Lina Zhou, and Andrew Sears. Automated stress detection using keystroke and linguistic features: an exploratory study. Int. J. Hum. Comput. Stud., 67(10):870–886, October 2009.">Vizer <em>et al.</em>, 2009</a>, <a class="reference internal" href="trajectory.html#id18" title="Iftikhar Ahmed Khan, Willem-Paul Brinkman, Nick Fine, and Robert M Hierons. Measuring personality from keyboard and mouse use. In Proceedings of the 15th European conference on Cognitive ergonomics: the ergonomics of cool interaction. New York, NY, USA, January 2008. ACM.">Khan <em>et al.</em>, 2008</a>, <a class="reference internal" href="trajectory.html#id17" title="A F M Nazmul Haque Nahin, Jawad Mohammad Alam, Hasan Mahmud, and Kamrul Hasan. Identifying emotion by keystroke dynamics and text pattern analysis. Behav. Inf. Technol., 33(9):987–996, September 2014.">Nahin <em>et al.</em>, 2014</a>, <a class="reference internal" href="trajectory.html#id20" title="Maarten Dijkstra. The diagnosis of self-efficacy using mouse and keyboard input. PhD thesis, Utrecht University, 2013.">Dijkstra, 2013</a>]</span></p>
 <p>There is not much research on the use of keystroke dynamics and behavioral user patterns.
-In <span id="id3">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>]</span> the authors explore the use of keystroke dynamics in correlation with end-user’s behavior attributes during web-based EUD activities, revealing that this metrics reflect some correlatinons with perceieved usefulness or self-efficacy.</p>
+In <span id="id3">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: https://doi.org/10.1016/j.chb.2018.02.012.">Katerina and Nicolaos, 2018</a>]</span> the authors explore the use of keystroke dynamics in correlation with end-user’s behavior attributes during web-based EUD activities, revealing that this metrics reflect some correlatinons with perceieved usefulness or self-efficacy.</p>
+<section id="keyboard-events">
+<h3>Keyboard events<a class="headerlink" href="#keyboard-events" title="Link to this heading">¶</a></h3>
+<p>Keyboard events are signals generated by computers or devices when a user interacts with a keyboard,, which are mainly used to capture user input.
+A keyboard event typically consists of two main actions: key press (key down) and key release (key up).</p>
+<p>Each event contains information realted to the specific key involved, such as the key code, character representation, and any modifier keys (e.g., Shift, Ctrl, Alt) that may be active during the event.</p>
+<p>For more information on keyboard events, check the Keyboard Events documentation in <a class="reference external" href="https://learn.microsoft.com/en-us/windows/apps/develop/input/keyboard-events">Windows</a>, <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent">Mozilla</a> or <a class="reference external" href="https://docs.unity3d.com/6000.2/Documentation/Manual/UIE-Keyboard-Events.html">Unity</a>.</p>
+</section>
 </section>
 <section id="typing-duration">
 <h2>Typing Duration<a class="headerlink" href="#typing-duration" title="Link to this heading">¶</a></h2>
-<p>When users type on a keyboard, each keystroke involves a key press followed by a key release. The typing duration metric captures the time interval between these two events for each keystroke. This metric is useful for analyzing typing speed or patterns. <span id="id4">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id16" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
+<p>When users type on a keyboard, each keystroke involves a key press followed by a key release. The typing duration metric captures the time interval between these two events for each keystroke. This metric is useful for analyzing typing speed or patterns. <span id="id4">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: https://doi.org/10.1016/j.chb.2018.02.012.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id16" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
 The function <code class="xref py py-func docutils literal notranslate"><span class="pre">typing_durations()</span></code> computes the typing durations from a DataFrame containing keyboard interaction data. The DataFrame should include columns for event type (key press or key release), timestamps, and keys (session or user identifiers).</p>
 </section>
 <section id="tpying-speed">
 <h2>Tpying Speed<a class="headerlink" href="#tpying-speed" title="Link to this heading">¶</a></h2>
-<p>This metric refers to the average number of characters typed per minute (CPM) by a user during a typing session. It provides insights into the user’s typing proficiency, ease of use or emotional state <span id="id5">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: \url{https://doi.org/10.1016/j.chb.2018.02.012}.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id16" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
+<p>This metric refers to the average number of characters typed per minute (CPM) by a user during a typing session. It provides insights into the user’s typing proficiency, ease of use or emotional state <span id="id5">[<a class="reference internal" href="trajectory.html#id7" title="Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? Comput. Human Behav., 83:288–305, June 2018. URL: https://doi.org/10.1016/j.chb.2018.02.012.">Katerina and Nicolaos, 2018</a>, <a class="reference internal" href="trajectory.html#id16" title="Preeti Khanna and M Sasikumar. Recognising emotions from keyboard stroke pattern. Int. J. Comput. Appl., 11(9):1–5, December 2010.">Khanna and Sasikumar, 2010</a>]</span>.
 The function <a class="reference internal" href="api/keyboard/keystrokes.html#pywib.typing_speed" title="pywib.typing_speed"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing_speed()</span></code></a> calculates the average typing speed from a DataFrame containing keyboard interaction data. The DataFrame should include columns for event type (key press or key release), timestamps, and keys (session or user identifiers).
 With the function <code class="xref py py-func docutils literal notranslate"><span class="pre">typing_speed_metrics()</span></code> the metrics returned include: average CPM, total characters typed, and total time spent typing.</p>
 </section>
@@ -308,7 +314,7 @@ The function <a class="reference internal" href="api/keyboard/keystrokes.html#py
 <div class="citation" id="id8" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
 <span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>,<a role="doc-backlink" href="#id5">3</a>)</span>
-<p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="\url{https://doi.org/10.1016/j.chb.2018.02.012}">\url{https://doi.org/10.1016/j.chb.2018.02.012}</a>.</p>
+<p>Tzafilkou Katerina and Protogeros Nicolaos. Mouse behavioral patterns and keystroke dynamics in End-User development: what can they tell us about users' behavioral attributes? <em>Comput. Human Behav.</em>, 83:288–305, June 2018. URL: <a class="reference external" href="https://doi.org/10.1016/j.chb.2018.02.012">https://doi.org/10.1016/j.chb.2018.02.012</a>.</p>
 </div>
 <div class="citation" id="id12" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
@@ -413,7 +419,10 @@ The function <a class="reference internal" href="api/keyboard/keystrokes.html#py
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Kestroke Metrics</a><ul>
-<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#keyboard-events">Keyboard events</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#typing-duration">Typing Duration</a></li>
 <li><a class="reference internal" href="#tpying-speed">Tpying Speed</a></li>
 <li><a class="reference internal" href="#backspace-usage">Backspace Usage</a></li>
