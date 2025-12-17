@@ -2,6 +2,9 @@ Velocity
 ========
 .. autofunction:: pywib.velocity
 
+.. role:: python(code)
+   :language: python
+
 Practical Example
 -----------------
 .. code-block:: python
@@ -18,11 +21,18 @@ Practical Example
         for trace in traces:
             print(f"Velocity values:\n{trace['velocity']}")
                 
+Notes
+------
+The method can be either run with either :python:`per_traces=True` or :python:`per_traces=False`, the first one segments the data by movement traces, while the second one computes the velocity for the entire DataFrame.
 
-.. autofunction:: pywib.velocity_metrics
+This is important to consider for the specific given dataset, if the data contains **anything else than movement data**, then :python:`per_traces=True` should be used to avoid incorrect velocity calculations. Whereas a dataset of consecutive movement events can be processed with `per_traces=False` to obtain a single velocity DataFrame.
+
 
 Velocity Metrics
 ================
+
+
+.. autofunction:: pywib.velocity_metrics
 
 Practical Example
 -----------------

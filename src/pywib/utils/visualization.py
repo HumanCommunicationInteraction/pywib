@@ -7,8 +7,8 @@ from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
 
 def visualize_trace(df, stroke_indices, stroke_id):
-    """"
-    Geenrates a plot visualizing the trace of a stroke.
+    """
+    Generates a plot visualizing the trace of a stroke.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing the stroke data with 'x', 'y and 'timeStamp' columns.

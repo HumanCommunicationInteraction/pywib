@@ -5,8 +5,8 @@ API Documentation
    :maxdepth: 1
 
    movement/index
-   utils/index
-   timing/index
    mouse/clicks
    trajectory/index
    keyboard/index
+   timing/index
+   utils/index
