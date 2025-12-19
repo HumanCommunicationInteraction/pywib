@@ -10,9 +10,11 @@ Pywib (Python Web Interaction Behavior) is a library designed to analyze user in
 
 The library includes various modules for different aspects of web interaction analysis, such as movement tracking, timing analysis, and pause detection.
 
+Contents
+---------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    introduction
    movement
