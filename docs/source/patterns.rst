@@ -3,6 +3,10 @@ Mouse Behavioral Patterns
 
 Introduction
 ------------
+
+In the context of HCI, mouse behavioral patterns refer to the combination of mouse movements, clicks and general interaction that can be explained or associated with specific user behaviors, cognitive states or activities while interacting with a computer interface.
+This patterns have been identified in various studies analyzing user interaction with web pages, applications and forms, but a formal "catalog" of such patterns can not be found easily in the literature, therefore this section aims to summarize those patterns thathave been identified and described in previous research works to help researchers in the field of HCI better understand and analyze user behavior.
+
 Original text from cite:`Katerina2018-ch`.
 
 *In the area of HCI researchers have been trying to quantify the movement of humans who perform pointing tasks on computers and other devices. Mouse cursor movement is a vital part in this field and has been used in many studies.*

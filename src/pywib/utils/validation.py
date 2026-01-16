@@ -9,7 +9,7 @@ keyboard_columns = [
    ColumnNames.KEY_VALUE_EVENT, ColumnNames.KEY_CODE_EVENT
 ]
 
-def validate_dataframe(df: pd.DataFrame):
+def validate_dataframe(df: pd.DataFrame, except_duplicate_timestamps: bool = False):
 
     for col in required_columns:
         if col not in df.columns:
@@ -18,7 +18,10 @@ def validate_dataframe(df: pd.DataFrame):
     # Ensure no duplicate timestamps per session
     for session_id, group in df.groupby(ColumnNames.SESSION_ID):
         if group[ColumnNames.TIME_STAMP].duplicated().any():
-            raise ValueError(f"Duplicate timestamps found in session {session_id}")
+            if except_duplicate_timestamps:
+                raise ValueError(f"Duplicate timestamps found in session {session_id}")
+            else:
+                print(f"Warning: Duplicate timestamps found in session {session_id}")
         
 def validate_dataframe_keyboard(df: pd.DataFrame):
 
