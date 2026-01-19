@@ -56,14 +56,18 @@ def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] 
 def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     Calculate typing speed metrics including average CPM, total characters typed, and total time spent typing.
+    
+    This metrics include average typing speed (average_typing_speed) in CPM, total characters typed (total_characters), and total time spent typing (total_time_seconds) in seconds.
+    
+    The average keydown to keyup duration (avg_keydown_to_keyup_duration) is the average duration of a keystroke (from keydown to keyup) in milliseconds.
 
     Parameters:
         df : pd.DataFrame DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
         traces : dict[str, list[pd.DataFrame]], optional Pre-extracted keystroke traces by session.
         per_trace : bool, optional Whether to calculate metrics per trace. Default is True.
     Returns:
-        dict: A dictionary with session IDs as keys and their corresponding typing speed metrics as values. This metrics include average typing speed (CPM), total characters typed, and total time spent typing (in seconds).
-    """
+        dict: A dictionary with session IDs as keys and their corresponding typing speed metrics as values.
+        """
     if traces is None:
         traces = extract_keystroke_traces_by_session(df)
     
@@ -73,13 +77,17 @@ def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
     for session_id, speeds in session_speeds.items():
         if speeds:
             avg_speed = np.mean(speeds)
-            total_chars = sum(session_traces[session_traces[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_UP].count() for session_traces in traces[session_id])
+            total_chars = sum(session_traces[session_traces[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_UP][ColumnNames.EVENT_TYPE].count() for session_traces in traces[session_id])
             total_time = sum((session_traces[ColumnNames.TIME_STAMP].diff().fillna(0).sum() / 1000.0) for session_traces in traces[session_id])
+            avg_keydown_to_keyup_duration = np.mean([
+                (trace[trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_UP][ColumnNames.TIME_STAMP].values - trace[trace[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN][ColumnNames.TIME_STAMP].values).mean()
+                for trace in traces[session_id]
+            ])
             metrics_by_session[session_id] = {
                 "average_typing_speed": avg_speed,
                 "total_characters": total_chars,
                 "total_time_seconds": total_time,
-                "avg_keydown_to_keyup_duration": -1  # TODO Placeholder for future implementation
+                "avg_keydown_to_keyup_duration": avg_keydown_to_keyup_duration  # TODO Review
             }
     return metrics_by_session
 

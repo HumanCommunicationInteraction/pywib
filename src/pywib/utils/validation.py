@@ -15,11 +15,6 @@ def validate_dataframe(df: pd.DataFrame):
         if col not in df.columns:
             raise ValueError(f"Missing required column: {col}")
         
-    # Ensure no duplicate timestamps per session
-    for session_id, group in df.groupby(ColumnNames.SESSION_ID):
-        if group[ColumnNames.TIME_STAMP].duplicated().any():
-            raise ValueError(f"Duplicate timestamps found in session {session_id}")
-        
 def validate_dataframe_keyboard(df: pd.DataFrame):
 
     validate_dataframe(df)
@@ -29,3 +24,8 @@ def validate_dataframe_keyboard(df: pd.DataFrame):
     for col in columns_to_check:
         if col not in df.columns:
             raise ValueError(f"Missing required column: {col}")
+        
+def validate_duplicate_timestamps(df: pd.DataFrame):
+    for session_id, group in df.groupby(ColumnNames.SESSION_ID):
+        if group[ColumnNames.TIME_STAMP].duplicated().any():
+            raise ValueError(f"Duplicate timestamps found in session {session_id}")
