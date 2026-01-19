@@ -1,7 +1,7 @@
 Introduction
 ============
 
-Welcome to **pywib** (Python Web Interaction Behaviour).
+Welcome to **pywib** (Python Web Interaction Behaviour) the python library designed to help ease the analysis of user interaction data in the field of HCI (Human-Computer Interaction).
 
 This project aims to analyze user interaction with web applications by processing interaction event data (such as clicks, mouse movements, scrolls, etc.) recorded by researchers to aid their studies.
 

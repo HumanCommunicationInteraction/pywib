@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Constants" href="constants.html"><link rel="prev" title="Kestroke Metrics" href="keyboard.html">
 
-    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.09.25 -->
+    <link rel="shortcut icon" href="_static/favicon.ico"><!-- Generated with Sphinx 8.1.3 and Furo 2025.12.19 -->
         <title>Timing Metrics - pywib 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=5ae546fa" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     
@@ -271,15 +271,19 @@
         <article role="main" id="furo-main-content">
           <section id="timing-metrics">
 <h1>Timing Metrics<a class="headerlink" href="#timing-metrics" title="Link to this heading">¶</a></h1>
+<p>This section covers metrics related to time, mainly those that quantify the duration of user interactions during sessions.</p>
 <section id="execution-time">
 <h2>Execution Time<a class="headerlink" href="#execution-time" title="Link to this heading">¶</a></h2>
+<p>This metric can also be referred to as “Total time” or “Session time”, as it represents the overall duration of a user session from the first recorded event to the last.
+It can be useful when filtering sessions based on their length if the task being studied has a defined expected minimum duration.
+It is important to note that this metric does not account for periods of inactivity or pauses within the session.</p>
 <p>Function <a class="reference internal" href="api/timing/time.html#pywib.execution_time" title="pywib.execution_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">execution_time()</span></code></a> computes the total execution time for each session by calculating the difference between the maximum and minimum timestamps within that session.</p>
-<p>This metric provides insights into the duration of user interactions during a session, but does not account for periods of inactivity or pauses within the session.</p>
 </section>
 <section id="movement-time">
 <h2>Movement Time<a class="headerlink" href="#movement-time" title="Link to this heading">¶</a></h2>
-<p>Function <a class="reference internal" href="api/timing/time.html#pywib.movement_time" title="pywib.movement_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">movement_time()</span></code></a> calculates the total movement time for each session by summing the time intervals between consecutive interaction points where movement occurs.
-This metric focuses on the active movement periods during a session, excluding any idle times, and provides a more accurate representation of the time spent in motion.</p>
+<p>This metric focuses on the active movement periods during a session, excluding any idle times, and provides a more accurate representation of the time spent in motion by the user.
+It is mainly useful when focusing on the time of the actual interaction, rather than for filtering based on total session duration.</p>
+<p>Function <a class="reference internal" href="api/timing/time.html#pywib.movement_time" title="pywib.movement_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">movement_time()</span></code></a> calculates the total movement time for each session by summing the time intervals between consecutive interaction points where movement occurs.</p>
 </section>
 </section>
 
