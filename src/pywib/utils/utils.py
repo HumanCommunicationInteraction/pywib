@@ -68,12 +68,13 @@ def compute_metrics_from_traces(
             - 'max': Maximum value.
             - 'min': Minimum value.
     """
-    if (traces is None) and (column_name not in df.columns):
+    if (traces is None) or (column_name not in df.columns):
         validate_dataframe(df)
         traces = compute_traces_fn(df, per_traces=True)
 
     metrics = {}
     for session_id, session_traces in traces.items():
+        # TODO error on empty session_traces?
         values = pd.concat([trace[column_name] for trace in session_traces])
         if preprocess_fn:
             values = preprocess_fn(values)
