@@ -37,7 +37,7 @@ def visualize_trace(df, stroke_indices, stroke_id):
     plt.gca().invert_yaxis()
     plt.show()
 
-def video_from_trace(df, user_id, outfile: str, width=640, height=480,  fps=30):
+def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, colored=False):
     """
     Generates a video visualizing the mouse trace of a user.
     
@@ -48,6 +48,7 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480,  fps=30):
         width (int): Width of the video frame.
         height (int): Height of the video frame.
         fps (int): Frames per second for the video.
+        colored (bool): If True, applies a temperature gradient (green to red) to the trajectory line.
     Returns:
         None: Saves the video file to the specified path.
     """
@@ -64,17 +65,44 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480,  fps=30):
     frame = np.ones((height, width, 3), dtype=np.uint8) * 255  # fondo blanco
     last_x, last_y = xs[0], ys[0]
     for i in range(1, n):
-        # Dibujar línea de movimiento
-        cv2.line(frame, (xs[i-1], ys[i-1]), (xs[i], ys[i]), color=(0, 0, 255), thickness=2)
+        # Calculate color based on progress if colored mode is enabled
+        if colored:
+            # Temperature gradient: green (0, 255, 0) -> yellow -> red (0, 0, 255)
+            progress = i / (n - 1)
+            green = int(255 * (1 - progress))
+            red = int(255 * progress)
+            line_color = (0, green, red)  # BGR format
+        else:
+            line_color = (0, 0, 255)  # Default red
         
+        # Dibujar línea de movimiento
+        if xs[i] <= 0 or ys[i] <= 0 or xs[i] > width or ys[i] > height:
+            # Coordenadas fuera de la pantalla, no dibujar
+            pass
+        elif xs[i-1] <= 0 or ys[i-1] <= 0 or xs[i-1] > width or ys[i-1] > height:
+            # Coordenadas anteriores fuera de la pantalla
+            if(last_x > 0 and last_y > 0):
+                cv2.line(frame, (last_x, last_y), (xs[i], ys[i]), color=line_color, thickness=2)
+        else:
+            cv2.line(frame, (xs[i-1], ys[i-1]), (xs[i], ys[i]), color=line_color, thickness=2)
+        
+        # Actualizar última posición válida a la posición actual si es válida (dentro de la pantalla)
+        if xs[i] > 0 and ys[i] > 0 and xs[i] <= width and ys[i] <= height:
+            last_x, last_y = xs[i], ys[i]
+
         # Dibujar clics
-        if eventType[i] == EventTypes.EVENT_ON_CLICK:
-            cv2.circle(frame, (xs[i], ys[i]), radius=5, color=(0, 0, 255), thickness=-1)
+        if eventType[i] == EventTypes.EVENT_ON_CLICK or (eventType[i-1] == EventTypes.EVENT_ON_MOUSE_DOWN and eventType[i] == EventTypes.EVENT_ON_MOUSE_UP):
+            cv2.circle(frame, (last_x, last_y), radius=5, color=(0, 0, 255), thickness=-1)
         elif eventType[i] == EventTypes.EVENT_KEY_DOWN or eventType[i] == EventTypes.EVENT_KEY_UP:
             # This event has coordinates (0,0) or (-1,-1)
-            cv2.rectangle(frame, (last_x-5, last_y-5), (xs[i]+5, ys[i]+5), color=(255, 0, 0), thickness=-1)
+            cv2.rectangle(frame, (last_x-5, last_y-5), (last_x+5, last_y+5), color=(255, 0, 0), thickness=-1)
+        elif eventType[i] == EventTypes.EVENT_WINDOW_SCROLL:
+            # This event has coordinates (0,0) or (-1,-1)
+            pts = np.array([(last_x, last_y-5), (last_x-5, last_y+5), (last_x+5, last_y+5)], np.int32)
+            cv2.polylines(frame, [pts], True, (255, 0, 0), 2)
         else:
-            last_x, last_y = xs[i], ys[i]
+            # Unknown or unhandled event type
+            pass
         
         # Escribir frame en vídeo
         video.write(frame.copy())
