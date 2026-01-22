@@ -2,7 +2,7 @@ name: Publish to PyPI
 
 on:
   push:
-    branches: ["main"]     # Uploads to TestPyPI on test branch
+    branches: ["test"]     # Uploads to TestPyPI on test branch
   release:
     types: [published]     # Uploads to PyPI when you publish a release
 
