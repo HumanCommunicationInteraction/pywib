@@ -51,7 +51,7 @@ all_files = true
 [tool.sphinx.config]
 project = "pywib"
 author = "Guillermo Dylan Carvajal Aza, Alejandro Álvarez Varela"
-release = "0.1.0"
+release = "0.2.0"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
@@ -64,3 +64,6 @@ extensions = [
 bibtex_bibfiles = ["references.bib"]
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+
+[tool.setuptools] 
+packages = ["src/pywib"]

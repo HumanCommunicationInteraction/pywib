@@ -6,10 +6,12 @@ __author__ = "Guillermo Dylan Carvajal Aza"
 __email__ = "carvajalguillermo@uniovi.es"
 
 from .constants import *
-from .utils import validate_dataframe, validate_dataframe_keyboard, extract_traces_by_session, visualize_trace
-from .core.movement import velocity, acceleration, jerkiness, path, auc_ratio
-from .core.timing import execution_time, movement_time, pauses_metrics
-from .utils.utils import compute_space_time_diff
+from .utils import (validate_dataframe, validate_dataframe_keyboard, 
+                    extract_traces_by_session, visualize_trace, compute_space_time_diff, video_from_trace, validate_duplicate_timestamps)
+from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
+                   execution_time, movement_time, pauses_metrics, velocity_metrics, 
+                   acceleration_metrics, jerkiness_metrics, number_of_clicks, 
+                   click_slip, num_pauses, deviations, auc_ratio_metrics, typing_speed_metrics, typing_speed, backspace_usage)
 
 __all__ = [
     # Version info
@@ -26,6 +28,10 @@ __all__ = [
     "validate_dataframe_keyboard",
     "extract_trace",
     "visualize_trace",
+    "compute_space_time_diff",
+    "extract_traces_by_session",
+    "video_from_trace",
+    "validate_duplicate_timestamps",
 
     # Movement functions
     "velocity",
@@ -33,11 +39,25 @@ __all__ = [
     "auc_ratio",
     "jerkiness",
     "path",
+    "velocity_metrics",
+    "acceleration_metrics",
+    "jerkiness_metrics",
+    "deviations",
+    "auc_ratio_metrics",
+
+    # Mouse functions
+    "number_of_clicks",
+    "click_slip",
+
+    # Keyboard functions
+    "typing_speed",
+    "typing_speed_metrics",
+    "backspace_usage",
 
     # Timing
     "pauses_metrics",
+    "execution_time",
+    "movement_time",
+    "num_pauses",
 
-    # Utils
-    "compute_space_time_diff",
-    "extract_traces_by_session",
 ]
