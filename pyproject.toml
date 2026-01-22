@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pywib"
-version = "0.1.1"
+version = "0.1.2"
 authors = [
   { name="Guillermo Dylan Carvajal Aza", email="carvajalguillermo@uniovi.es" },
   { name="Alejandro Álvarez Varela", email="avarela@uniovi.es"}
