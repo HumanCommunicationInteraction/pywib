@@ -37,6 +37,30 @@ def velocity_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[str, list[pd.
         traces[session_id] = session_traces
     return traces
 
+def velocity_traces_parallel(traces: dict[str, list[pd.DataFrame]], n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
+    """
+    Calculate velocity for a dictionary of traces (each a list of DataFrames) in parallel.
+
+    Parameters:
+        traces (dict[str, list[pd.DataFrame]]): Mapping of sessionId to list of DataFrames.
+        n_jobs (int): Number of parallel jobs.
+
+    Returns:
+        dict[str, list[pd.DataFrame]]: Same structure, but with velocity computed in each DataFrame.
+    """
+    from joblib import Parallel, delayed
+
+    def compute_velocity_for_trace(df):
+        validate_dataframe(df)
+        return velocity_df(df)
+
+    for session_id, session_traces in traces.items():
+        session_traces = Parallel(n_jobs=n_jobs)(
+            delayed(compute_velocity_for_trace)(df) for df in session_traces
+        )
+        traces[session_id] = session_traces
+    return traces
+
 import pandas as pd
 
 def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:

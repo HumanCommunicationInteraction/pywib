@@ -5,10 +5,10 @@ from pywib.utils import (acceleration_traces, velocity_traces, velocity_df,
                          acceleration_df, jerkiness_df, jerkiness_traces, 
                          _path, validate_dataframe, compute_space_time_diff, 
                          compute_metrics_from_traces, extract_traces_by_session, 
-                         auc_ratio_traces, auc_ratio_df)
+                         auc_ratio_traces, auc_ratio_df, velocity_traces_parallel)
 from pywib.constants import ColumnNames
 
-def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
+def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
     """
     Function to calculate velocity for either a single DataFrame or a traces dictionary.
 
@@ -33,6 +33,10 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
+
+    if parallel:
+        # Compute velocity for each trace in parallel
+        return velocity_traces_parallel(traces, n_jobs=n_jobs)
 
     # Compute velocity for each trace
     return velocity_traces(traces)

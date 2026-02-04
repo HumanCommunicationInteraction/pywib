@@ -44,35 +44,6 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
         traces_by_session[session_id] = traces
     return traces_by_session
 
-def extract_traces_by_session_parallel(dt: pd.DataFrame, n_jobs: Optional[int] = None) -> dict:
-    """
-    Extracts traces from the DataFrame, grouped by (sessionId, sceneId).
-    Each trace is considered as a sequence of consecutive ON_MOUSE_MOVE events
-    between two non-move events.
-    Parameters:
-        dt (pd.DataFrame): DataFrame containing 'sessionId', 'sceneId', 'eventType', and 'timeStamp' columns.
-        n_jobs (Optional[int]): The number of threads to use for parallel processing.
-    Returns:
-        dict: a dictionary with keys as (sessionId) and values as lists of DataFrames.
-    """
-    validate_dataframe(dt)
-    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
-    traces_by_session : dict = {}
-    groups = list(dt.groupby(ColumnNames.SESSION_ID))
-    # For small number of groups or forced sequential, keep single-threaded
-    if n_jobs == 1 or len(groups) < 2:
-        for session_id, group in groups:
-            _, traces = _extract_traces_for_session((session_id, group))
-            traces_by_session[session_id] = traces
-        return traces_by_session
-
-    # ThreadPoolExecutor chosen to avoid Windows multiprocessing spawn/pickle overhead.
-    max_workers = n_jobs if n_jobs is not None else None
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as exc:
-        for session_id, traces in exc.map(_extract_traces_for_session, groups):
-            traces_by_session[session_id] = traces
-
-    return traces_by_session
 
 def _extract_traces_for_session(item: Tuple[str, pd.DataFrame]) -> Tuple[str, List[pd.DataFrame]]:
     session_id, group = item
@@ -108,7 +79,7 @@ def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.D
         keystroke_traces_by_session[session_id] = keystroke_traces
     return keystroke_traces_by_session
     
-def extract_mouse_click_traces_by_ession(dt: pd.DataFrame) -> dict:
+def extract_mouse_click_traces_by_session(dt: pd.DataFrame) -> dict:
     """
     Extracts those traces with event movements that end with ON_MOUSE_CLICK or ON_TOUCH_TAP events,
     grouped by sessionId.
