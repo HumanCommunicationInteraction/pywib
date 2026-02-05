@@ -1,7 +1,7 @@
 """
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Guillermo Dylan Carvajal Aza"
 __email__ = "carvajalguillermo@uniovi.es"
 
