@@ -39,7 +39,7 @@ Documentation = "https://pywib.readthedocs.io/"
 Repository = "https://github.com/HumanCommunicationInteraction/pywib.git"
 
 [tool.hatch.build.targets.wheel]
-packages = ["pywib"]
+packages = ["src/pywib"]
 
 [tool.sphinx]
 builder = "html"
@@ -64,6 +64,3 @@ extensions = [
 bibtex_bibfiles = ["references.bib"]
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
-
-[tool.setuptools] 
-packages = ["src/pywib"]
