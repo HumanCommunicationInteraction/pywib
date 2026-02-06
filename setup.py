@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/HumanCommunicationInteraction/pywib",
     packages=find_packages(),
-    author='Guillermo Dylan Carvajal Aza',
+    author='Guillermo Dylan Carvajal Aza & Alejandro Varela Álvarez',
     author_email='carvajalguillermo@uniovi.es',
     keywords=['HCI', 'Web Interaction', 'Analyzer'],
     classifiers=[
