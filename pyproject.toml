@@ -35,7 +35,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/HumanCommunicationInteraction/pywib"
 "Bug Tracker" = "https://github.com/HumanCommunicationInteraction/pywib/issues"
-Documentation = "https://pywib.readthedocs.io/"
+Documentation = "https://humancommunicationinteraction.github.io/pywib/"
 Repository = "https://github.com/HumanCommunicationInteraction/pywib.git"
 
 [tool.hatch.build.targets.wheel]
