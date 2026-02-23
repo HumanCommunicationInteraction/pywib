@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
 import cv2
-from pywib.constants import EventTypes
+import seaborn as sns
 
+from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
 
 def visualize_trace(df, stroke_indices, stroke_id):
@@ -19,11 +19,11 @@ def visualize_trace(df, stroke_indices, stroke_id):
     """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))
-    plt.plot(stroke_data['x'], stroke_data['y'], 'b-o', linewidth=2, markersize=4, label='Trazo real')
+    plt.plot(stroke_data[ColumnNames.X], stroke_data[ColumnNames.Y], 'b-o', linewidth=2, markersize=4, label='Real trace')
 
-    x_start, y_start = stroke_data['x'].iloc[0], stroke_data['y'].iloc[0]
-    x_end, y_end = stroke_data['x'].iloc[-1], stroke_data['y'].iloc[-1]
-    plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Línea óptima')
+    x_start, y_start = stroke_data[ColumnNames.X].iloc[0], stroke_data[ColumnNames.Y].iloc[0]
+    x_end, y_end = stroke_data[ColumnNames.X].iloc[-1], stroke_data[ColumnNames.Y].iloc[-1]
+    plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Optimal trace')
 
     plt.plot(x_start, y_start, 'go', markersize=8, label='Inicio')
     plt.plot(x_end, y_end, 'ro', markersize=8, label='Fin')
@@ -31,7 +31,7 @@ def visualize_trace(df, stroke_indices, stroke_id):
     duration = stroke_data['timeStamp'].iloc[-1] - stroke_data['timeStamp'].iloc[0]
     plt.xlabel('X (píxeles)')
     plt.ylabel('Y (píxeles)')
-    plt.title(f'Trazo {stroke_id} - Duración: {duration:.0f}ms - Puntos: {len(stroke_data)}')
+    plt.title(f'Trace {stroke_id} - Duration: {duration:.0f}ms - Points: {len(stroke_data)}')
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.gca().invert_yaxis()
@@ -108,4 +108,57 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, c
         video.write(frame.copy())
     
     video.release()
-    print(f"Vídeo generado para el usuario {user_id}: {outfile}")
+    print(f"Video generated for user {user_id}: {outfile}")
+
+def keyboard_heatmap(df, session_id=None, use_keycode=True):
+    
+    if session_id is not None:
+        df = df[df[ColumnNames.SESSION_ID] == session_id]
+
+    # Only count keydown events
+    df = df[df[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN]
+
+    # Choose which column to aggregate
+    key_col = ColumnNames.KEY_CODE_EVENT if use_keycode else ColumnNames.KEY_VALUE_EVENT
+
+    # Count occurrences
+    key_counts = df[key_col].value_counts().to_dict()
+
+    # Define simplified keyboard layout grid
+    keyboard_layout = [
+        ["KeyQ", "KeyW", "KeyE", "KeyR", "KeyT", "KeyY", "KeyU", "KeyI", "KeyO", "KeyP"],
+        ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL"],
+        ["KeyZ", "KeyX", "KeyC", "KeyV", "KeyB", "KeyN", "KeyM"],
+        ["Space"]
+    ]
+
+    # Convert layout to heatmap matrix
+    max_cols = max(len(row) for row in keyboard_layout)
+    heatmap_data = []
+
+    for row in keyboard_layout:
+        heatmap_row = []
+        for key in row:
+            heatmap_row.append(key_counts.get(key, 0))
+        # Pad shorter rows
+        heatmap_row += [np.nan] * (max_cols - len(row))
+        heatmap_data.append(heatmap_row)
+
+    heatmap_data = np.array(heatmap_data)
+
+    # Plot heatmap
+    plt.figure(figsize=(15, 5))
+    sns.heatmap(
+        heatmap_data,
+        annot=True,
+        fmt=".0f",
+        cmap="Reds",
+        cbar=True,
+        linewidths=0.5,
+        linecolor='gray'
+    )
+
+    plt.title("Keyboard Usage Heatmap")
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
