@@ -6,3 +6,4 @@ test/__pycache__
 dist
 .vscode/
 docs/build
+venv
