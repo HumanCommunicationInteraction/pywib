@@ -75,6 +75,8 @@ class ColumnNames:
     ACCELERATION = 'acceleration'
     JERKINESS = 'jerkiness'
     AUC_RATIO = 'auc_ratio'
+    NUMBER_OF_PAUSES = 'num_pauses'
+    MEAN_PAUSE_PER_TRACE = 'mean_pauses_per_trace'
 
 class KeyCodeEvents:
     """ Key code event constants for keyboard interactions."""
