@@ -1,8 +1,9 @@
 import pandas as pd
-from ..utils.validation import validate_dataframe
-from ..utils.segmentation import extract_traces_by_session
-from ..utils.utils import compute_space_time_diff
-from ..constants import ColumnNames
+from pywib.utils.validation import validate_dataframe
+from pywib.utils.segmentation import extract_traces_by_session
+from pywib.utils.timing import num_pauses_df, num_pauses_traces, pauses_metrics_df, pauses_metrics_per_trace
+from pywib.utils.utils import compute_space_time_diff
+from pywib.constants import ColumnNames
 
 def execution_time(df: pd.DataFrame) -> dict:
     """
@@ -49,7 +50,7 @@ def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None
 
     return movement_time_per_session
 
-def num_pauses(df: pd.DataFrame, threshold: float = 100, computeTraces: bool = True) -> tuple[dict, dict]:
+def num_pauses(df: pd.DataFrame, traces:dict[str, list[pd.DataFrame]] = None, threshold: float = 100, computeTraces: bool = True) -> dict[str, dict]:
     """
     Calculate the number of pauses in the DataFrame.
     
@@ -59,46 +60,20 @@ def num_pauses(df: pd.DataFrame, threshold: float = 100, computeTraces: bool = T
         computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
     
     Returns:
-        tuple (tuple[dict, dict]): A tuple containing two dictionaries with the number of pauses per session and the mean number of pauses per trace, with the sessionId as keys.
+        dict: A dictionary containing the number of pauses and the mean pause pere trace.
+        With :py:attr:`~pywib.constants.ColumnNames.NUMBER_OF_PAUSES` and :py:attr:`~pywib.constants.ColumnNames.MEAN_PAUSE_PER_TRACE` as keys.    
     """
 
-    validate_dataframe(df)
-    
     if computeTraces:
-        df = extract_traces_by_session(df)
+        if traces:
+            return  num_pauses_traces(traces, threshold)
+        else:
+            return num_pauses_traces(extract_traces_by_session(df), threshold)
     else:
-        df_pauses = _num_pauses_trace(df, threshold)
-        total_pauses_session = df_pauses.shape[0]
-        metrics = {}
-        metrics[df[ColumnNames.SESSION_ID].iloc[0]] = {
-            "num_pauses": total_pauses_session,
-            "mean_pauses_per_trace": total_pauses_session
-        }
-        return metrics
-
-    metrics_per_session = {}
-    for session_id, session_traces in df.items():
-        total_pauses_session = 0
-        for trace in session_traces:
-            df_pauses = _num_pauses_trace(trace, threshold)
-            total_pauses_session += df_pauses.shape[0]
-        metrics_per_session[session_id] = {
-            "num_pauses": total_pauses_session,
-            "mean_pauses_per_trace": total_pauses_session / len(session_traces) if len(session_traces) > 0 else 0
-        }
-    return  metrics_per_session
-
-def _num_pauses_trace(df: pd.DataFrame, threshold: float) -> pd.DataFrame:
-    """
-    Helper function to calculate pauses in a single trace.
-    """
-    df = df.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
-    df[ColumnNames.DT] = df[ColumnNames.TIME_STAMP].diff().fillna(0)
-    pauses = df[df[ColumnNames.DT] > threshold]
-    return pauses
+        return num_pauses_df(df, threshold)
 
 
-def pauses_metrics(df: pd.DataFrame, threshold: float = 100, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def pauses_metrics(df: pd.DataFrame, threshold: float = 100, traces: dict[str, list[pd.DataFrame]] = None, per_traces = True) -> dict:
     """
     Calculate pause metrics for the given DataFrame.
     
@@ -111,37 +86,12 @@ def pauses_metrics(df: pd.DataFrame, threshold: float = 100, traces: dict[str, l
         dict: A dictionary with sessionId as keys and a dictionary of pause metrics as values.
     """
 
-    if traces is None:
-        validate_dataframe(df)  
-        traces = extract_traces_by_session(df)
+    if per_traces:
+        if traces is None:
+            validate_dataframe(df)
+            traces = extract_traces_by_session(df)
+        return pauses_metrics_per_trace(traces, threshold)
+    else:
+        return pauses_metrics_df(df, threshold)
     
-    pause_metrics_per_session = {}
-    number_pauses_session, number_pauses_trace = num_pauses(traces, threshold, computeTraces=False)
-    for session_id, session_traces in traces.items():
-        total_pauses = 0
-        total_pause_duration = 0.0
-        pause_durations = []
-
-        for trace in session_traces:
-            trace = compute_space_time_diff(trace)  
-            pauses = trace[trace[ColumnNames.DT] > threshold]
-            total_pauses += pauses.shape[0]
-            total_pause_duration += pauses[ColumnNames.DT].sum()
-            pause_durations.extend(pauses[ColumnNames.DT].tolist())
-
-        # Compute pause metrics for the session
-        if total_pauses > 0:
-            mean_pause_duration = total_pause_duration / total_pauses
-        else:
-            mean_pause_duration = 0
-
-        pause_metrics_per_session[session_id] = {
-            "total_pauses": total_pauses,
-            "mean_pause_duration": mean_pause_duration,
-            "pause_durations": pause_durations,
-            "mean_pauses_per_trace": number_pauses_trace.get(session_id, 0),
-            "max_pause": max(pause_durations) if pause_durations else 0,
-            "min_pause": min(pause_durations) if pause_durations else 0,
-        }
-
-    return pause_metrics_per_session
+    
