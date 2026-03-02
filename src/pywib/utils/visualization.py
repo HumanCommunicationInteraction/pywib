@@ -110,55 +110,86 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, c
     video.release()
     print(f"Video generated for user {user_id}: {outfile}")
 
-def keyboard_heatmap(df, session_id=None, use_keycode=True):
-    
+def keyboard_heatmap(df, session_id=None):
+
     if session_id is not None:
         df = df[df[ColumnNames.SESSION_ID] == session_id]
 
     # Only count keydown events
     df = df[df[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN]
 
-    # Choose which column to aggregate
-    key_col = ColumnNames.KEY_CODE_EVENT if use_keycode else ColumnNames.KEY_VALUE_EVENT
+    # ---- Convert ASCII to character ----
+    df = df.copy()
 
-    # Count occurrences
-    key_counts = df[key_col].value_counts().to_dict()
+    # Drop null / invalid ascii
+    df = df[df[ColumnNames.KEY_CODE_EVENT].notna()]
 
-    # Define simplified keyboard layout grid
-    keyboard_layout = [
-        ["KeyQ", "KeyW", "KeyE", "KeyR", "KeyT", "KeyY", "KeyU", "KeyI", "KeyO", "KeyP"],
-        ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH", "KeyJ", "KeyK", "KeyL"],
-        ["KeyZ", "KeyX", "KeyC", "KeyV", "KeyB", "KeyN", "KeyM"],
-        ["Space"]
+    if df.empty:
+        # TODO warn?
+        return
+
+    # Convert ASCII integer → character
+    df["char"] = df[ColumnNames.KEY_CODE_EVENT].astype(int).apply(chr)
+
+    # Normalize to lowercase (so A and a merge)
+    df["char"] = df["char"].apply(str.lower)
+
+    key_counts = df["char"].value_counts()
+
+    # ---- FULL STANDARD QWERTY LAYOUT (ANSI) ----
+    layout = [
+        ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+        ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
+        ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'"],
+        ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
+        ["space"]
     ]
 
-    # Convert layout to heatmap matrix
-    max_cols = max(len(row) for row in keyboard_layout)
-    heatmap_data = []
+    # Determine max width for consistent matrix
+    max_cols = max(len(row) for row in layout)
 
-    for row in keyboard_layout:
-        heatmap_row = []
+    heatmap_data = []
+    annotations = []
+
+    
+    for row in layout:
+        data_row = []
+        label_row = []
+
         for key in row:
-            heatmap_row.append(key_counts.get(key, 0))
-        # Pad shorter rows
-        heatmap_row += [np.nan] * (max_cols - len(row))
-        heatmap_data.append(heatmap_row)
+            if key == "space":
+                count = key_counts.get(" ", 0)
+                label = "Space"
+            else:
+                count = key_counts.get(key, 0)
+                label = key.upper()
+            print(f"Count: {count}, Label: {label}, key: {key}")
+            data_row.append(count)
+            label_row.append(f"{label}\n{count}")
+
+        while len(data_row) < max_cols:
+            data_row.append(np.nan)
+            label_row.append("")
+
+        heatmap_data.append(data_row)
+        annotations.append(label_row)
 
     heatmap_data = np.array(heatmap_data)
 
-    # Plot heatmap
-    plt.figure(figsize=(15, 5))
+    plt.figure(figsize=(18, 6))
     sns.heatmap(
         heatmap_data,
-        annot=True,
-        fmt=".0f",
+        annot=np.array(annotations),
+        fmt="",
         cmap="Reds",
-        cbar=True,
         linewidths=0.5,
-        linecolor='gray'
+        vmin=0,
+        linecolor="gray",
+        cbar=True
     )
-
-    plt.title("Keyboard Usage Heatmap")
+    
+    plt.title("Keyboard Usage Heatmap (ASCII / keyCodeEvent)")
     plt.xticks([])
     plt.yticks([])
     plt.show()
+        
