@@ -31,7 +31,7 @@ def compute_metrics_from_traces(
     traces: dict[str, list[pd.DataFrame]] | None,
     column_name: str,
     compute_traces_fn,
-    preprocess_fn=None
+    preprocess_fn=None,
 ) -> dict:
     """
     Compute basic statistical metrics (mean, max, min) for a specific column across sessions.
@@ -68,7 +68,7 @@ def compute_metrics_from_traces(
             - 'max': Maximum value.
             - 'min': Minimum value.
     """
-    if (traces is None) or (column_name not in df.columns):
+    if (traces is None):
         validate_dataframe(df)
         traces = compute_traces_fn(df, per_traces=True)
 
