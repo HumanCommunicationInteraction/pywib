@@ -10,13 +10,13 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 setup(
     name='pywib',
     packages=find_packages(),
-    version='0.1.4',
+    version='0.1.5',
     description='HCI Web Interaction Analyzer - A library for analyzing web user interactions',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/HumanCommunicationInteraction/pywib",
     packages=find_packages(),
-    author='Guillermo Dylan Carvajal Aza',
+    author='Guillermo Dylan Carvajal Aza & Alejandro Varela Álvarez',
     author_email='carvajalguillermo@uniovi.es',
     keywords=['HCI', 'Web Interaction', 'Analyzer'],
     classifiers=[
