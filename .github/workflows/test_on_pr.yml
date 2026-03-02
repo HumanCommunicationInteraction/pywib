@@ -1,6 +1,13 @@
 name: Test on Pull Request
 on: 
   pull_request:
+    paths:
+      - 'src/**'
+      - 'test/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - 'setup.py'
+      - '.github/workflows/test_on_pr.yml'
 jobs:
   test:
     runs-on: ubuntu-latest
