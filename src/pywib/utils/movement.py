@@ -61,8 +61,6 @@ def velocity_traces_parallel(traces: dict[str, list[pd.DataFrame]], n_jobs: int 
         traces[session_id] = session_traces
     return traces
 
-import pandas as pd
-
 def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate acceleration for a single DataFrame.

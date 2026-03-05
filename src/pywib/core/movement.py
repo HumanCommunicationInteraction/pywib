@@ -5,7 +5,7 @@ from pywib.utils import (acceleration_traces, velocity_traces, velocity_df,
                          acceleration_df, jerkiness_df, jerkiness_traces, 
                          _path, validate_dataframe, compute_space_time_diff, 
                          compute_metrics_from_traces, extract_traces_by_session, 
-                         auc_ratio_traces, auc_ratio_df, velocity_traces_parallel)
+                         auc_ratio_traces, auc_ratio_df)
 from pywib.constants import ColumnNames
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
