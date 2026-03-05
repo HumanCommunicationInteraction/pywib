@@ -1,14 +1,14 @@
 """
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.5"
 __author__ = "Guillermo Dylan Carvajal Aza"
 __email__ = "carvajalguillermo@uniovi.es"
 
 from .constants import *
 from .utils import (validate_dataframe, validate_dataframe_keyboard, 
-                    extract_traces_by_session, visualize_trace, compute_space_time_diff, video_from_trace, 
-                    validate_duplicate_timestamps)
+                    extract_traces_by_session, visualize_trace, compute_space_time_diff, 
+                    video_from_trace, validate_duplicate_timestamps, keyboard_heatmap)
 from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
                    execution_time, movement_time, pauses_metrics, velocity_metrics, 
                    acceleration_metrics, jerkiness_metrics, number_of_clicks, 
@@ -33,6 +33,7 @@ __all__ = [
     "extract_traces_by_session",
     "video_from_trace",
     "validate_duplicate_timestamps",
+    "keyboard_heatmap",
 
     # Movement functions
     "velocity",

@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
 import cv2
-from pywib.constants import EventTypes
+import seaborn as sns
 
+from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
 
 def visualize_trace(df, stroke_indices, stroke_id):
@@ -19,11 +19,11 @@ def visualize_trace(df, stroke_indices, stroke_id):
     """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))
-    plt.plot(stroke_data['x'], stroke_data['y'], 'b-o', linewidth=2, markersize=4, label='Trazo real')
+    plt.plot(stroke_data[ColumnNames.X], stroke_data[ColumnNames.Y], 'b-o', linewidth=2, markersize=4, label='Real trace')
 
-    x_start, y_start = stroke_data['x'].iloc[0], stroke_data['y'].iloc[0]
-    x_end, y_end = stroke_data['x'].iloc[-1], stroke_data['y'].iloc[-1]
-    plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Línea óptima')
+    x_start, y_start = stroke_data[ColumnNames.X].iloc[0], stroke_data[ColumnNames.Y].iloc[0]
+    x_end, y_end = stroke_data[ColumnNames.X].iloc[-1], stroke_data[ColumnNames.Y].iloc[-1]
+    plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Optimal trace')
 
     plt.plot(x_start, y_start, 'go', markersize=8, label='Inicio')
     plt.plot(x_end, y_end, 'ro', markersize=8, label='Fin')
@@ -31,7 +31,7 @@ def visualize_trace(df, stroke_indices, stroke_id):
     duration = stroke_data['timeStamp'].iloc[-1] - stroke_data['timeStamp'].iloc[0]
     plt.xlabel('X (píxeles)')
     plt.ylabel('Y (píxeles)')
-    plt.title(f'Trazo {stroke_id} - Duración: {duration:.0f}ms - Puntos: {len(stroke_data)}')
+    plt.title(f'Trace {stroke_id} - Duration: {duration:.0f}ms - Points: {len(stroke_data)}')
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.gca().invert_yaxis()
@@ -108,4 +108,88 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, c
         video.write(frame.copy())
     
     video.release()
-    print(f"Vídeo generado para el usuario {user_id}: {outfile}")
+    print(f"Video generated for user {user_id}: {outfile}")
+
+def keyboard_heatmap(df, session_id=None):
+
+    if session_id is not None:
+        df = df[df[ColumnNames.SESSION_ID] == session_id]
+
+    # Only count keydown events
+    df = df[df[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_KEY_DOWN]
+
+    # ---- Convert ASCII to character ----
+    df = df.copy()
+
+    # Drop null / invalid ascii
+    df = df[df[ColumnNames.KEY_CODE_EVENT].notna()]
+
+    if df.empty:
+        # TODO warn?
+        return
+
+    # Convert ASCII integer → character
+    df["char"] = df[ColumnNames.KEY_CODE_EVENT].astype(int).apply(chr)
+
+    # Normalize to lowercase (so A and a merge)
+    df["char"] = df["char"].apply(str.lower)
+
+    key_counts = df["char"].value_counts()
+
+    # ---- FULL STANDARD QWERTY LAYOUT (ANSI) ----
+    layout = [
+        ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="],
+        ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
+        ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'"],
+        ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
+        ["space"]
+    ]
+
+    # Determine max width for consistent matrix
+    max_cols = max(len(row) for row in layout)
+
+    heatmap_data = []
+    annotations = []
+
+    
+    for row in layout:
+        data_row = []
+        label_row = []
+
+        for key in row:
+            if key == "space":
+                count = key_counts.get(" ", 0)
+                label = "Space"
+            else:
+                count = key_counts.get(key, 0)
+                label = key.upper()
+            print(f"Count: {count}, Label: {label}, key: {key}")
+            data_row.append(count)
+            label_row.append(f"{label}\n{count}")
+
+        while len(data_row) < max_cols:
+            data_row.append(np.nan)
+            label_row.append("")
+
+        heatmap_data.append(data_row)
+        annotations.append(label_row)
+
+    heatmap_data = np.array(heatmap_data)
+
+    plt.figure(figsize=(18, 6))
+    sns.heatmap(
+        heatmap_data,
+        annot=np.array(annotations),
+        fmt="",
+        cmap="Reds",
+        linewidths=0.5,
+        vmin=0,
+        linecolor="gray",
+        cbar=True
+    )
+    
+    plt.title("Keyboard Usage Heatmap (ASCII / keyCodeEvent)")
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+        

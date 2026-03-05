@@ -1,5 +1,5 @@
-from typing import List, Optional, Tuple
-import concurrent.futures
+from typing import List
+
 import pandas as pd
 from ..constants import EventTypes, ColumnNames
 from ..utils.validation import validate_dataframe, validate_dataframe_keyboard
@@ -13,13 +13,8 @@ def extract_trace(dt: pd.DataFrame) -> list:
     """
     validate_dataframe(dt)
     dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
-    is_move = (dt[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_MOUSE_MOVE) | (dt[ColumnNames.EVENT_TYPE] == EventTypes.EVENT_ON_TOUCH_MOVE)
-    group_id = (~is_move).cumsum()
-    traces = []
-    for _, group in dt[is_move].groupby(group_id[is_move]):
-        if len(group) > 1:
-            traces.append(group)
-    return traces
+    return _extract_move_trace(dt)
+
 
 def extract_traces_by_session(dt: pd.DataFrame) -> dict:
     """
@@ -35,26 +30,8 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
     dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
     traces_by_session = {}
     for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
-        is_move = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
-        group_id = (~is_move).cumsum()
-        traces = []
-        for _, sub_group in group[is_move].groupby(group_id[is_move]):
-            if len(sub_group) > 1:
-                traces.append(sub_group)
-        traces_by_session[session_id] = traces
+        traces_by_session[session_id] = _extract_move_trace(group)
     return traces_by_session
-
-
-def _extract_traces_for_session(item: Tuple[str, pd.DataFrame]) -> Tuple[str, List[pd.DataFrame]]:
-    session_id, group = item
-    is_move = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_ON_MOUSE_MOVE, EventTypes.EVENT_ON_TOUCH_MOVE])
-    group_id = (~is_move).cumsum()
-    traces: List[pd.DataFrame] = []
-    for _, sub_group in group[is_move].groupby(group_id[is_move]):
-        if len(sub_group) > 1:
-            traces.append(sub_group)
-    return session_id, traces
-
 
 def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.DataFrame]]:
     """
@@ -70,17 +47,22 @@ def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.D
     dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
     keystroke_traces_by_session = {}
     for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
-        is_keydown = group[ColumnNames.EVENT_TYPE].isin([EventTypes.EVENT_KEY_UP, EventTypes.EVENT_KEY_DOWN, EventTypes.EVENT_KEY_PRESS])
-        group_id = (~is_keydown).cumsum()
-        keystroke_traces = []
-        for _, sub_group in group[is_keydown].groupby(group_id[is_keydown]):
-            if len(sub_group) > 0:
-                keystroke_traces.append(sub_group)
-        keystroke_traces_by_session[session_id] = keystroke_traces
+        is_key_event = group[ColumnNames.EVENT_TYPE].isin([
+            EventTypes.EVENT_KEY_UP,
+            EventTypes.EVENT_KEY_DOWN,
+            EventTypes.EVENT_KEY_PRESS,
+        ])
+
+        keystroke_traces_by_session[session_id] = _extract_consecutive_traces(
+            group,is_key_event
+            ,min_length=1
+        )
+
     return keystroke_traces_by_session
-    
+
 def extract_mouse_click_traces_by_session(dt: pd.DataFrame) -> dict:
     """
+    
     Extracts those traces with event movements that end with ON_MOUSE_CLICK or ON_TOUCH_TAP events,
     grouped by sessionId.
     """
@@ -135,3 +117,36 @@ def extract_mouse_click_traces_by_session_with_intial_pause(dt: pd.DataFrame, pa
 
         click_traces_by_session[session_id] = click_traces
     return click_traces_by_session
+
+
+def _extract_move_trace(dt: pd.DataFrame) -> list[pd.DataFrame]:
+    """
+    Helper function to extract consecutive movement traces for segmentations.
+    """
+    is_move = dt[ColumnNames.EVENT_TYPE].isin([
+        EventTypes.EVENT_ON_MOUSE_MOVE,
+        EventTypes.EVENT_ON_TOUCH_MOVE
+    ])
+
+    return _extract_consecutive_traces(
+        dt,
+        is_move,
+        min_length=2
+    )
+
+def _extract_consecutive_traces(
+        df:pd.DataFrame,
+        is_target_event: pd.Series,
+        min_length: int = 1,
+    ) -> List[pd.DataFrame]:
+    """
+    Extracts consecutive traces of rows where the event target is met.
+    """
+    group_id = (~is_target_event).cumsum()
+
+    traces = [
+        group
+        for _, group in df[is_target_event].groupby(group_id [is_target_event])
+        if len(group) >= min_length
+    ]
+    return traces
