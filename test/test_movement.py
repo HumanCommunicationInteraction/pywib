@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from utils import process_csv, import_pyModule
+from utils import assert_between_zero_inf, process_csv, import_pyModule
 
 import_pyModule()
 from pywib import (velocity, acceleration, compute_space_time_diff, 
@@ -54,12 +54,37 @@ class TestMovement(unittest.TestCase):
         metrics = velocity_metrics(self.test_data.copy())
 
         for _, session_id in metrics.items():
-            self.assertIn('mean', session_id)
-            self.assertIn('max', session_id)
-            self.assertIn('min', session_id)
-            self.assertGreaterEqual(session_id['mean'], 0)
-            self.assertGreaterEqual(session_id['max'], 0)
-            self.assertGreaterEqual(session_id['min'], 0)
+            assert_between_zero_inf(self, session_id, 'mean')
+            assert_between_zero_inf(self, session_id, 'max')
+            assert_between_zero_inf(self, session_id, 'min')
+
+    def test_velocity_metrics_from_velocity_df(self):
+        """Test velocity metrics from a previosly computed velocity dataframe"""
+        # Compute space-time differences
+        df = compute_space_time_diff(self.test_data.copy())
+        
+        # Calculate velocity
+        df_velocity = velocity(df)
+        metrics = velocity_metrics(df_velocity)
+
+        for _, session_id in metrics.items():
+            assert_between_zero_inf(self, session_id, 'mean')
+            assert_between_zero_inf(self, session_id, 'max')
+            assert_between_zero_inf(self, session_id, 'min')
+
+    def test_velocity_metrics_from_velocity_traces(self):
+        """Test velocity metrics from a previosly computed velocity dataframe"""
+        # Compute space-time differences
+        df = compute_space_time_diff(self.test_data.copy())
+        
+        # Calculate velocity
+        df_velocity = velocity(df, per_traces=True)
+        metrics = velocity_metrics(None, traces=df_velocity)
+
+        for _, session_id in metrics.items():
+            assert_between_zero_inf(self, session_id, 'mean')
+            assert_between_zero_inf(self, session_id, 'max')
+            assert_between_zero_inf(self, session_id, 'min')
 
     def test_acceleration(self):
         """Test acceleration calculation"""
@@ -103,6 +128,21 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['mean'], 0)
             self.assertGreaterEqual(session['max'], session['min'])
 
+    def test_acceleration_metrics_from_aceleration_df(self):
+        """Test acceleration metrics from precomputed acceleration df"""
+        df = compute_space_time_diff(self.test_data.copy())
+        
+        # Calculate acceleration
+        df_acceleration = acceleration(df)
+        acc_metrics = acceleration_metrics(df_acceleration)
+
+        for _, session in acc_metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+            self.assertGreaterEqual(session['mean'], 0)
+            self.assertGreaterEqual(session['max'], session['min'])
+
     def test_jerkiness(self):
         """Test jerkiness calculation"""
         jk_df = jerkiness(self.test_data.copy(), per_traces=True)
@@ -127,6 +167,17 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['mean'], 0)
             self.assertGreaterEqual(session['max'], session['min'])
 
+    def test_jerkiness_from_df(self):
+        jk_df = jerkiness(self.test_data.copy())
+        metrics = jerkiness_metrics(jk_df)
+
+        for _, session in metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+            self.assertGreaterEqual(session['mean'], 0)
+            self.assertGreaterEqual(session['max'], session['min'])
+
     def test_auc(self):
         auc = auc_ratio(self.test_data_auc.copy())
         for _, session in auc.items():
@@ -142,6 +193,9 @@ class TestMovement(unittest.TestCase):
             self.assertIn('min_ratio', session)
             self.assertIn('max_ratio', session)
             self.assertGreaterEqual(session['mean_ratio'], 0)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -91,19 +91,19 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
                 last_move_y = None
                 mouse_down_time = None
                 accumulated_move_distance = 0.0
+        # TODO this variable is never used??
         click_slips_per_session[session_id] = {
             "slips": slips,
             "distances": distances,
         }
         metrics = {
-            "click_slips": slips,
-            "longest_click_slip": max(distances) if distances else 0,
-            "shortest_click_slip": min(distances) if distances else 0,
-            "average_click_slip": slips / len(distances) if distances else 0,
-            "average_click_slip_distance": np.mean(distances) if distances else 0,
-            "average_click_duration": np.mean(durations) if durations else 0,
-            "max_click_duration": max(durations) if durations else 0,
-            "min_click_duration": min(durations) if durations else 0,
+            ColumnNames.CLICK_SLIPS: slips,
+            ColumnNames.MAX_CLICK_SLIP: max(distances) if distances else 0,
+            ColumnNames.MIN_CLICK_SLIP: min(distances) if distances else 0,
+            ColumnNames.MEAN_CLICK_SLIP: np.mean(distances) if distances else 0,
+            ColumnNames.MEAN_CLICK_DURATION: np.mean(durations) if durations else 0,
+            ColumnNames.MAX_CLICK_DURATION: max(durations) if durations else 0,
+            ColumnNames.MIN_CLICK_DURATION: min(durations) if durations else 0,
         }
         metrics_per_session[session_id] = metrics
     return metrics_per_session

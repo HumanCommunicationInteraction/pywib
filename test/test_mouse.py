@@ -19,8 +19,8 @@ class TestData:
         'SESSION_B': 2
     }
     expected_click_slips = {
-        'SESSION_A': {'click_slips': 0,'longest_click_slip':0, 'shortest_click_slip': 0, 'average_click_slip': 0, 'average_click_slip_distance': 0, 'average_click_duration':  np.float64(30.0), 'max_click_duration':  np.float64(30.0), 'min_click_duration':  np.float64(30.0)},
-        'SESSION_B': {'click_slips': 1, 'longest_click_slip': np.float64(25.0), 'shortest_click_slip': np.float64(25.0), 'average_click_slip': 1.0, 'average_click_slip_distance': np.float64(25.0), 'average_click_duration': np.float64(30.0), 'max_click_duration': np.float64(30.0), 'min_click_duration': np.float64(30.0)}
+        'SESSION_A': {'click_slips': 0,'max_click_slip':0, 'min_click_slip': 0, 'mean_click_slip': 0, 'mean_click_duration':  np.float64(30.0), 'max_click_duration': 30, 'min_click_duration':  30},
+        'SESSION_B': {'click_slips': 1, 'max_click_slip': np.float64(25.0), 'min_click_slip': np.float64(25.0), 'mean_click_slip': np.float64(25.0), 'mean_click_duration': np.float64(30.0), 'max_click_duration': np.float64(30.0), 'min_click_duration': 30}
     }
 
 class TestMouse(unittest.TestCase):
@@ -46,8 +46,8 @@ class TestMouse(unittest.TestCase):
         durations = click_slip(self.test_data)
         self.assertIn('SESSION_A', durations)
         self.assertIn('SESSION_B', durations)
-        self.assertGreaterEqual(durations['SESSION_A']['average_click_duration'], 30)
-        self.assertGreaterEqual(durations['SESSION_B']['average_click_duration'], 30)
+        self.assertGreaterEqual(durations['SESSION_A']['mean_click_duration'], 30)
+        self.assertGreaterEqual(durations['SESSION_B']['mean_click_duration'], 30)
         self.assertGreaterEqual(durations['SESSION_A']['max_click_duration'], durations['SESSION_B']['min_click_duration'])
         self.assertGreaterEqual(durations['SESSION_B']['max_click_duration'], durations['SESSION_B']['min_click_duration'])
 
