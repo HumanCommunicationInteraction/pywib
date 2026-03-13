@@ -9,6 +9,17 @@ keyboard_columns = [
    ColumnNames.KEY_VALUE_EVENT, ColumnNames.KEY_CODE_EVENT
 ]
 
+def validate_not_none(*params):
+    for param in params:
+        if param is None:
+            raise ValueError("Either 'df' or 'traces' must be provided.")
+
+def validate_one_not_none(*params):
+    for param in params:
+        if param is not None:
+            return 
+    raise ValueError("Either 'df' or 'traces' must be provided.")
+
 def validate_dataframe(df: pd.DataFrame):
 
     for col in required_columns:
