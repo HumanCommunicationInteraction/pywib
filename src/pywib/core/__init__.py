@@ -1,5 +1,5 @@
 """
-Utility functions for PyWib
+Core metrics functions from PyWib
 """
 from .timing import execution_time, movement_time, num_pauses, pauses_metrics
 from .movement import (velocity, acceleration, jerkiness, 
@@ -7,7 +7,7 @@ from .movement import (velocity, acceleration, jerkiness,
                        velocity_metrics, acceleration_metrics, jerkiness_metrics,
                        deviations)
 from .mouse import click_slip, number_of_clicks
-from .keyboard import (typing_speed, typing_speed_metrics, backspace_usage)
+from .keyboard.keyboard import (typing_speed, typing_speed_metrics, backspace_usage)
 
 __all__ = [
     "execution_time",

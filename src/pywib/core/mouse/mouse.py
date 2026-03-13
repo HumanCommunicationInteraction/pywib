@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
-from ..utils.validation import validate_dataframe
-from ..utils.utils import compute_space_time_diff
-from ..utils.segmentation import extract_traces_by_session
-from ..constants import ColumnNames, EventTypes
+
+from pywib.utils import validate_dataframe
+from pywib.constants import ColumnNames, EventTypes
 
 def number_of_clicks(df: pd.DataFrame) -> dict:
     """
