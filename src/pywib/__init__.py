@@ -12,7 +12,8 @@ from .utils import (validate_dataframe, validate_dataframe_keyboard,
 from .core import (velocity, acceleration, jerkiness, path, auc_ratio, 
                    execution_time, movement_time, pauses_metrics, velocity_metrics, 
                    acceleration_metrics, jerkiness_metrics, number_of_clicks, 
-                   click_slip, num_pauses, deviations, auc_ratio_metrics, typing_speed_metrics, typing_speed, backspace_usage)
+                   click_slip, num_pauses, deviations, auc_ratio_metrics,
+                     typing_speed_metrics, typing_speed, backspace_usage, typing_durations)
 
 __all__ = [
     # Version info
@@ -55,6 +56,7 @@ __all__ = [
     "typing_speed",
     "typing_speed_metrics",
     "backspace_usage",
+    "typing_durations"
 
     # Timing
     "pauses_metrics",

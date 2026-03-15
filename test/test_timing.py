@@ -7,7 +7,7 @@ from utils import process_csv, import_pyModule
 
 import_pyModule()
 
-from pywib import movement_time, execution_time
+from pywib import movement_time, execution_time, extract_traces_by_session
 
 DEBUG = True
 
@@ -44,6 +44,14 @@ class TestTiming(unittest.TestCase):
             self.assertIsInstance(time, float)
             self.assertLessEqual(time, TestData.window_resize_error_execution_time)
 
+    def test_movement_time_by_trace(self):
+        traces = extract_traces_by_session(self.test_data)
+        move_time = movement_time(None, traces)
+        self.assertIsInstance(move_time, dict)
+        for session_id, time in move_time.items():
+            self.assertIsInstance(session_id, str)
+            self.assertIsInstance(time, float)
+            self.assertLessEqual(time, TestData.window_resize_error_execution_time)
 
 if __name__ == '__main__':
     unittest.main()

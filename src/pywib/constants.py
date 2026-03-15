@@ -77,6 +77,8 @@ class ColumnNames:
     AUC_RATIO = 'auc_ratio'
     NUMBER_OF_PAUSES = 'num_pauses'
     MEAN_PAUSE_PER_TRACE = 'mean_pauses_per_trace'
+    BACKSPACE_USAGE="backspace_usage"
+    TOTAL_CHARS="total_characters"
 
 class KeyCodeEvents:
     """ Key code event constants for keyboard interactions."""

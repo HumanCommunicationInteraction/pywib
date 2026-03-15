@@ -7,29 +7,30 @@ This module provides methods to analyze interaction data from DataFrames.
 import pandas as pd
 import numpy as np
 from pywib.utils.segmentation import extract_keystroke_traces_by_session
-from pywib.utils.validation import validate_dataframe_keyboard
+from pywib.utils import validate_dataframe_keyboard
 from pywib.constants import EventTypes, ColumnNames
 from pywib.utils.keyboard import (backspace_usage_df, backspace_usage_traces, typing_durations_df, typing_durations_traces, typing_speed_df, typing_speed_traces)
 
-def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> list:
+def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True, single: bool = False) -> list:
     """
     Calculate the durations of individual keystrokes.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing interaction data with 'event_type', 'timestamp', and 'key' columns.
         traces (dict[str, list[pd.DataFrame]]): optional Pre-extracted keystroke traces by session.
-        per_traces (bool): optional Whether to calculate durations per trace. Default is True.
+        per_traces (bool): optional whether to calculate durations per trace. Default is True.
+        single (bool): optional, wether to compute durations fully (all the time the user is typing) or for every single keystroke (value for every single key press and release combination)
     Returns:
-        list: List of keystroke durations in milliseconds.
+        list[float]: List of keystroke durations in milliseconds.
     """
     if traces is None and per_traces:
         traces = extract_keystroke_traces_by_session(df)
-        return typing_durations_traces(traces, False)
+        return typing_durations_traces(traces, False, single=single)
 
     if not per_traces:
         return typing_durations_df(df)
 
-    return typing_durations_traces(traces)
+    return typing_durations_traces(traces, single=single)
 
 def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces : bool = True) -> dict[list[float]] | float:
     """
@@ -85,7 +86,7 @@ def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
             ])
             metrics_by_session[session_id] = {
                 "average_typing_speed": avg_speed,
-                "total_characters": total_chars,
+                ColumnNames.TOTAL_CHARS: total_chars,
                 "total_time_seconds": total_time,
                 "avg_keydown_to_keyup_duration": avg_keydown_to_keyup_duration  # TODO Review
             }
