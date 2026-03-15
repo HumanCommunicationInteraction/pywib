@@ -5,6 +5,7 @@ from pywib.utils import (_path, validate_dataframe, compute_space_time_diff,
                          extract_traces_by_session, 
                          auc_ratio_traces, auc_ratio_df)
 from pywib.constants import ColumnNames
+from pywib.utils.validation import validate_not_none, validate_one_not_none
 
 def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
     """
@@ -18,6 +19,8 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
     Returns:
         pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
     """
+    
+    validate_one_not_none(df, traces)
 
     if traces is None:
         validate_dataframe(df)

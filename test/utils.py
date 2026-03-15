@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from collections import defaultdict
 
@@ -62,3 +63,8 @@ def csv_to_df_no_checks(file_path):
         file_path (str): Path to the CSV file.
     """
     return pd.read_csv(file_path, encoding='utf-8', sep=',')
+
+def assert_between_zero_inf(self, data, column):
+        self.assertIn(column, data)
+        self.assertGreaterEqual(data[column], 0)
+        self.assertLessEqual(data[column], np.inf)
