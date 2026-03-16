@@ -4,6 +4,7 @@ from pywib.utils import (acceleration_traces, velocity_traces, velocity_df,
                          acceleration_df, jerkiness_df, jerkiness_traces, 
                          validate_dataframe, compute_metrics_from_traces, extract_traces_by_session)
 from pywib.constants import ColumnNames
+from pywib.utils.validation import validate_any_not_none
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
     """
@@ -19,6 +20,9 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
     Returns:
         dict[str, list[pd.DataFrame]]: Dictionary of traces with computed 'velocity' column.
     """
+
+    validate_any_not_none(df, traces)
+
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
@@ -52,6 +56,8 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean ', 'max', and 'min' velocity.
     """
     
+    validate_any_not_none(df, traces)
+
     return compute_metrics_from_traces(
         df=df,
         traces=traces,
@@ -66,8 +72,8 @@ def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] 
 
     If `traces` is None, they will be computed from the DataFrame.
     """
-    if df is None and traces is None:
-        raise ValueError("Either 'df' or 'traces' must be provided.")
+
+    validate_any_not_none(df, traces)
 
     if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
@@ -92,6 +98,10 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' acceleration.
     """
+
+    
+    validate_any_not_none(df, traces)
+
     if (ColumnNames.ACCELERATION not in df.columns) and (traces is None):
         validate_dataframe(df)
         if ColumnNames.VELOCITY not in df.columns:
@@ -124,8 +134,8 @@ def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = N
     dict[str, list[pd.DataFrame]]
         Dictionary of traces, each containing the computed 'jerkiness' column.
     """
-    if df is None and traces is None:
-        raise ValueError("Either 'df' or 'traces' must be provided.")
+   
+    validate_any_not_none(df, traces)
 
     if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
@@ -150,6 +160,9 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' jerkiness.
     """
+    
+    validate_any_not_none(df, traces)
+    
     if((ColumnNames.JERKINESS not in df.columns) and (traces is None)):
         validate_dataframe(df)
         if(ColumnNames.ACCELERATION not in df.columns):
