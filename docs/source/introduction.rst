@@ -30,5 +30,11 @@ Small Example
 
    from pywib import velocity, velocity_metrics
 
-   v = velocity(df_all_sessions)
-   v_metrics = velocity_metrics(None, v)
+   # From an already read DataFrame from a csv
+   df_all_sessions = process_csv(input_file)
+   df_all_sessions.rename(columns={'moveX': 'x', 'moveY': 'y', 'id_usuario': 'sessionId'}, inplace=True)
+
+   vel = velocity(df_all_sessions)
+   vel_metrics = velocity_metrics(vel)
+
+   acc = acceleration(vel, None, True)

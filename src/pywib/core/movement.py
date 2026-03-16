@@ -7,7 +7,7 @@ from pywib.utils import (acceleration_traces, velocity_traces, velocity_df,
                          compute_metrics_from_traces, extract_traces_by_session, 
                          auc_ratio_traces, auc_ratio_df)
 from pywib.constants import ColumnNames
-from pywib.utils.validation import validate_not_none, validate_one_not_none
+from pywib.utils.validation import validate_any_not_none
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
     """
@@ -24,7 +24,7 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
         dict[str, list[pd.DataFrame]]: Dictionary of traces with computed 'velocity' column.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
@@ -51,7 +51,7 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean ', 'max', and 'min' velocity.
     """
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
     
     if  (traces is None):
         if df is not None or (ColumnNames.VELOCITY not in df.columns):
@@ -74,7 +74,7 @@ def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] 
 
     If `traces` is None, they will be computed from the DataFrame.
     """
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
@@ -100,7 +100,7 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' acceleration.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if (ColumnNames.ACCELERATION not in df.columns) or (traces is None):
         validate_dataframe(df)
@@ -135,7 +135,7 @@ def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = N
         Dictionary of traces, each containing the computed 'jerkiness' column.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
@@ -161,7 +161,7 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean', 'max', and 'min' jerkiness.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if((ColumnNames.JERKINESS not in df.columns) or (traces is None)):
         validate_dataframe(df)
@@ -192,7 +192,7 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
         pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if traces is None:
         validate_dataframe(df)
@@ -224,6 +224,8 @@ def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -
     Returns:
         float: The computed AUC value.
     """
+
+    validate_any_not_none(df)
 
     if(validation):
         validate_dataframe(df)
@@ -257,6 +259,8 @@ def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool =
     float: The computed optimal AUC value.
     """
     
+    validate_any_not_none(df)
+
     if(validation):
         validate_dataframe(df)
 
@@ -287,6 +291,8 @@ def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, pe
         auc_per_session (dict): A dictionary with sessionId as keys and a tuple (auc, auc_ratio) as values. Where the auc is the area under the curve and auc_ratio is the ratio between the AUC and the optimal AUC.
     """
 
+    validate_any_not_none(df, traces)
+
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
@@ -313,9 +319,10 @@ def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean_ratio', 'max_ratio', 'min_ratio' for the auc ratio and 'mean', 'max', and 'min' auc.
     """
+    
+
     if (computed_auc is None):
-        if(df is None):
-            raise ValueError("Either 'df' or 'traces' must be provided.")
+        validate_any_not_none(df, traces)
         if (traces is not None):
             computed_auc = auc_ratio(None, traces=traces, per_traces=True)
         else:
@@ -345,6 +352,8 @@ def deviations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = 
     Returns:
         dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mad_mean' (mean of maximum absolute deviations), 'mad_max' (maximum absolute deviation across all traces), 'mad_min' (minimum absolute deviation across all traces) and 'aad' (average absolute deviation).
     """
+    validate_any_not_none(df, traces)
+    
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
