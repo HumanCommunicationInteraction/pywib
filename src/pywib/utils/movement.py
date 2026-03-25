@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from pywib.constants import ColumnNames
 from pywib.utils import compute_space_time_diff, validate_dataframe
+from pywib.utils.utils import deprecated
 
 def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -135,7 +136,7 @@ def jerkiness_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[str, list[pd
         traces[session_id] = session_traces
     return traces
 
-
+@deprecated
 def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict[str, list[pd.DataFrame]]:
     """
     Compute jerkiness for either a single DataFrame or multiple traces.
@@ -183,6 +184,7 @@ def _path(trace: pd.DataFrame) -> pd.DataFrame:
 
     return trace
 
+@deprecated
 def _auc(df: pd.DataFrame) -> float:
     """
     Helper function to calculate the Area Under the Curve (AUC) for a single DataFrame.
@@ -200,6 +202,7 @@ def _auc(df: pd.DataFrame) -> float:
     area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
     return area_real
 
+@deprecated
 def _auc_optimal(df: pd.DataFrame) -> float:
     """
     Helper function to calculate the Area Under the Optimal Curve for a single DataFrame.
@@ -220,18 +223,41 @@ def _auc_optimal(df: pd.DataFrame) -> float:
 
     return area_optimal
 
-def auc_ratio_df(df: pd.DataFrame) -> dict:
+def auc_df(df: pd.DataFrame) -> dict:
     """
     Calculate AUC and AUC ratio for a single DataFrame, returning them as a dictionary.
     
     Parameters:
         df (pd.DataFrame): DataFrame containing 'x' and 'y' columns.
     Returns:
-        dict: Dictionary with 'auc', and 'auc_ratio'.
+        tuple: A tuple (Geometric Auc, Execution Auc) as values.
     """
     validate_dataframe(df)
-    auc_val = _auc(df)
-    area_optimal = _auc_optimal(df)
+    
+
+    return (_auc_geometric_deviation(df), _auc_execution_deviation(df)
+    )
+
+def auc_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[str, list[tuple]]:
+    """
+    Calculate AUC and AUC ratio for a single DataFrame, returning them as a dictionary.
+    
+    Parameters:
+        traces (pd.dict[str,list[pd.DataFrame]]): The traces with tthe sessionId as the key and the traces as values.
+    Returns:
+        dict: Dictionary sessionId as keys and a list with a tuple (Geometric Auc, Execution Auc) as values.
+    """
+
+    auc_sessions = {}
+    for session_id, session_traces in traces.items():
+        auc_per_trace = []
+        for i, df in enumerate(session_traces):
+            validate_dataframe(df)
+            auc_per_trace.append(auc_df(df))
+        auc_sessions[session_id] = auc_per_trace
+    return auc_sessions
+
+def _auc_geometric_deviation(df):
     df_opt = compute_optimal_path(df)
     # Prepare arrays
     user_x, user_y = df['x'].values, df['y'].values
@@ -257,16 +283,51 @@ def auc_ratio_df(df: pd.DataFrame) -> dict:
 
     auc_perp = np.trapezoid(dists, s_grid)
     
-    # Optional normalization by total optimal path length TODO correct?
+    # Normalization by total optimal path length
     total_opt_length = s_grid[-1]
     if total_opt_length > 0:
         auc_perp /= total_opt_length
+    return auc_perp
 
-    return {
-        "auc": auc_val,
-        "auc_ratio": abs(auc_val - area_optimal) / (abs(area_optimal) + 1e-6),
-        'auc_perp': auc_perp
-    }
+def _auc_execution_deviation(df):
+
+    x = df['x'].to_numpy()
+    y = df['y'].to_numpy()
+
+    if len(x) < 2:
+        return 0.0
+
+    # start and end
+    x0, y0 = x[0], y[0]
+    x1, y1 = x[-1], y[-1]
+
+    # line coefficients
+    a = y1 - y0
+    b = x0 - x1
+    c = x1*y0 - x0*y1
+
+    denom = np.sqrt(a*a + b*b)
+
+    # perpendicular distance to optimal line
+    d = np.abs(a*x + b*y + c) / denom
+
+    # arc-length along trajectory
+    dx = np.diff(x)
+    dy = np.diff(y)
+    ds = np.sqrt(dx*dx + dy*dy)
+
+    s = np.concatenate(([0], np.cumsum(ds)))
+
+    # integrate deviation
+    auc = np.trapezoid(d, s)
+
+    # normalize by straight-line distance
+    straight_dist = np.sqrt((x1-x0)**2 + (y1-y0)**2)
+
+    if straight_dist > 0:
+        auc /= straight_dist
+
+    return auc
 
 def compute_optimal_path(df: pd.DataFrame, n_points: int = 100) -> pd.DataFrame:
     """
@@ -303,6 +364,7 @@ def point_to_segment_distance(px, py, x1, y1, x2, y2):
         closest_y = y1 + t * dy
         return np.hypot(px - closest_x, py - closest_y)
 
+@deprecated
 def auc_ratio_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[list[dict]]:
     """
     Calculate AUC ratio metrics for multiple traces grouped by session IDs.
@@ -317,7 +379,7 @@ def auc_ratio_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[list[dict]]:
         auc_metrics_per_trace = []
         for i, df in enumerate(session_traces):
             validate_dataframe(df)
-            auc_metrics_per_trace.append(auc_ratio_df(df))
+            # auc_metrics_per_trace.append(auc_ratio_df(df))
         auc_metrics[session_id] = auc_metrics_per_trace
     return auc_metrics
 

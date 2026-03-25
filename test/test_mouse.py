@@ -67,8 +67,8 @@ class TestMouse(unittest.TestCase):
         durations = click_slip(self.test_data, threshold=0)
         self.assertIn('SESSION_A', durations)
         self.assertIn('SESSION_B', durations)
-        self.assertGreaterEqual(durations['SESSION_A']['average_click_duration'], 30)
-        self.assertGreaterEqual(durations['SESSION_B']['average_click_duration'], 30)
+        self.assertGreaterEqual(durations['SESSION_A']['mean_click_duration'], 30)
+        self.assertGreaterEqual(durations['SESSION_B']['mean_click_duration'], 30)
 
     def test_click_duration_inf_threshold(self):
         """
@@ -77,8 +77,8 @@ class TestMouse(unittest.TestCase):
         durations = click_slip(self.test_data, threshold=np.inf)
         self.assertIn('SESSION_A', durations)
         self.assertIn('SESSION_B', durations)
-        self.assertGreaterEqual(durations['SESSION_A']['average_click_duration'], 0)
-        self.assertGreaterEqual(durations['SESSION_B']['average_click_duration'], 0)
+        self.assertGreaterEqual(durations['SESSION_A']['mean_click_duration'], 0)
+        self.assertGreaterEqual(durations['SESSION_B']['mean_click_duration'], 0)
 
 if __name__ == '__main__':
     unittest.main()

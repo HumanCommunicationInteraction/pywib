@@ -7,7 +7,7 @@ from utils import assert_between_zero_inf, process_csv, import_pyModule
 
 import_pyModule()
 from pywib import (velocity, acceleration, compute_space_time_diff, 
-                   auc_ratio_metrics, auc_ratio, velocity_metrics, acceleration_metrics,
+                   velocity_metrics, acceleration_metrics,
                    jerkiness, jerkiness_metrics)
 
 # Cambiar a True solo al probar en desarrollo
@@ -177,23 +177,6 @@ class TestMovement(unittest.TestCase):
             self.assertIn('min', session)
             self.assertGreaterEqual(session['mean'], 0)
             self.assertGreaterEqual(session['max'], session['min'])
-
-    def test_auc(self):
-        auc = auc_ratio(self.test_data_auc.copy())
-        for _, session in auc.items():
-            for trace in session:
-                self.assertIn('auc_ratio', trace)
-                self.assertIn('auc', trace)
-                self.assertGreaterEqual(trace['auc_ratio'], 0)
-        
-    def test_auc_metrics(self):
-        auc_metrics = auc_ratio_metrics(self.test_data_auc.copy())
-        for _, session in auc_metrics.items():
-            self.assertIn('mean_ratio', session)
-            self.assertIn('min_ratio', session)
-            self.assertIn('max_ratio', session)
-            self.assertGreaterEqual(session['mean_ratio'], 0)
-
 
 
 

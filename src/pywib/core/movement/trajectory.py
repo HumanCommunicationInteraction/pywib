@@ -3,9 +3,11 @@ import numpy as np
 
 from pywib.utils import (_path, validate_dataframe, compute_space_time_diff, 
                          extract_traces_by_session, 
-                         auc_ratio_traces, auc_ratio_df)
+                         auc_ratio_traces)
 from pywib.constants import ColumnNames
-from pywib.utils.validation import validate_not_none, validate_one_not_none
+from pywib.utils.movement import auc_df, auc_traces
+from pywib.utils.utils import deprecated
+from pywib.utils.validation import validate_any_not_none
 
 def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
     """
@@ -20,7 +22,7 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
         pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
     """
     
-    validate_one_not_none(df, traces)
+    validate_any_not_none(df, traces)
 
     if traces is None:
         validate_dataframe(df)
@@ -40,38 +42,35 @@ def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) 
     return traces
 
 
-def auc(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float | dict:
+def auc(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> tuple| dict:
     """
     Calculate the Area Under the Curve (AUC) for the given DataFrame.
     
     Parameters:
         df (pd.DataFrame): DataFrame containing 'timeStamp' and 'y' columns.
-        validation (bool): Whether to validate the DataFrame structure, by default True.
-        computeTraces (bool): Whether to compute traces by sessionId, by default True.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+        per_traces (bool): Whether to compute traces by sessionId, by default True.
     
     Returns:
-        float: The computed AUC value.
+        tuple: A tuple (Geometric Auc, Execution Auc) as values if not per traces.
+        dict: Dictionary sessionId as keys and a list with a tuple (Geometric Auc, Execution Auc) as values if per traces.
     """
+    validate_any_not_none(df, traces)
 
-    if(validation):
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return auc_df(df)
+
+    # If traces are not provided, extract them from df
+    if traces is None:
         validate_dataframe(df)
-
-    # TODO revisar
-    if computeTraces:
-        df = df.sort_values(by=ColumnNames.TIME_STAMP)
         traces = extract_traces_by_session(df)
-        auc_by_session = {}
-        for session_id, session_traces in traces.items():
-            session_traces = compute_space_time_diff(session_traces)
-            auc_by_session[session_id] = np.mean([np.trapezoid(trace[ColumnNames.Y], trace[ColumnNames.X]) for trace in session_traces])
-        return auc_by_session
-    else:
-        df = compute_space_time_diff(df)
-        # Área bajo la curva real
-        area_real = np.trapezoid(df[ColumnNames.Y], df[ColumnNames.X])
-        return area_real
+
+    # Compute auc for each trace
+    return auc_traces(traces)
 
 
+@deprecated
 def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
     """
     Calculate the Optimal Area Under the Curve (AUC) for the given DataFrame.
@@ -103,6 +102,8 @@ def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool =
 
     return area_optimal
 
+
+@deprecated
 def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
     """
     Calculate the AUC ratio for the given DataFrame.
@@ -118,9 +119,9 @@ def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, pe
     if df is None and traces is None:
         raise ValueError("Either 'df' or 'traces' must be provided.")
 
-    if not per_traces:
+    # if not per_traces:
         # Compute directly on the DataFrame (no trace extraction)
-        return auc_ratio_df(df)
+        # return auc_ratio_df(df)
 
     # If traces are not provided, extract them from df
     if traces is None:
@@ -129,6 +130,8 @@ def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, pe
 
     return auc_ratio_traces(traces)
 
+
+@deprecated
 def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
     """
     This function computes the mean, max, and min auc ratio for each session on the given dataframe or list of traces.

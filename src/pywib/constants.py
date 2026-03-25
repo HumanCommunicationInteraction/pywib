@@ -88,6 +88,8 @@ class ColumnNames:
     MAX_CLICK_DURATION = 'max_click_duration'
     MIN_CLICK_DURATION = 'min_click_duration'
     MEAN_CLICK_DURATION = 'mean_click_duration'
+    AUC_GEOM = 'auc_geometric'
+    AUC_EXEC = 'auc_execution'
 
 class KeyCodeEvents:
     """ Key code event constants for keyboard interactions."""

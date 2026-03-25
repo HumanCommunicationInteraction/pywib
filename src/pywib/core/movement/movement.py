@@ -4,6 +4,7 @@ from pywib.utils import (acceleration_traces, velocity_traces, velocity_df,
                          acceleration_df, jerkiness_df, jerkiness_traces, 
                          validate_dataframe, compute_metrics_from_traces, extract_traces_by_session)
 from pywib.constants import ColumnNames
+from pywib.utils.movement import velocity_traces_parallel
 from pywib.utils.validation import validate_any_not_none
 
 def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
@@ -102,11 +103,11 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     
     validate_any_not_none(df, traces)
 
-    if (ColumnNames.ACCELERATION not in df.columns) and (traces is None):
+    if (ColumnNames.ACCELERATION not in df.columns) or (traces is None):
         validate_dataframe(df)
         if ColumnNames.VELOCITY not in df.columns:
             traces = velocity(df, per_traces=True)
-        traces = acceleration(None, traces,  per_traces=True)
+        traces = acceleration(df, traces,  per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
@@ -163,13 +164,13 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
     
     validate_any_not_none(df, traces)
     
-    if((ColumnNames.JERKINESS not in df.columns) and (traces is None)):
+    if((ColumnNames.JERKINESS not in df.columns) or (traces is None)):
         validate_dataframe(df)
         if(ColumnNames.ACCELERATION not in df.columns):
             if(ColumnNames.VELOCITY not in df.columns):
                 traces = velocity(df, per_traces=True)
-            traces = acceleration(None, traces, per_traces=True)
-        traces = jerkiness(None, traces, per_traces=True)
+            traces = acceleration(df, traces, per_traces=True)
+        traces = jerkiness(df, traces, per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
