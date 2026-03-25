@@ -3,6 +3,7 @@ import numpy as np
 from pywib.constants import ColumnNames
 from pywib.utils import compute_space_time_diff, validate_dataframe
 from pywib.utils.utils import deprecated
+from joblib import Parallel, delayed
 
 def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -16,8 +17,8 @@ def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     """
     validate_dataframe(df)
     df = _path(df)  # Compute distance and dt first
-    df['velocity'] = df['distance'] / df['dt']
-    df['velocity'] = df['velocity'].fillna(0)  # Replace NaN (first point) with 0
+    df[ColumnNames.VELOCITY] = df[ColumnNames.DISTANCE] / df[ColumnNames.DT]
+    df[ColumnNames.VELOCITY] = df[ColumnNames.VELOCITY].fillna(0)  # Replace NaN (first point) with 0
     return df
 
 
@@ -49,7 +50,6 @@ def velocity_traces_parallel(traces: dict[str, list[pd.DataFrame]], n_jobs: int 
     Returns:
         dict[str, list[pd.DataFrame]]: Same structure, but with velocity computed in each DataFrame.
     """
-    from joblib import Parallel, delayed
 
     def compute_velocity_for_trace(df):
         validate_dataframe(df)
@@ -77,7 +77,7 @@ def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.VELOCITY not in df.columns):
         df = velocity_df(df)
 
-    df['acceleration'] = df['velocity'].diff().fillna(0) / df['dt']
+    df['acceleration'] = df['velocity'].diff().fillna(0) / df[ColumnNames.DT]
     df['acceleration'] = df['acceleration'].fillna(0)
     return df
 
@@ -114,7 +114,7 @@ def jerkiness_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.ACCELERATION not in df.columns):
         df = acceleration_df(df)
 
-    df['jerkiness'] = df['acceleration'].diff().fillna(0) / df['dt']
+    df['jerkiness'] = df['acceleration'].diff().fillna(0) / df[ColumnNames.DT]
     df['jerkiness'] = df['jerkiness'].fillna(0)
     return df
 
@@ -180,7 +180,7 @@ def _path(trace: pd.DataFrame) -> pd.DataFrame:
     validate_dataframe(trace)
 
     trace = compute_space_time_diff(trace)
-    trace['distance'] = np.sqrt(trace['dx'] ** 2 + trace['dy'] ** 2)
+    trace[ColumnNames.DISTANCE] = np.sqrt(trace[ColumnNames.DX] ** 2 + trace[ColumnNames.DY] ** 2)
 
     return trace
 
@@ -260,8 +260,8 @@ def auc_traces(traces: dict[str, list[pd.DataFrame]]) -> dict[str, list[tuple]]:
 def _auc_geometric_deviation(df):
     df_opt = compute_optimal_path(df)
     # Prepare arrays
-    user_x, user_y = df['x'].values, df['y'].values
-    opt_x, opt_y = df_opt['x'].values, df_opt['y'].values
+    user_x, user_y = df[ColumnNames.X].values, df[ColumnNames.Y].values
+    opt_x, opt_y = df_opt[ColumnNames.X].values, df_opt[ColumnNames.Y].values
 
     # Compute perpendicular distances from optimal points to user segments
     dists = []
@@ -291,8 +291,8 @@ def _auc_geometric_deviation(df):
 
 def _auc_execution_deviation(df):
 
-    x = df['x'].to_numpy()
-    y = df['y'].to_numpy()
+    x = df[ColumnNames.X].to_numpy()
+    y = df[ColumnNames.Y].to_numpy()
 
     if len(x) < 2:
         return 0.0
@@ -341,13 +341,13 @@ def compute_optimal_path(df: pd.DataFrame, n_points: int = 100) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with columns 'x' and 'y' representing the optimal path.
     """
-    start_x, start_y = df['x'].iloc[0], df['y'].iloc[0]
-    end_x, end_y = df['x'].iloc[-1], df['y'].iloc[-1]
+    start_x, start_y = df[ColumnNames.X].iloc[0], df[ColumnNames.Y].iloc[0]
+    end_x, end_y = df[ColumnNames.X].iloc[-1], df[ColumnNames.Y].iloc[-1]
 
     x_opt = np.linspace(start_x, end_x, n_points)
     y_opt = np.linspace(start_y, end_y, n_points)
 
-    df_opt = pd.DataFrame({'x': x_opt, 'y': y_opt})
+    df_opt = pd.DataFrame({ColumnNames.X: x_opt, ColumnNames.Y: y_opt})
     return df_opt
 
 def point_to_segment_distance(px, py, x1, y1, x2, y2):

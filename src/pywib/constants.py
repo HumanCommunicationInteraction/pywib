@@ -73,6 +73,7 @@ class ColumnNames:
     DT = 'dt'
     DX = 'dx'
     DY = 'dy'
+    DISTANCE = 'distance'
     VELOCITY= 'velocity'
     ACCELERATION = 'acceleration'
     JERKINESS = 'jerkiness'
@@ -90,6 +91,10 @@ class ColumnNames:
     MEAN_CLICK_DURATION = 'mean_click_duration'
     AUC_GEOM = 'auc_geometric'
     AUC_EXEC = 'auc_execution'
+    AAD = 'aad'
+    MAD_MAX = 'mad_mad'
+    MIN_MAD = 'mean_mad'
+    MEAN_MAD = 'min_mad'
 
 class KeyCodeEvents:
     """ Key code event constants for keyboard interactions."""

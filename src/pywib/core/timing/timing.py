@@ -1,5 +1,5 @@
 import pandas as pd
-from pywib.utils.validation import validate_dataframe
+from pywib.utils.validation import validate_any_not_none, validate_dataframe
 from pywib.utils.segmentation import extract_traces_by_session
 from pywib.utils.timing import num_pauses_df, num_pauses_traces, pauses_metrics_df, pauses_metrics_per_trace
 from pywib.utils.utils import compute_space_time_diff
@@ -16,6 +16,7 @@ def execution_time(df: pd.DataFrame) -> dict:
         dict: Total execution time in milliseconds for each session.
 
     """
+    validate_any_not_none(df)
     validate_dataframe(df)
 
     total_time_per_session = {}
@@ -36,6 +37,9 @@ def movement_time(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None
     Returns:
         dict: A dictionary with sessionId as keys and total movement time in milliseconds as values.
     """
+    
+    validate_any_not_none(df, traces)
+
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
@@ -64,12 +68,16 @@ def num_pauses(df: pd.DataFrame, traces:dict[str, list[pd.DataFrame]] = None, th
         With :py:attr:`~pywib.constants.ColumnNames.NUMBER_OF_PAUSES` and :py:attr:`~pywib.constants.ColumnNames.MEAN_PAUSE_PER_TRACE` as keys.    
     """
 
+    validate_any_not_none(df, traces)
+
     if computeTraces:
         if traces:
             return  num_pauses_traces(traces, threshold)
         else:
+            validate_dataframe(df)
             return num_pauses_traces(extract_traces_by_session(df), threshold)
     else:
+        validate_dataframe(df)
         return num_pauses_df(df, threshold)
 
 
@@ -86,12 +94,15 @@ def pauses_metrics(df: pd.DataFrame, threshold: float = 100, traces: dict[str, l
         dict: A dictionary with sessionId as keys and a dictionary of pause metrics as values.
     """
 
+    validate_any_not_none(df, traces)
+    
     if per_traces:
         if traces is None:
             validate_dataframe(df)
             traces = extract_traces_by_session(df)
         return pauses_metrics_per_trace(traces, threshold)
     else:
+        validate_dataframe(df)
         return pauses_metrics_df(df, threshold)
     
     

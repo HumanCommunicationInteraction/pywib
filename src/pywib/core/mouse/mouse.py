@@ -3,6 +3,7 @@ import numpy as np
 
 from pywib.utils import validate_dataframe
 from pywib.constants import ColumnNames, EventTypes
+from pywib.utils.validation import validate_any_not_none
 
 def number_of_clicks(df: pd.DataFrame) -> dict:
     """
@@ -12,6 +13,7 @@ def number_of_clicks(df: pd.DataFrame) -> dict:
     Returns:
         dict: A dictionary with session IDs as keys and number of clicks as values.
     """
+    validate_any_not_none(df)
     validate_dataframe(df)
 
     clicks_per_session = {}
@@ -26,6 +28,9 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
     A click slip is defined as a click event that occurs within a certain distance
     from the previous mouse position (indicating an unintended click).
 
+    We define a click slip as: the total path distance of all EVENT_ON_MOUSE_MOVE events that occur between an
+    EVENT_ON_MOUSE_DOWN and the subsequent EVENT_ON_MOUSE_UP. If that total move-distance is less than `threshold` we count it as a slip.
+    
     Parameters:
         df (pd.DataFrame): DataFrame containing mouse event data.
         threshold (float): Distance threshold to consider a click as a slip.
@@ -33,6 +38,7 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
     Returns:
         dict: A dictionary with session IDs as keys and the metrics (click slips, max, min, average) as values.
     """
+    validate_any_not_none(df)
     validate_dataframe(df)
 
     click_slips_per_session = {}
@@ -41,11 +47,6 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
     for session_id, group in df:
         group = group.sort_values(by=ColumnNames.TIME_STAMP)
         slips = 0
-        # We define a click slip as: the total path distance of all
-        # EVENT_ON_MOUSE_MOVE events that occur between an
-        # EVENT_ON_MOUSE_DOWN and the subsequent EVENT_ON_MOUSE_UP.
-        # If that total move-distance is less than `threshold` we count
-        # it as a slip.
         in_down = False
         last_move_x = None
         last_move_y = None
@@ -90,11 +91,6 @@ def click_slip(df: pd.DataFrame, threshold: float = 5.0) -> dict:
                 last_move_y = None
                 mouse_down_time = None
                 accumulated_move_distance = 0.0
-        # TODO this variable is never used??
-        click_slips_per_session[session_id] = {
-            "slips": slips,
-            "distances": distances,
-        }
         metrics = {
             ColumnNames.CLICK_SLIPS: slips,
             ColumnNames.MAX_CLICK_SLIP: max(distances) if distances else 0,

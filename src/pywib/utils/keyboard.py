@@ -55,7 +55,7 @@ def typing_durations_df(df: pd.DataFrame = None, validate: bool = True, single:b
     
     for trace in traces:
         if single:
-            durations.append(_typing_durations_full(trace))
+            durations.append(_typing_durations_per_key(trace))
         else:
             durations += _typing_durations_full(trace)
     return durations
@@ -75,6 +75,7 @@ def typing_durations_traces(traces: dict[str, list[pd.DataFrame]], validate: boo
     for session_id, keystroke_traces in traces.items():
         durations = []
         for trace in keystroke_traces:
+            validate_dataframe_keyboard(trace)
             if single:
                 durations.append(_typing_durations_full(trace))
             else:
@@ -126,6 +127,7 @@ def typing_speed_traces(traces: dict[str, list[pd.DataFrame]], validate: bool = 
     for session_id, keystroke_traces in traces.items():
         speed_by_trace = []
         for trace in keystroke_traces:
+            validate_dataframe_keyboard(trace)
             cpm = typing_speed_df(trace, validate)
             speed_by_trace.append(cpm)
         speed_by_session[session_id] = speed_by_trace
@@ -161,6 +163,7 @@ def backspace_usage_traces(traces: dict[str, list[pd.DataFrame]], validate: bool
     for session_id, keystroke_traces in traces.items():
         backspace_count = 0
         for trace in keystroke_traces:
+            validate_dataframe_keyboard(trace)
             usage = backspace_usage_df(trace, validate)
             backspace_count += usage
         usage_by_session[session_id] = backspace_count

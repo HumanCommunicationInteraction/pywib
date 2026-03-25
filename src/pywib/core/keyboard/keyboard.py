@@ -10,6 +10,7 @@ from pywib.utils.segmentation import extract_keystroke_traces_by_session
 from pywib.utils import validate_dataframe_keyboard
 from pywib.constants import EventTypes, ColumnNames
 from pywib.utils.keyboard import (backspace_usage_df, backspace_usage_traces, typing_durations_df, typing_durations_traces, typing_speed_df, typing_speed_traces)
+from pywib.utils.validation import validate_any_not_none
 
 def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True, single: bool = False) -> list:
     """
@@ -23,11 +24,16 @@ def typing_durations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFram
     Returns:
         list[float]: List of keystroke durations in milliseconds.
     """
+    
+    validate_any_not_none(df, traces)
+    
     if traces is None and per_traces:
+        validate_dataframe_keyboard(df)
         traces = extract_keystroke_traces_by_session(df)
         return typing_durations_traces(traces, False, single=single)
 
     if not per_traces:
+        validate_dataframe_keyboard(df)
         return typing_durations_df(df)
 
     return typing_durations_traces(traces, single=single)
@@ -45,11 +51,15 @@ def typing_speed(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] 
         dict (dict[list[float]] | float) : A dictionary with session IDs as keys and lists of typing speeds (CPM) per trace as values, or a float representing the typing speed if per_traces is False.
     """
 
+    validate_any_not_none(df, traces)
+
     if per_traces and traces is None:
+        validate_dataframe_keyboard(df)
         traces = extract_keystroke_traces_by_session(df)
         return typing_speed_traces(traces, False)
 
     elif not per_traces:
+        validate_dataframe_keyboard(df)
         return typing_speed_df(df)
 
     return typing_speed_traces(traces)
@@ -69,6 +79,9 @@ def typing_speed_metrics(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
     Returns:
         dict: A dictionary with session IDs as keys and their corresponding typing speed metrics as values.
         """
+    
+    validate_any_not_none(df, traces)
+
     if traces is None:
         traces = extract_keystroke_traces_by_session(df)
     
@@ -104,6 +117,9 @@ def backspace_usage(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame
     Returns:
         dict: A dictionary with session IDs as keys and their corresponding backspace counts as values.
     """
+    
+    validate_any_not_none(df, traces)
+
     if traces is None and per_trace:
         validate_dataframe_keyboard(df)
         traces = extract_keystroke_traces_by_session(df)
