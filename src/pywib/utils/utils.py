@@ -77,15 +77,15 @@ def compute_metrics_from_traces(
 
     metrics = {}
     for session_id, session_traces in traces.items():
-        # TODO error on empty session_traces?
-        values = pd.concat([trace[column_name] for trace in session_traces])
-        if preprocess_fn:
-            values = preprocess_fn(values)
-        metrics[session_id] = {
-            'mean': values.mean(),
-            'max': values.max(),
-            'min': values.min()
-        }
+        if(len(session_traces) > 0):
+            values = pd.concat([trace[column_name] for trace in session_traces])
+            if preprocess_fn:
+                values = preprocess_fn(values)
+            metrics[session_id] = {
+                'mean': values.mean(),
+                'max': values.max(),
+                'min': values.min()
+            }
 
     return metrics
 
