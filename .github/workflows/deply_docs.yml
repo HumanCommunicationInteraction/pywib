@@ -37,6 +37,8 @@ jobs:
       - name: Build documentation
         run: |
           cd docs && make clean && make html
+      
+      
 
       # 5️⃣ Desplegar a GitHub Pages
       - name: Deploy to GitHub Pages

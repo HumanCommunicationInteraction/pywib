@@ -15,7 +15,6 @@ def num_pauses_df(df: pd.DataFrame, threshold: float = 100) -> dict[str, dict]:
             dict: A dictionary containing the number of pauses and the mean pause pere trace.
                   With :py:data:`~pywib.constants.ColumnNames.NUMBER_OF_PAUSES`, :py:data:`~pywib.constants.ColumnNames.MEAN_PAUSE_PER_TRACE` as keys.
         """
-        validate_dataframe(df)
         df_pauses = _num_pauses_trace(df, threshold)
         total_pauses_session = df_pauses.shape[0]
         metrics = {}
@@ -86,6 +85,7 @@ def pauses_metrics_per_trace(traces: dict[str, list[pd.DataFrame]], threshold: f
         pause_durations = []
 
         for trace in session_traces:
+            validate_dataframe(trace)
             trace = compute_space_time_diff(trace)  
             pauses = trace[trace[ColumnNames.DT] > threshold]
             total_pause_duration += pauses[ColumnNames.DT].sum()

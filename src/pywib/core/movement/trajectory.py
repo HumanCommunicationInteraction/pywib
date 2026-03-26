@@ -1,0 +1,200 @@
+import pandas as pd
+import numpy as np
+
+from pywib.utils import (_path, validate_dataframe, compute_space_time_diff, 
+                         extract_traces_by_session, 
+                         auc_ratio_traces)
+from pywib.constants import ColumnNames
+from pywib.utils.movement import auc_df, auc_traces
+from pywib.utils.utils import deprecated
+from pywib.utils.validation import validate_any_not_none
+
+def path(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> pd.DataFrame:
+    """
+    Calculate the path length for the given DataFrame.
+    This function computes the path length based on the Euclidean distance between consecutive points.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'x' and 'y' columns.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+
+    Returns:
+        pd.DataFrame: DataFrame with an additional 'distance' column representing the path length.
+    """
+    
+    validate_any_not_none(df, traces)
+
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    for session_id, session_traces in traces.items():
+            for i in range(len(session_traces)):
+                validate_dataframe(session_traces[i])
+
+            # Compute the distance for each trace
+            for j in range(len(session_traces)):
+                session_traces[j][ColumnNames.DISTANCE] = _path(session_traces[j])[ColumnNames.DISTANCE]
+            
+            # Store the traces with distance in the dictionary
+            traces[session_id] = session_traces
+
+    return traces
+
+
+def auc(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> tuple| dict:
+    """
+    Calculate the Area Under the Curve (AUC) for the given DataFrame.
+    
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'timeStamp' and 'y' columns.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+        per_traces (bool): Whether to compute traces by sessionId, by default True.
+    
+    Returns:
+        tuple: A tuple (Geometric Auc, Execution Auc) as values if not per traces.
+        dict: Dictionary sessionId as keys and a list with a tuple (Geometric Auc, Execution Auc) as values if per traces.
+    """
+    validate_any_not_none(df, traces)
+
+    if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        return auc_df(df)
+
+    # If traces are not provided, extract them from df
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    # Compute auc for each trace
+    return auc_traces(traces)
+
+
+@deprecated
+def auc_optimal(df: pd.DataFrame, validation: bool = True, computeTraces: bool = True) -> float:
+    """
+    Calculate the Optimal Area Under the Curve (AUC) for the given DataFrame.
+    
+    Parameters:
+    df (pd.DataFrame): DataFrame containing 'timeStamp' and 'y' columns.
+    validation (bool): Whether to validate the DataFrame structure, by default True.
+    computeTraces (bool): Whether to compute traces by sessionId, by default True.
+    
+    Returns:
+    float: The computed optimal AUC value.
+    """
+    
+    if(validation):
+        validate_dataframe(df)
+
+    if computeTraces:
+        df = extract_traces_by_session(df)
+
+
+    df = compute_space_time_diff(df)
+
+    # Área bajo la línea óptima
+    x0, y0 = df[ColumnNames.X].iloc[0], df[ColumnNames.Y].iloc[0]
+    x1, y1 = df[ColumnNames.X].iloc[-1], df[ColumnNames.Y].iloc[-1]
+    x_opt = np.linspace(x0, x1, len(df))
+    y_opt = np.linspace(y0, y1, len(df))
+    area_optimal = np.trapezoid(y_opt, x_opt)
+
+    return area_optimal
+
+
+@deprecated
+def auc_ratio(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
+    """
+    Calculate the AUC ratio for the given DataFrame.
+    
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'timeStamp' and 'y' columns.
+        computeTraces (bool): Whether to compute traces by sessionId, by default True. If False, df is assumed to be already segmented by sessionId.
+    
+    Returns:
+        auc_per_session (dict): A dictionary with sessionId as keys and a tuple (auc, auc_ratio) as values. Where the auc is the area under the curve and auc_ratio is the ratio between the AUC and the optimal AUC.
+    """
+
+    if df is None and traces is None:
+        raise ValueError("Either 'df' or 'traces' must be provided.")
+
+    # if not per_traces:
+        # Compute directly on the DataFrame (no trace extraction)
+        # return auc_ratio_df(df)
+
+    # If traces are not provided, extract them from df
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    return auc_ratio_traces(traces)
+
+
+@deprecated
+def auc_ratio_metrics(df: pd.DataFrame = None, computed_auc: dict = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    This function computes the mean, max, and min auc ratio for each session on the given dataframe or list of traces.
+    The optimal auc is not given in the output, only the auc ratio and auc, since it can be derived from them if needed.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing interaction data.
+        computed_auc (dict): Precomputed AUC ratios. If None, they will be computed from df or traces.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mean_ratio', 'max_ratio', 'min_ratio' for the auc ratio and 'mean', 'max', and 'min' auc.
+    """
+    if (computed_auc is None):
+        if(df is None):
+            raise ValueError("Either 'df' or 'traces' must be provided.")
+        if (traces is not None):
+            computed_auc = auc_ratio(None, traces=traces, per_traces=True)
+        else:
+            computed_auc = auc_ratio(df)
+
+    for session_id in computed_auc.keys():
+        auc_ratios = [trace_metrics['auc_ratio'] for trace_metrics in computed_auc[session_id]]
+        auc = [trace_metrics['auc'] for trace_metrics in computed_auc[session_id]]
+        computed_auc[session_id] = {
+            'mean_ratio': np.mean(auc_ratios) if auc_ratios else 0,
+            'max_ratio': np.max(auc_ratios) if auc_ratios else 0,
+            'min_ratio': np.min(auc_ratios) if auc_ratios else 0,
+            'mean': np.mean(auc) if auc else 0,
+            'max': np.max(auc) if auc else 0,
+            'min': np.min(auc) if auc else 0,
+        }
+    return computed_auc
+    
+
+def deviations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+    """
+    Calculate the Mean Absolute Deviation (MAD) for the given DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing 'y' column.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as dictionaries with 'mad_mean' (mean of maximum absolute deviations), 'mad_max' (maximum absolute deviation across all traces), 'mad_min' (minimum absolute deviation across all traces) and 'aad' (average absolute deviation).
+    """
+    
+    validate_any_not_none(df, traces)
+
+    if traces is None:
+        validate_dataframe(df)
+        traces = extract_traces_by_session(df)
+
+    metrics = {}
+    for session_id, session_traces in traces.items():
+        session_average_absolute_deviation = []
+        session_mad_max = []
+        for trace in session_traces:
+            session_average_absolute_deviation.append(np.mean(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+            session_mad_max.append(np.max(np.abs(trace[ColumnNames.Y] - trace[ColumnNames.Y].mean())))
+        metrics[session_id] = {
+            ColumnNames.AAD: np.mean(session_average_absolute_deviation) if session_average_absolute_deviation else 0,
+            ColumnNames.MAD_MAX: np.max(session_mad_max) if session_mad_max else 0,
+            ColumnNames.MEAN_MAD: np.mean(session_mad_max) if session_mad_max else 0,
+            ColumnNames.MIN_MAD: np.min(session_mad_max) if session_mad_max else 0,
+        }
+
+    return metrics

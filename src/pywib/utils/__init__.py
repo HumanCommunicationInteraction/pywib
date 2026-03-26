@@ -8,7 +8,7 @@ from .visualization import visualize_trace, video_from_trace, keyboard_heatmap
 from .utils import compute_space_time_diff, compute_metrics_from_traces
 from .movement import (acceleration_traces, velocity_traces, velocity_df, 
                        acceleration_df, jerkiness_df, jerkiness_traces, _path,
-                       auc_ratio_traces, auc_ratio_df)
+                       auc_ratio_traces)
 
 __all__ = [
     'validate_dataframe',
@@ -25,7 +25,6 @@ __all__ = [
     '_path',
     'compute_metrics_from_traces',
     'auc_ratio_traces',
-    'auc_ratio_df',
     'extract_mouse_click_traces_by_session',
     'extract_mouse_click_traces_by_session_with_intial_pause',
     'video_from_trace',

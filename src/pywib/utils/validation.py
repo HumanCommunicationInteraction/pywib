@@ -9,25 +9,28 @@ keyboard_columns = [
    ColumnNames.KEY_VALUE_EVENT, ColumnNames.KEY_CODE_EVENT
 ]
 
-def validate_not_none(*params):
-    for param in params:
-        if param is None:
-            raise ValueError("Either 'df' or 'traces' must be provided.")
-
-def validate_one_not_none(*params):
+def validate_any_not_none(*params):
+    """
+    Validates if from all parameters at least one is not None.
+    If all are None, it raises an exception.
+    """
     for param in params:
         if param is not None:
             return 
-    raise ValueError("Either 'df' or 'traces' must be provided.")
+    raise ValueError("At least one of the provided parameters for the method must be present.")
 
 def validate_dataframe(df: pd.DataFrame):
-
+    """
+    Validates that all required columns are pressent in the DataFrame-
+    """
     for col in required_columns:
         if col not in df.columns:
             raise ValueError(f"Missing required column: {col}")
         
 def validate_dataframe_keyboard(df: pd.DataFrame):
-
+    """
+    Validates that all required columns are pressent in the DataFrame for keystroke analyisis.
+    """
     validate_dataframe(df)
 
     columns_to_check = keyboard_columns
@@ -37,6 +40,10 @@ def validate_dataframe_keyboard(df: pd.DataFrame):
             raise ValueError(f"Missing required column: {col}")
         
 def validate_duplicate_timestamps(df: pd.DataFrame):
+    """
+    Validates the DataFrame to check if it contains duplicate TimeStamps.
+    Take into account that identical TimeStamps are not always wrong, we can have sequential events executing at once.
+    """
     for session_id, group in df.groupby(ColumnNames.SESSION_ID):
         if group[ColumnNames.TIME_STAMP].duplicated().any():
             raise ValueError(f"Duplicate timestamps found in session {session_id}")
