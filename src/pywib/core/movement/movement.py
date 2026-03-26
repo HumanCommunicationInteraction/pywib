@@ -7,7 +7,7 @@ from pywib.constants import ColumnNames
 from pywib.utils.movement import velocity_traces_parallel
 from pywib.utils.validation import validate_any_not_none
 
-def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
+def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
     """
     Function to calculate velocity for either a single DataFrame or a traces dictionary.
 
@@ -67,7 +67,7 @@ def velocity_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = N
         preprocess_fn=lambda s: s[s > 0]  # Exclude zero velocities
     )
 
-def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
+def acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict[str, list[pd.DataFrame]]:
     """
     Wrapper function to calculate acceleration for either a single DataFrame or a traces dictionary.
 
@@ -103,11 +103,12 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
     
     validate_any_not_none(df, traces)
 
-    if (ColumnNames.ACCELERATION not in df.columns) or (traces is None):
-        validate_dataframe(df)
-        if ColumnNames.VELOCITY not in df.columns:
-            traces = velocity(df, per_traces=True)
-        traces = acceleration(df, traces,  per_traces=True)
+    if(df is not None):
+        if (ColumnNames.ACCELERATION not in df.columns) or (traces is None):
+            validate_dataframe(df)
+            if ColumnNames.VELOCITY not in df.columns:
+                traces = velocity(df, per_traces=True)
+            traces = acceleration(df, traces,  per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
@@ -117,7 +118,7 @@ def acceleration_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]]
         preprocess_fn=lambda s: s[s != 0]    # Exclude zero accelerations
     )
 
-def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> dict[str, list[pd.DataFrame]]:
+def jerkiness(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict[str, list[pd.DataFrame]]:
     """
     Compute jerkiness for either a single DataFrame or multiple traces.
 
@@ -164,13 +165,14 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
     
     validate_any_not_none(df, traces)
     
-    if((ColumnNames.JERKINESS not in df.columns) or (traces is None)):
-        validate_dataframe(df)
-        if(ColumnNames.ACCELERATION not in df.columns):
-            if(ColumnNames.VELOCITY not in df.columns):
-                traces = velocity(df, per_traces=True)
-            traces = acceleration(df, traces, per_traces=True)
-        traces = jerkiness(df, traces, per_traces=True)
+    if(df is not None):
+        if((ColumnNames.JERKINESS not in df.columns) or (traces is None)):
+            validate_dataframe(df)
+            if(ColumnNames.ACCELERATION not in df.columns):
+                if(ColumnNames.VELOCITY not in df.columns):
+                    traces = velocity(df, per_traces=True)
+                traces = acceleration(df, traces, per_traces=True)
+            traces = jerkiness(df, traces, per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,

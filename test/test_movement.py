@@ -64,7 +64,7 @@ class TestMovement(unittest.TestCase):
         df = compute_space_time_diff(self.test_data.copy())
         
         # Calculate velocity
-        df_velocity = velocity(df)
+        df_velocity = velocity(df, per_traces=False)
         metrics = velocity_metrics(df_velocity)
 
         for _, session_id in metrics.items():
@@ -133,7 +133,7 @@ class TestMovement(unittest.TestCase):
         df = compute_space_time_diff(self.test_data.copy())
         
         # Calculate acceleration
-        df_acceleration = acceleration(df)
+        df_acceleration = acceleration(df, per_traces=False)
         acc_metrics = acceleration_metrics(df_acceleration)
 
         for _, session in acc_metrics.items():
@@ -168,7 +168,7 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['max'], session['min'])
 
     def test_jerkiness_from_df(self):
-        jk_df = jerkiness(self.test_data.copy())
+        jk_df = jerkiness(self.test_data.copy(), per_traces=False)
         metrics = jerkiness_metrics(jk_df)
 
         for _, session in metrics.items():
