@@ -5,6 +5,7 @@ import seaborn as sns
 
 from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
+from pywib.utils.validation import validate_dataframe_keyboard
 
 def visualize_trace(df, stroke_indices, stroke_id):
     """
@@ -111,6 +112,8 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, c
     print(f"Video generated for user {user_id}: {outfile}")
 
 def keyboard_heatmap(df, session_id=None):
+
+    validate_dataframe_keyboard(df)
 
     if session_id is not None:
         df = df[df[ColumnNames.SESSION_ID] == session_id]

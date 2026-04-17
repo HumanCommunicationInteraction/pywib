@@ -5,7 +5,6 @@ Pywib (Python Web Interaction Behaviour) is a library desgined for analysing and
 ## How to
 ```python
 from pywib import velocity, velocity_metrics
-
 v = velocity(df_all_sessions)
 v_metrics = velocity_metrics(None, v)
 ```

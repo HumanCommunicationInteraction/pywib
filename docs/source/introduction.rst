@@ -65,3 +65,9 @@ Small Example
    vel_metrics = velocity_metrics(vel)
 
    acc = acceleration(vel, None, True)
+
+References
+=============
+
+.. bibliography:: references.bib
+   :style: apa

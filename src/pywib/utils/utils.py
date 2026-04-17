@@ -1,3 +1,6 @@
+import functools
+from typing import Callable, ParamSpec, TypeVar
+import warnings
 import pandas as pd
 from ..constants import ColumnNames
 from ..utils.validation import validate_dataframe
@@ -74,14 +77,30 @@ def compute_metrics_from_traces(
 
     metrics = {}
     for session_id, session_traces in traces.items():
-        # TODO error on empty session_traces?
-        values = pd.concat([trace[column_name] for trace in session_traces])
-        if preprocess_fn:
-            values = preprocess_fn(values)
-        metrics[session_id] = {
-            'mean': values.mean(),
-            'max': values.max(),
-            'min': values.min()
-        }
+        if(len(session_traces) > 0):
+            values = pd.concat([trace[column_name] for trace in session_traces])
+            if preprocess_fn:
+                values = preprocess_fn(values)
+            metrics[session_id] = {
+                'mean': values.mean(),
+                'max': values.max(),
+                'min': values.min()
+            }
 
     return metrics
+
+rT = TypeVar('rT') # return type
+pT = ParamSpec('pT') # parameters type
+def deprecated(func: Callable[pT, rT]) -> Callable[pT, rT]:
+    """Use this decorator to mark functions as deprecated.
+    Every time the decorated function runs, it will emit
+    a "deprecation" warning."""
+    @functools.wraps(func)
+    def new_func(*args: pT.args, **kwargs: pT.kwargs):
+        warnings.simplefilter('always', DeprecationWarning)  # turn off filter
+        warnings.warn("Call to a deprecated function {}.".format(func.__name__),
+                      category=DeprecationWarning,
+                      stacklevel=2)
+        warnings.simplefilter('default', DeprecationWarning)  # reset filter
+        return func(*args, **kwargs)
+    return new_func

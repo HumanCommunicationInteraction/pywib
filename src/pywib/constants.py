@@ -4,7 +4,7 @@
 
 # Version and library information
 LIBRARY_NAME = "pywib"
-LIBRARY_VERSION = "0.1.5"
+LIBRARY_VERSION = "1.0.0"
 
 # Event types for interaction tracking
 class EventTypes:
@@ -73,12 +73,15 @@ class ColumnNames:
     DT = 'dt'
     DX = 'dx'
     DY = 'dy'
+    DISTANCE = 'distance'
     VELOCITY= 'velocity'
     ACCELERATION = 'acceleration'
     JERKINESS = 'jerkiness'
     AUC_RATIO = 'auc_ratio'
     NUMBER_OF_PAUSES = 'num_pauses'
     MEAN_PAUSE_PER_TRACE = 'mean_pauses_per_trace'
+    BACKSPACE_USAGE="backspace_usage"
+    TOTAL_CHARS="total_characters"
     CLICK_SLIPS = 'click_slips'
     MAX_CLICK_SLIP = 'max_click_slip'
     MIN_CLICK_SLIP = 'min_click_slip'
@@ -86,6 +89,12 @@ class ColumnNames:
     MAX_CLICK_DURATION = 'max_click_duration'
     MIN_CLICK_DURATION = 'min_click_duration'
     MEAN_CLICK_DURATION = 'mean_click_duration'
+    AUC_GEOM = 'auc_geometric'
+    AUC_EXEC = 'auc_execution'
+    AAD = 'aad'
+    MAD_MAX = 'mad_mad'
+    MIN_MAD = 'mean_mad'
+    MEAN_MAD = 'min_mad'
 
 class KeyCodeEvents:
     """ Key code event constants for keyboard interactions."""

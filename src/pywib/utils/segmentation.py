@@ -33,7 +33,26 @@ def extract_traces_by_session(dt: pd.DataFrame) -> dict:
         traces_by_session[session_id] = _extract_move_trace(group)
     return traces_by_session
 
-def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.DataFrame]]:
+def extract_keystroke_traces(df: pd.DataFrame) -> list[pd.DataFrame]:
+    """
+    Extracts keystroke traces from the DataFrame.
+    Each keystroke trace is considered as a sequence of consecutive key events
+    between two non-keyboard events.
+    Parameters:
+        dt (pd.DataFrame): DataFrame containing 'sessionId', 'sceneId', 'eventType', and 'timeStamp' columns.
+    Returns:
+        lsit[pd.DataFrame]: A list contanining the traces.
+    """
+    validate_dataframe_keyboard(df)
+    df = df.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    is_key_event = df[ColumnNames.EVENT_TYPE].isin([
+            EventTypes.EVENT_KEY_UP,
+            EventTypes.EVENT_KEY_DOWN,
+            EventTypes.EVENT_KEY_PRESS,
+        ])
+    return _extract_consecutive_traces(df,is_key_event,min_length=1)
+
+def extract_keystroke_traces_by_session(df: pd.DataFrame) -> dict[str, list[pd.DataFrame]]:
     """
     Extracts keystroke traces from the DataFrame, grouped by (sessionId, sceneId).
     Each keystroke trace is considered as a sequence of consecutive key events
@@ -43,20 +62,11 @@ def extract_keystroke_traces_by_session(dt: pd.DataFrame) -> dict[str, list[pd.D
     Returns:
         dict: a dictionary with keys as (sessionId) and values as lists of DataFrames.
     """
-    validate_dataframe_keyboard(dt)
-    dt = dt.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
+    validate_dataframe_keyboard(df)
+    df = df.sort_values(by=ColumnNames.TIME_STAMP).reset_index(drop=True)
     keystroke_traces_by_session = {}
-    for session_id, group in dt.groupby(ColumnNames.SESSION_ID):
-        is_key_event = group[ColumnNames.EVENT_TYPE].isin([
-            EventTypes.EVENT_KEY_UP,
-            EventTypes.EVENT_KEY_DOWN,
-            EventTypes.EVENT_KEY_PRESS,
-        ])
-
-        keystroke_traces_by_session[session_id] = _extract_consecutive_traces(
-            group,is_key_event
-            ,min_length=1
-        )
+    for session_id, group in df.groupby(ColumnNames.SESSION_ID):
+        keystroke_traces_by_session[session_id] = extract_keystroke_traces(group)
 
     return keystroke_traces_by_session
 
