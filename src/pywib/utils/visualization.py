@@ -7,16 +7,26 @@ from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
 from pywib.utils.validation import validate_dataframe_keyboard
 
-def visualize_trace(df, stroke_indices, stroke_id):
+def visualize_trace(df, stroke_indices, stroke_id, plot_name: str = None, plot: bool = True, show_info: bool = False, show_optimal_line: bool = False):
     """
-    Generates a plot visualizing the trace of a stroke.
+    Generates (and optionally saves) a plot visualizing the trace of a stroke.
 
     Parameters:
         df (pd.DataFrame): DataFrame containing the stroke data with 'x', 'y and 'timeStamp' columns.
-        stroke_indices (list): List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index.
+        stroke_indices (list): List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index
         stroke_id (str): Identifier for the stroke to be displayed in the title.
-    Returns:
-        None: Displays a plot of the stroke trace.
+        plot_name (str, optional): If provided, saves the plot to this file path.
+        plot (bool): Whether to display the plot.
+    """
+    """
+    Generates (and optionally saves) a plot visualizing the trace of a stroke.
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing the stroke data with 'x', 'y and 'timeStamp' columns.
+        stroke_indices (list): List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index
+        stroke_id (str): Identifier for the stroke to be displayed in the title.
+        plot_name (str, optional): If provided, saves the plot to this file path.
+        plot (bool): Whether to display the plot.
     """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))
@@ -24,19 +34,32 @@ def visualize_trace(df, stroke_indices, stroke_id):
 
     x_start, y_start = stroke_data[ColumnNames.X].iloc[0], stroke_data[ColumnNames.Y].iloc[0]
     x_end, y_end = stroke_data[ColumnNames.X].iloc[-1], stroke_data[ColumnNames.Y].iloc[-1]
-    plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Optimal trace')
+    
+    if(show_optimal_line):
+        plt.plot([x_start, x_end], [y_start, y_end], 'r--', linewidth=2, label='Optimal trace')
 
-    plt.plot(x_start, y_start, 'go', markersize=8, label='Inicio')
-    plt.plot(x_end, y_end, 'ro', markersize=8, label='Fin')
+        plt.plot(x_start, y_start, 'go', markersize=8, label='Start')
+        plt.plot(x_end, y_end, 'ro', markersize=8, label='End')
 
-    duration = stroke_data['timeStamp'].iloc[-1] - stroke_data['timeStamp'].iloc[0]
-    plt.xlabel('X (píxeles)')
-    plt.ylabel('Y (píxeles)')
-    plt.title(f'Trace {stroke_id} - Duration: {duration:.0f}ms - Points: {len(stroke_data)}')
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.gca().invert_yaxis()
-    plt.show()
+  
+    if(show_info):
+        duration = stroke_data[ColumnNames.TIME_STAMP].iloc[-1] - stroke_data[ColumnNames.TIME_STAMP].iloc[0]
+        plt.xlabel('X (px)')
+        plt.ylabel('Y (px)')
+        plt.title(f'Trace {stroke_id} - Duration: {duration:.0f}ms - Points: {len(stroke_data)}')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.gca().invert_yaxis()
+    else:
+        plt.axis('off')
+
+    if plot_name:
+        plt.savefig(plot_name, bbox_inches='tight', dpi=300)
+
+    if plot:
+        plt.show()
+    else:
+        plt.close()
 
 def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, colored=False):
     """

@@ -178,6 +178,33 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['mean'], 0)
             self.assertGreaterEqual(session['max'], session['min'])
 
+    def test_jerkiness_metrics_recomputes_when_traces_missing_column(self):
+        partial_traces = velocity(self.test_data.copy(), per_traces=True)
+        metrics = jerkiness_metrics(self.test_data.copy(), traces=partial_traces)
+
+        self.assertIsInstance(metrics, dict)
+        self.assertTrue(len(metrics) > 0)
+        for _, session in metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+
+    def test_jerkiness_metrics_raises_with_incomplete_traces_and_no_df(self):
+        partial_traces = velocity(self.test_data.copy(), per_traces=True)
+        with self.assertRaises(ValueError):
+            jerkiness_metrics(None, traces=partial_traces)
+
+    def test_jerkiness_metrics_with_precomputed_jerkiness_traces(self):
+        full_traces = jerkiness(self.test_data.copy(), per_traces=True)
+        metrics = jerkiness_metrics(None, traces=full_traces)
+
+        self.assertIsInstance(metrics, dict)
+        self.assertTrue(len(metrics) > 0)
+        for _, session in metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+
 
 
 if __name__ == '__main__':

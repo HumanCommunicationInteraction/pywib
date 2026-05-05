@@ -164,15 +164,33 @@ def jerkiness_metrics(df: pd.DataFrame, traces: dict[str, list[pd.DataFrame]] = 
     """
     
     validate_any_not_none(df, traces)
-    
-    if(df is not None):
-        if((ColumnNames.JERKINESS not in df.columns) or (traces is None)):
-            validate_dataframe(df)
-            if(ColumnNames.ACCELERATION not in df.columns):
-                if(ColumnNames.VELOCITY not in df.columns):
-                    traces = velocity(df, per_traces=True)
-                traces = acceleration(df, traces, per_traces=True)
-            traces = jerkiness(df, traces, per_traces=True)
+
+    traces_missing_jerkiness = False
+    if traces is not None:
+        traces_missing_jerkiness = any(
+            ColumnNames.JERKINESS not in trace.columns
+            for session_traces in traces.values()
+            for trace in session_traces
+        )
+
+    if traces_missing_jerkiness and df is None:
+        raise ValueError(
+            f"Provided traces do not contain '{ColumnNames.JERKINESS}'. "
+            f"Please provide a DataFrame so {ColumnNames.JERKINESS} can be computed, "
+            f"or pass traces already containing '{ColumnNames.JERKINESS}'."
+        )
+
+    if (df is not None) and (
+        (ColumnNames.JERKINESS not in df.columns) or
+        (traces is None) or
+        traces_missing_jerkiness
+    ):
+        validate_dataframe(df)
+        if ColumnNames.ACCELERATION not in df.columns:
+            if ColumnNames.VELOCITY not in df.columns:
+                traces = velocity(df, per_traces=True)
+            traces = acceleration(df, traces, per_traces=True)
+        traces = jerkiness(df, traces, per_traces=True)
 
     return compute_metrics_from_traces(
         df=df,
