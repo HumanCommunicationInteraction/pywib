@@ -8,7 +8,7 @@ from utils import assert_between_zero_inf, process_csv, import_pyModule
 import_pyModule()
 from pywib import (velocity, acceleration, compute_space_time_diff, 
                    velocity_metrics, acceleration_metrics,
-                   jerkiness, jerkiness_metrics)
+                   jerkiness, jerkiness_metrics, extract_traces_by_session)
 
 # Cambiar a True solo al probar en desarrollo
 DEBUG = True
@@ -86,6 +86,24 @@ class TestMovement(unittest.TestCase):
             assert_between_zero_inf(self, session_id, 'max')
             assert_between_zero_inf(self, session_id, 'min')
 
+    def test_velocity_metrics_recomputes_when_traces_missing_column(self):
+        """Recompute velocity traces from df when provided traces lack velocity column."""
+        partial_traces = extract_traces_by_session(self.test_data.copy())
+        metrics = velocity_metrics(self.test_data.copy(), traces=partial_traces)
+
+        self.assertIsInstance(metrics, dict)
+        self.assertTrue(len(metrics) > 0)
+        for _, session in metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+
+    def test_velocity_metrics_raises_with_incomplete_traces_and_no_df(self):
+        """Raise ValueError when traces lack velocity and no dataframe is available."""
+        partial_traces = extract_traces_by_session(self.test_data.copy())
+        with self.assertRaises(ValueError):
+            velocity_metrics(None, traces=partial_traces)
+
     def test_acceleration(self):
         """Test acceleration calculation"""
         df = compute_space_time_diff(self.test_data.copy())
@@ -143,6 +161,24 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['mean'], 0)
             self.assertGreaterEqual(session['max'], session['min'])
 
+    def test_acceleration_metrics_recomputes_when_traces_missing_column(self):
+        """Recompute acceleration traces from df when provided traces lack acceleration."""
+        partial_traces = velocity(self.test_data.copy(), per_traces=True)
+        metrics = acceleration_metrics(self.test_data.copy(), traces=partial_traces)
+
+        self.assertIsInstance(metrics, dict)
+        self.assertTrue(len(metrics) > 0)
+        for _, session in metrics.items():
+            self.assertIn('mean', session)
+            self.assertIn('max', session)
+            self.assertIn('min', session)
+
+    def test_acceleration_metrics_raises_with_incomplete_traces_and_no_df(self):
+        """Raise ValueError when traces lack acceleration and no dataframe is available."""
+        partial_traces = velocity(self.test_data.copy(), per_traces=True)
+        with self.assertRaises(ValueError):
+            acceleration_metrics(None, traces=partial_traces)
+
     def test_jerkiness(self):
         """Test jerkiness calculation"""
         jk_df = jerkiness(self.test_data.copy(), per_traces=True)
@@ -179,6 +215,7 @@ class TestMovement(unittest.TestCase):
             self.assertGreaterEqual(session['max'], session['min'])
 
     def test_jerkiness_metrics_recomputes_when_traces_missing_column(self):
+        """Recompute jerkiness traces from df when provided traces lack jerkiness."""
         partial_traces = velocity(self.test_data.copy(), per_traces=True)
         metrics = jerkiness_metrics(self.test_data.copy(), traces=partial_traces)
 
@@ -190,11 +227,13 @@ class TestMovement(unittest.TestCase):
             self.assertIn('min', session)
 
     def test_jerkiness_metrics_raises_with_incomplete_traces_and_no_df(self):
+        """Raise ValueError when traces lack jerkiness and no dataframe is available."""
         partial_traces = velocity(self.test_data.copy(), per_traces=True)
         with self.assertRaises(ValueError):
             jerkiness_metrics(None, traces=partial_traces)
 
     def test_jerkiness_metrics_with_precomputed_jerkiness_traces(self):
+        """Use precomputed jerkiness traces directly without recomputation."""
         full_traces = jerkiness(self.test_data.copy(), per_traces=True)
         metrics = jerkiness_metrics(None, traces=full_traces)
 

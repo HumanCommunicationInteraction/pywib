@@ -18,16 +18,6 @@ def visualize_trace(df, stroke_indices, stroke_id, plot_name: str = None, plot: 
         plot_name (str, optional): If provided, saves the plot to this file path.
         plot (bool): Whether to display the plot.
     """
-    """
-    Generates (and optionally saves) a plot visualizing the trace of a stroke.
-
-    Parameters:
-        df (pd.DataFrame): DataFrame containing the stroke data with 'x', 'y and 'timeStamp' columns.
-        stroke_indices (list): List of indices corresponding to the stroke in the DataFrame. Can be obtained using df.index
-        stroke_id (str): Identifier for the stroke to be displayed in the title.
-        plot_name (str, optional): If provided, saves the plot to this file path.
-        plot (bool): Whether to display the plot.
-    """
     stroke_data = df.loc[stroke_indices]
     plt.figure(figsize=(10, 8))
     plt.plot(stroke_data[ColumnNames.X], stroke_data[ColumnNames.Y], 'b-o', linewidth=2, markersize=4, label='Real trace')
