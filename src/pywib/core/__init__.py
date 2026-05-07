@@ -23,10 +23,9 @@ __all__ = [
     "jerkiness_metrics",
     "click_slip",
     "number_of_clicks",
-    "deviations"
+    "deviations",
     "typing_speed",
     "typing_speed_metrics",
     "backspace_usage",
     "typing_durations",
-    "typing_speed"
 ]

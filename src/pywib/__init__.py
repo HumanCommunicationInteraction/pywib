@@ -28,7 +28,6 @@ __all__ = [
     # Utility functions
     "validate_dataframe",
     "validate_dataframe_keyboard",
-    "extract_trace",
     "visualize_trace",
     "compute_space_time_diff",
     "extract_traces_by_session",
@@ -45,7 +44,7 @@ __all__ = [
     "acceleration_metrics",
     "jerkiness_metrics",
     "deviations",
-    "auc"
+    "auc",
 
     # Mouse functions
     "number_of_clicks",
@@ -55,7 +54,7 @@ __all__ = [
     "typing_speed",
     "typing_speed_metrics",
     "backspace_usage",
-    "typing_durations"
+    "typing_durations",
 
     # Timing
     "pauses_metrics",

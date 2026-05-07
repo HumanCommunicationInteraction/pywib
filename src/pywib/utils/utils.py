@@ -24,9 +24,9 @@ def compute_space_time_diff(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df.sort_values(by=[ColumnNames.TIME_STAMP], inplace=True)
     df[ColumnNames.TIME_STAMP] = pd.to_numeric(df[ColumnNames.TIME_STAMP], errors='coerce')
-    df['dt'] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.TIME_STAMP].diff().fillna(0)
-    df['dx'] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.X].diff().fillna(0)
-    df['dy'] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.Y].diff().fillna(0)
+    df[ColumnNames.DT] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.TIME_STAMP].diff().fillna(0)
+    df[ColumnNames.DX] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.X].diff().fillna(0)
+    df[ColumnNames.DY] = df.groupby([ColumnNames.SESSION_ID])[ColumnNames.Y].diff().fillna(0)
     return df
 
 def compute_metrics_from_traces(
@@ -78,6 +78,12 @@ def compute_metrics_from_traces(
     metrics = {}
     for session_id, session_traces in traces.items():
         if(len(session_traces) > 0):
+            for trace_index, trace in enumerate(session_traces):
+                if column_name not in trace.columns:
+                    raise ValueError(
+                        f"Missing required column '{column_name}' in "
+                        f"session '{session_id}', trace index {trace_index}."
+                    )
             values = pd.concat([trace[column_name] for trace in session_traces])
             if preprocess_fn:
                 values = preprocess_fn(values)
