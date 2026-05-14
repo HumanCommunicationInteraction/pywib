@@ -77,8 +77,8 @@ def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.VELOCITY not in df.columns):
         df = velocity_df(df)
 
-    df['acceleration'] = df['velocity'].diff().fillna(0) / df[ColumnNames.DT]
-    df['acceleration'] = df['acceleration'].fillna(0)
+    df[ColumnNames.ACCELERATION] = df[ColumnNames.VELOCITY].diff().fillna(0) / df[ColumnNames.DT]
+    df[ColumnNames.ACCELERATION] = df[ColumnNames.ACCELERATION].fillna(0)
     return df
 
 
@@ -114,8 +114,8 @@ def jerkiness_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.ACCELERATION not in df.columns):
         df = acceleration_df(df)
 
-    df['jerkiness'] = df['acceleration'].diff().fillna(0) / df[ColumnNames.DT]
-    df['jerkiness'] = df['jerkiness'].fillna(0)
+    df[ColumnNames.JERKINESS] = df[ColumnNames.ACCELERATION].diff().fillna(0) / df[ColumnNames.DT]
+    df[ColumnNames.JERKINESS] = df[ColumnNames.JERKINESS].fillna(0)
     return df
 
 
