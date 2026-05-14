@@ -17,8 +17,10 @@ def velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     """
     validate_dataframe(df)
     df = _path(df)  # Compute distance and dt first
-    df[ColumnNames.VELOCITY] = df[ColumnNames.DISTANCE] / df[ColumnNames.DT]
-    df[ColumnNames.VELOCITY] = df[ColumnNames.VELOCITY].fillna(0)  # Replace NaN (first point) with 0
+    # Avoid division by zero if dt is 0
+    df[ColumnNames.VELOCITY] = np.where(df[ColumnNames.DT] != 0, 
+                                        df[ColumnNames.DISTANCE] / df[ColumnNames.DT], 
+                                        0)
     return df
 
 
@@ -77,8 +79,10 @@ def acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.VELOCITY not in df.columns):
         df = velocity_df(df)
 
-    df[ColumnNames.ACCELERATION] = df[ColumnNames.VELOCITY].diff().fillna(0) / df[ColumnNames.DT]
-    df[ColumnNames.ACCELERATION] = df[ColumnNames.ACCELERATION].fillna(0)
+    # Avoid division by zero if dt is 0
+    df[ColumnNames.ACCELERATION] = np.where(df[ColumnNames.DT] != 0, 
+                                            df[ColumnNames.VELOCITY].diff().fillna(0) / df[ColumnNames.DT], 
+                                            0)
     return df
 
 
@@ -114,8 +118,10 @@ def jerkiness_df(df: pd.DataFrame) -> pd.DataFrame:
     if(ColumnNames.ACCELERATION not in df.columns):
         df = acceleration_df(df)
 
-    df[ColumnNames.JERKINESS] = df[ColumnNames.ACCELERATION].diff().fillna(0) / df[ColumnNames.DT]
-    df[ColumnNames.JERKINESS] = df[ColumnNames.JERKINESS].fillna(0)
+    # Avoid division by zero if dt is 0
+    df[ColumnNames.JERKINESS] = np.where(df[ColumnNames.DT] != 0, 
+                                         df[ColumnNames.ACCELERATION].diff().fillna(0) / df[ColumnNames.DT], 
+                                         0)
     return df
 
 
