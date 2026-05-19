@@ -4,7 +4,7 @@
 
 # Version and library information
 LIBRARY_NAME = "pywib"
-LIBRARY_VERSION = "1.0.1"
+LIBRARY_VERSION = "1.1.0"
 
 # Event types for interaction tracking
 class EventTypes:
