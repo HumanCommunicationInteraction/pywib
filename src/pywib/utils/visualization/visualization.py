@@ -2,13 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 import seaborn as sns
+import pathlib
+import os
 
 from pywib.constants import EventTypes
 from pywib.constants import ColumnNames
 from pywib.utils.validation import validate_dataframe_keyboard
 from pywib.utils.visualization.trace_strategies import get_visualization_strategy
 
-def visualize_trace(df, stroke_indices, stroke_id, type: str = "simple", plot_name: str = None, plot: bool = True, **kwargs):
+def visualize_trace(df, stroke_indices, stroke_id, type: str = "simple", plot_name: str = None, plot: bool = True, save_path: str = None, **kwargs):
     """
     Generates (and optionally saves) a plot visualizing the trace of a stroke.
 
@@ -34,7 +36,8 @@ def visualize_trace(df, stroke_indices, stroke_id, type: str = "simple", plot_na
     strategy.apply(ax, stroke_data, stroke_id)
 
     if plot_name:
-        plt.savefig(plot_name, bbox_inches='tight', dpi=300)
+        file_path = os.path.join(save_path, plot_name) if save_path else plot_name
+        plt.savefig(file_path, bbox_inches='tight', dpi=300)
 
     if plot:
         plt.show()
