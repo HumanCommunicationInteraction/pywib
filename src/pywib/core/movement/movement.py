@@ -16,7 +16,7 @@ def _traces_missing_column(traces: dict[str, list[pd.DataFrame]] | None, column_
         for trace in session_traces
     )
 
-def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]]:
+def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True, parallel:bool = False, n_jobs: int = 2) -> dict[str, list[pd.DataFrame]] | pd.DataFrame:
     """
     Function to calculate velocity for either a single DataFrame or a traces dictionary.
 
@@ -28,7 +28,7 @@ def velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = No
         per_traces (bool): Whether to compute velocity per trace. If False, compute directly on df.
 
     Returns:
-        dict[str, list[pd.DataFrame]]: Dictionary of traces with computed 'velocity' column.
+        (dict[str, list[pd.DataFrame]] | pd.DataFrame): Dictionary of traces with computed 'velocity' column or DataFrame with computed 'velocity' column if per_traces is False.
     """
 
     validate_any_not_none(df, traces)
