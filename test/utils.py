@@ -4,7 +4,7 @@ from collections import defaultdict
 
 def import_pyModule():
     """
-    Necessary to import the pywib package when running tests directly from the test/ folder.
+    Necessary to import the PyWIB package when running tests directly from the test/ folder.
     """
     import sys
     import os
