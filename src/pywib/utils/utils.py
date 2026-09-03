@@ -110,3 +110,32 @@ def deprecated(func: Callable[pT, rT]) -> Callable[pT, rT]:
         warnings.simplefilter('default', DeprecationWarning)  # reset filter
         return func(*args, **kwargs)
     return new_func
+
+def to_pywib_df(df: pd.DataFrame, colSessionId: str, colX: str, colY: str, colTimeStamp: str, colKeyValue: str = None, colKeyCode: str = None) -> pd.DataFrame:
+    """
+    Convert a DataFrame to the standard PyWib format.
+
+    Parameters:
+        df (pd.DataFrame): Input DataFrame with arbitrary column names.
+        colSessionId (str): Name of the column representing the session ID.
+        colX (str): Name of the column representing the X coordinate.
+        colY (str): Name of the column representing the Y coordinate.
+        colTimeStamp (str): Name of the column representing the timestamp.
+        colKeyValue (str | None): Name of the column representing the key value.
+        colKeyCode (str | None): Name of the column representing the key code.
+
+    Returns:
+        pd.DataFrame: A new DataFrame with standardized column names for PyWib.
+    """
+
+    if(df is None or df.empty):
+        raise ValueError("Input DataFrame is empty or None.")
+
+    return df.rename(columns={
+        colX: ColumnNames.X,
+        colY: ColumnNames.Y,
+        colTimeStamp: ColumnNames.TIME_STAMP,
+        colKeyValue: ColumnNames.KEY_VALUE,
+        colKeyCode: ColumnNames.KEY_CODE,
+        colSessionId: ColumnNames.SESSION_ID
+    })

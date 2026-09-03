@@ -1,5 +1,3 @@
-from pywib.utils.utils import deprecated
-
 # Version and library information
 LIBRARY_NAME = "pywib"
 LIBRARY_VERSION = "1.1.2"
@@ -64,8 +62,6 @@ class ColumnNames:
     TIME_STAMP = 'timeStamp'
     X = 'x'
     Y = 'y'
-    KEY_VALUE_EVENT = 'keyValueEvent'
-    KEY_CODE_EVENT = 'keyCodeEvent'
     KEY_VALUE = 'keyValue'
     KEY_CODE = 'keyCode'
     SOURCE_SESSION_ID = 'sourceSessionId'
@@ -95,18 +91,6 @@ class ColumnNames:
     MAD_MAX = 'mad_mad'
     MIN_MAD = 'mean_mad'
     MEAN_MAD = 'min_mad'
-
-@deprecated
-class KeyCodeEvents:
-    """
-    This class has been deprecated since version 1.1.2. Please use the KeyValues class instead.
-    For more information read https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode.
-    """
-    """ Key code event constants for keyboard interactions."""
-    KEY_CODE_BACKSPACE = 8
-    """Key code for the Backspace key."""
-    KEY_CODE_DELETE = 46
-    """Key code for the Delete key."""
 
 class KeyValues:
     """ 

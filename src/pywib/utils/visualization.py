@@ -210,7 +210,7 @@ def keyboard_heatmap(df, session_id=None, layoutType="ANSI"):
         cbar=True
     )
     
-    plt.title("Keyboard Usage Heatmap (ASCII / keyCodeEvent)")
+    plt.title("Keyboard Usage Heatmap (ASCII / keyCode)")
     plt.xticks([])
     plt.yticks([])
     plt.show()
