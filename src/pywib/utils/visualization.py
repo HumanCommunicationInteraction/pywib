@@ -124,7 +124,7 @@ def video_from_trace(df, user_id, outfile: str, width=640, height=480, fps=30, c
     video.release()
     print(f"Video generated for user {user_id}: {outfile}")
 
-def keyboard_heatmap(df, session_id=None, layoutType="ANSI"):
+def keyboard_heatmap(df, session_id=None):
     """
     Generates a heatmap visualizing the frequency of key presses for a given session or for all sessions in the DataFrame.
     The type of keyboard represented is a standard QWERTY layout (ANSI), and the heatmap shows the frequency of key presses for each key.
