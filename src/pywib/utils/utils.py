@@ -131,11 +131,14 @@ def to_pywib_df(df: pd.DataFrame, colSessionId: str, colX: str, colY: str, colTi
     if(df is None or df.empty):
         raise ValueError("Input DataFrame is empty or None.")
 
+    if(colKeyValue is not None):
+        df = df.rename(columns={colKeyValue: ColumnNames.KEY_VALUE})
+    if(colKeyCode is not None):
+        df = df.rename(columns={colKeyCode: ColumnNames.KEY_CODE})
+
     return df.rename(columns={
         colX: ColumnNames.X,
         colY: ColumnNames.Y,
         colTimeStamp: ColumnNames.TIME_STAMP,
-        colKeyValue: ColumnNames.KEY_VALUE,
-        colKeyCode: ColumnNames.KEY_CODE,
         colSessionId: ColumnNames.SESSION_ID
     })
