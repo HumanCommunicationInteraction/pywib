@@ -199,18 +199,25 @@ def deviations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = 
 
     return metrics
 
-def angle(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None) -> dict:
+def angle(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
     """
     Angle formed by 3 consecutive points.
     Computed using formula:
     0i = arcos((yi+1-yi,xi+1-xi)*(yi-1-yi,xi-1-xi)/(di+1*di))
+
+    Parameters:
+        df (pd.DataFrame): DataFrame containing required columns.
+        traces (dict): A dictionary with keys as (sessionId) and values as lists of DataFrames. If None, traces will be computed from df.
+        per_traces (bool): Whether to compute the angle for each trace in the DataFrame. If False, the angle will be computed directly on the DataFrame.
+    Returns:
+        dict: A dictionary with keys as (sessionId) and values as lists of DataFrames with the 'angle' column.
     """
     validate_any_not_none(df, traces)
 
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
-
+    # TODO do by single
     for session_id, session_traces in traces.items():
         for trace in session_traces:
             trace[ColumnNames.ANGLE] = np.nan
