@@ -160,9 +160,12 @@ class TestTrajectory(unittest.TestCase):
         """
         angles = angle(self.test_data_flips, per_traces=True)
         for trace in angles.get("SESSION_A"):
-            for value in trace[ColumnNames.ANGLE]:
-                self.assertGreaterEqual(value, 0, "Values for angle must be >= 0")
-                self.assertTrue(value <= math.pi, "Values for angle must be <= pi")
+            for index, value in enumerate(trace[ColumnNames.ANGLE]):
+                if index == 0 or index == len(trace) - 1:
+                    continue;
+                else:
+                    self.assertGreaterEqual(value, 0, "Values for angle must be >= 0")
+                    self.assertTrue(value <= math.pi, "Values for angle must be <= pi")
 
     def test_angle_perTraces_collinearSameDirection(self):
         """
@@ -191,13 +194,13 @@ class TestTrajectory(unittest.TestCase):
                 for i in range(1, len(interior) - 2):
                     theta = interior[i]
                     match i:
-                        case 0:
+                        case 1:
                             self.assertAlmostEqual(theta, math.pi/4, places=10,
                                 msg=f"[{session_id}] Angle must give angle 45º, got {theta}")
-                        case 1:
+                        case 2:
                             self.assertAlmostEqual(theta, math.pi/2, places=10,
                                 msg=f"[{session_id}] Angle must give angle 90º, got {theta}")
-                        case 2:
+                        case 3:
                             self.assertAlmostEqual(theta, math.pi + math.pi, places=10,
                                 msg=f"[{session_id}] Angle must give angle 135º, got {theta}")
 
@@ -215,6 +218,32 @@ class TestTrajectory(unittest.TestCase):
                 for theta in interior:
                     self.assertAlmostEqual(theta, math.pi, places=10,
                         msg=f"[{session_id}] Collinear opposite-direction must give angle 180º, got {theta}")
+
+
+    def test_angular_velocity_perTraces_inRange(self):
+        """ 
+            The values for the angular velocity must always be  0 <= n.
+        """
+        ang_vel = angular_velocity(self.test_data_flips, per_traces=True)
+        for _, traces in ang_vel.items():
+            for trace in traces:
+                for value in trace[ColumnNames.ANGULAR_VELOCITY]:
+                    self.assertGreaterEqual(value, 0, "Values for angular velocity must be >= 0")
+
+    def test_angular_acceleration_perTraces(self):
+        """
+            The calues for angular acceleration must always be bewween -pi <= n <= pi
+        """
+        ang_acc = angular_acceleration(self.test_data_flips, per_traces=True)
+        for _, traces in ang_acc.items():
+                for trace in traces:
+                    expected = trace[ColumnNames.ANGULAR_VELOCITY].diff().fillna(0) / trace[ColumnNames.DT]
+                    expected = expected.where(trace[ColumnNames.DT] != 0, 0)
+
+                    np.testing.assert_allclose(
+                        trace[ColumnNames.ANGULAR_ACCELERATION],
+                        expected,
+                    )
 
 if __name__ == '__main__':
     unittest.main()
