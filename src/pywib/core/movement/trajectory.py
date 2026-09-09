@@ -199,7 +199,7 @@ def deviations(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = 
 
     return metrics
 
-def angle(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
+def angle(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> pd.DataFrame | dict:
     """
     Angle formed by 3 consecutive points.
     Computed using formula:
@@ -214,60 +214,44 @@ def angle(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None,
     """
     validate_any_not_none(df, traces)
 
+    if not per_traces:
+        validate_dataframe(df)
+        return _compute_angles(df)
+
     if traces is None:
         validate_dataframe(df)
         traces = extract_traces_by_session(df)
-    # TODO do by single
+
     for _, session_traces in traces.items():
         for trace in session_traces:
-            x_coordinates = pd.to_numeric(trace[ColumnNames.X], errors="coerce").to_numpy(dtype=float)
-            y_coordinates = pd.to_numeric(trace[ColumnNames.Y], errors="coerce").to_numpy(dtype=float)
-            trace[ColumnNames.ANGLE] = np.nan
-            for i in range(1, len(trace) - 1):
-                idx = trace.index[i]
-
-                v1 = np.array([
-                    y_coordinates[i] - y_coordinates[i - 1],
-                    x_coordinates[i] - x_coordinates[i - 1],
-                ])
-                v2 = np.array([
-                    y_coordinates[i + 1] - y_coordinates[i],
-                    x_coordinates[i + 1] - x_coordinates[i],
-                ])
-
-                n1 = np.linalg.norm(v1)
-                n2 = np.linalg.norm(v2)
-                if not np.isfinite(n1) or not np.isfinite(n2) or n1 == 0 or n2 == 0:
-                    continue
-
-                trace.at[idx, ColumnNames.ANGLE] = np.arccos(np.clip(np.dot(v1, v2) / (n1 * n2), -1.0, 1.0))
+            _compute_angles(trace)
     return traces
 
-def angular_velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
+def angular_velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> pd.DataFrame | dict:
     """
     Angular velocity computed as the change in angle over time.
     """
-    # TODO per traces
     validate_any_not_none(df, traces)
     
     if(df is not None):
         validate_dataframe(df)
+        if not per_traces:
+            if ColumnNames.ANGLE not in df.columns:
+                df = angle(df, per_traces=False)
+            if ColumnNames.DT not in df.columns:
+                df = df.copy()
+                timestamps = pd.to_numeric(df[ColumnNames.TIME_STAMP], errors="coerce")
+                df[ColumnNames.DT] = timestamps.diff().fillna(0)
+            return angular_velocity_df(df)
         if(ColumnNames.ANGLE not in df.columns):
             df = angle(df, traces)
-            for session_id, session_traces in df.items():
-                        for index, trace in enumerate(session_traces):
-                            session_traces[index] = angular_velocity_df(trace)
-                        df[session_id] = session_traces
-            return df
+            return _apply_metric_to_traces(df, angular_velocity_df)
         else:
             return angular_velocity_df(df)
  
     # If traces are not provided, extract them from df
     if traces is not None:
-        for session_id, session_traces in traces.items():
-            for index, trace in enumerate(session_traces):
-                session_traces[index] = angular_velocity_df(trace)
-            traces[session_id] = session_traces
+        return _apply_metric_to_traces(traces, angular_velocity_df)
     return traces
 
 def angular_velocity_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -293,7 +277,7 @@ def angular_velocity_df(df: pd.DataFrame) -> pd.DataFrame:
     df[ColumnNames.ANGULAR_VELOCITY] = np.where(df[ColumnNames.DT] != 0, df[ColumnNames.ANGLE] / df[ColumnNames.DT], 0)
     return df
 
-def angular_acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> dict:
+def angular_acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> pd.DataFrame | dict:
     """
     Angular acceleration computed as the change in angular velocity over time.
     """
@@ -302,22 +286,19 @@ def angular_acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
     
     if(df is not None):
         validate_dataframe(df)
+        if not per_traces:
+            if ColumnNames.ANGULAR_VELOCITY not in df.columns:
+                df = angular_velocity(df, per_traces=False)
+            return angular_acceleration_df(df)
         if(ColumnNames.ANGULAR_VELOCITY not in df.columns):
             df = angular_velocity(df, per_traces=per_traces)
         if isinstance(df, dict):
-            for session_id, session_traces in df.items():
-                for index, trace in enumerate(session_traces):
-                    session_traces[index] = angular_acceleration_df(trace)
-                df[session_id] = session_traces
-            return df
+            return _apply_metric_to_traces(df, angular_acceleration_df)
         return angular_acceleration_df(df)
  
         # If traces are not provided, extract them from df
     if traces is not None:
-        for session_id, session_traces in traces.items():
-            for index, trace in enumerate(session_traces):
-                session_traces[index] = angular_acceleration_df(trace)
-            traces[session_id] = session_traces
+        return _apply_metric_to_traces(traces, angular_acceleration_df)
     return traces
 
 def angular_acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
