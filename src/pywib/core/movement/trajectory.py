@@ -5,7 +5,8 @@ from pywib.utils import (_path, validate_dataframe, compute_space_time_diff,
                          extract_traces_by_session, 
                          auc_ratio_traces)
 from pywib.constants import ColumnNames
-from pywib.utils.movement import auc_df, auc_traces, flips
+from pywib.utils.movement import (auc_df, auc_traces, flips, _apply_metric_to_traces,
+                                   _compute_angles, angular_acceleration_df, angular_velocity_df)
 from pywib.utils.utils import deprecated
 from pywib.utils.validation import validate_any_not_none
 
@@ -254,29 +255,6 @@ def angular_velocity(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFram
         return _apply_metric_to_traces(traces, angular_velocity_df)
     return traces
 
-def angular_velocity_df(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compute the angular velocity for a given DataFrame.
-    Angular velocity is calculated as the change in angle over time.
-    
-    Parameters:
-        df (pd.DataFrame): DataFrame containing 'timeStamp' and 'angle' columns.
-    
-    Returns:
-        pd.DataFrame: DataFrame with an additional 'angular_velocity' column representing the angular velocity.
-    """
-    validate_dataframe(df)
-    
-    if(ColumnNames.DT not in df.columns):
-        df = compute_space_time_diff(df)
-
-    if ColumnNames.ANGLE not in df.columns:
-        df = angle(df)
-
-    df[ColumnNames.ANGLE] = df[ColumnNames.ANGLE].fillna(0)
-    df[ColumnNames.ANGULAR_VELOCITY] = np.where(df[ColumnNames.DT] != 0, df[ColumnNames.ANGLE] / df[ColumnNames.DT], 0)
-    return df
-
 def angular_acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = True) -> pd.DataFrame | dict:
     """
     Angular acceleration computed as the change in angular velocity over time.
@@ -301,31 +279,6 @@ def angular_acceleration(df: pd.DataFrame = None, traces: dict[str, list[pd.Data
         return _apply_metric_to_traces(traces, angular_acceleration_df)
     return traces
 
-def angular_acceleration_df(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Compute the angular acceleration for a given DataFrame.
-    Angular acceleration is calculated as the change in angular velocity over time.
-    
-    Parameters:
-        df (pd.DataFrame): DataFrame containing 'timeStamp' and 'angular_velocity' columns.
-    
-    Returns:
-        pd.DataFrame: DataFrame with an additional 'angular_acceleration' column representing the angular acceleration.
-    """
-    validate_dataframe(df)
-    
-    if ColumnNames.ANGULAR_VELOCITY not in df.columns:
-        df = angular_velocity_df(df)
-
-    if ColumnNames.DT not in df.columns:
-        df = compute_space_time_diff(df)
-
-    df[ColumnNames.ANGULAR_ACCELERATION] = np.where(
-        df[ColumnNames.DT] != 0,
-        df[ColumnNames.ANGULAR_VELOCITY].diff().fillna(0) / df[ColumnNames.DT],
-        0,
-    )
-    return df
 
 def direction_changes(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None, per_traces: bool = False) -> pd.DataFrame | dict:
     """
@@ -552,3 +505,4 @@ def jitter(df: pd.DataFrame = None, traces: dict[str, list[pd.DataFrame]] = None
         traces = extract_traces_by_session(df)
 
     raise NotImplementedError("Jitter is not implemented yet.")
+
