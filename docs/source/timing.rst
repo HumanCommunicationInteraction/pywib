@@ -22,10 +22,15 @@ Function :py:func:`~pywib.movement_time` calculates the total movement time for 
 
 Number of pauses
 ----------------
-Function :py:func:`~pywib.num_pauses` computes the number of pauses by each session, giving as a result.
+Function :py:func:`~pywib.num_pauses` computes the number of pauses by each session.
 This function maintains the principle of having two separate behaviours depending on the segmentation.
 If the DataFrame is not segmented by traces, then all events are taken into account to compute pauses, even clicks, scrolls, keystrokes, etc.
 But if the DataFrame is segmented, then it will only computed pauses given during the times of movement. 
 This is crucial to understand what our data represents, as we may want to consider those pauses that happen right after a click or a key press instead of only those given at movement time.
 
-The metrics for this pauses can be obtained using the method :py:func:`~pywib.pauses_metrics`, which will return... TODO
+The metrics for this pauses can be obtained using the method :py:func:`~pywib.pauses_metrics`, which will return a dictorionary with the sessionId as keys and the following metrics:
+- total_pauses
+- mean_pause_duration
+- pause_durations
+- max_pause
+- min_pause
